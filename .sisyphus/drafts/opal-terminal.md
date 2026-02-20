@@ -135,6 +135,73 @@ Opal Terminal (Rust + Metal + AppKit)
 - **Primary**: Homebrew (brew install opal)
 - **Secondary**: Direct download (DMG from GitHub releases)
 
+## Work Plan
+
+### Wave 1: Foundation & Project Setup
+- 1.1 Set up Rust project with Cargo.toml and dependencies
+- 1.2 Configure objc2 bridge for AppKit integration
+- 1.3 Set up Metal framework integration
+- 1.4 Create project structure (modules, crates)
+- 1.5 Add logging and error handling infrastructure
+- 1.6 Verify empty shell builds successfully
+
+### Wave 2: Custom Terminal Emulator Core
+- 2.1 Design and implement VTE parser state machine
+- 2.2 Implement escape sequence interpreter
+- 2.3 Build screen buffer with scrollback (100k+ lines)
+- 2.4 Implement 256-color and truecolor support
+- 2.5 Implement cursor management and text attributes
+- 2.6 Build PTY layer with process spawning
+- 2.7 Implement input handling and terminal modes
+- 2.8 Test terminal emulator with various apps
+
+### Wave 3: Metal Rendering Engine
+- 3.1 Set up Metal device, command queue, and pipeline
+- 3.2 Implement text atlas with glyph caching
+- 3.3 Build GPU-accelerated text renderer
+- 3.4 Implement blur shader for Liquid Glass effect
+- 3.5 Build composition pipeline
+- 3.6 Implement vsync and frame pacing
+- 3.7 Performance optimization
+
+### Wave 4: AppKit UI Integration
+- 4.1 Create main window with NSVisualEffectView blur
+- 4.2 Implement window chrome and title bar
+- 4.3 Build collapsible sidebar with file tree view
+- 4.4 Implement Safari-style tab bar
+- 4.5 Build tab/terminal pane management
+- 4.6 Create GUI preferences window
+- 4.7 Implement keyboard shortcut system
+- 4.8 Add menu bar integration
+
+### Wave 5: Sidebar Features & Git Integration
+- 5.1 Implement file browser with tree view
+- 5.2 Add cwd tracking and auto-refresh
+- 5.3 Integrate git2 crate for Git operations
+- 5.4 Implement file status indicators
+- 5.5 Build branch switcher dropdown
+- 5.6 Add context menu for git actions
+- 5.7 Implement file click → open in editor
+- 5.8 Add editor configuration in preferences
+
+### Wave 6: Theme Engine & Polish
+- 6.1 Build theme system with color schemes
+- 6.2 Create default Liquid Glass theme
+- 6.3 Add theme customization in preferences
+- 6.4 Implement font selection and sizing
+- 6.5 Add accessibility support
+- 6.6 Performance profiling and optimization
+
+### Wave 7: Testing & Release Preparation
+- 7.1 Write integration tests for terminal emulator
+- 7.2 Add UI tests for sidebar and preferences
+- 7.3 Create test suite for Git integration
+- 7.4 Set up CI/CD pipeline
+- 7.5 Create Homebrew formula
+- 7.6 Build DMG distribution package
+- 7.7 Final QA and bug fixes
+- 7.8 Prepare v1.0 release
+
 ## Research Pending
 - [x] Rust terminal emulator landscape
 - [x] Apple Liquid Glass design specifics
