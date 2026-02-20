@@ -231,6 +231,20 @@ impl App {
 
     pub fn run(&self) -> Result<(), anyhow::Error> {
         log::info!("Starting Opal Terminal");
+
+        #[cfg(target_os = "macos")]
+        {
+            use std::process::Command;
+
+            Command::new("osascript")
+                .args([
+                    "-e",
+                    "tell app \"Terminal\" to do script \"echo 'Welcome to Opal Terminal v0.1.0'\"",
+                ])
+                .spawn()
+                .ok();
+        }
+
         Ok(())
     }
 
