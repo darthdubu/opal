@@ -1,8 +1,0 @@
-[build]
-rustflags = ["-C", "link-arg=-undefined", "-C", "linker=clang"]
-
-[target.x86_64-apple-darwin]
-rustflags = ["-C", "link-arg=-undefined", "-C", "linker=clang"]
-
-[target.aarch64-apple-darwin]
-rustflags = ["-C", "link-arg=-undefined", "-C", "linker=clang"]

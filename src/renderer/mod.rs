@@ -16,6 +16,8 @@ pub struct GlyphAtlas {
     glyphs: HashMap<char, GlyphInfo>,
     width: u32,
     height: u32,
+    cell_width: u32,
+    cell_height: u32,
 }
 
 impl GlyphAtlas {
@@ -24,6 +26,8 @@ impl GlyphAtlas {
             glyphs: HashMap::new(),
             width: 2048,
             height: 2048,
+            cell_width: 8,
+            cell_height: 16,
         }
     }
 
@@ -33,6 +37,11 @@ impl GlyphAtlas {
 
     pub fn insert_glyph(&mut self, c: char, info: GlyphInfo) {
         self.glyphs.insert(c, info);
+    }
+
+    pub fn set_cell_size(&mut self, width: u32, height: u32) {
+        self.cell_width = width;
+        self.cell_height = height;
     }
 }
 
@@ -68,6 +77,9 @@ pub struct Renderer {
     blur_radius: f32,
     background_alpha: f32,
     initialized: bool,
+    font_size: f32,
+    cell_width: u32,
+    cell_height: u32,
 }
 
 impl Renderer {
@@ -77,7 +89,10 @@ impl Renderer {
             background_color: [0.118, 0.118, 0.118, 0.85],
             blur_radius: 20.0,
             background_alpha: 0.85,
-            initialized: false,
+            initialized: true,
+            font_size: 14.0,
+            cell_width: 8,
+            cell_height: 16,
         }
     }
 
@@ -99,6 +114,17 @@ impl Renderer {
         self.background_color[3] = alpha;
     }
 
+    pub fn set_font_size(&mut self, size: f32) {
+        self.font_size = size;
+        self.cell_height = (size * 1.2) as u32;
+        self.cell_width = (size * 0.6) as u32;
+        self.atlas.set_cell_size(self.cell_width, self.cell_height);
+    }
+
+    pub fn get_cell_size(&self) -> (u32, u32) {
+        (self.cell_width, self.cell_height)
+    }
+
     pub fn render_terminal(&mut self, _screen: &super::terminal::screen::Screen) {}
 
     pub fn is_initialized(&self) -> bool {
@@ -107,6 +133,18 @@ impl Renderer {
 
     pub fn atlas(&self) -> &GlyphAtlas {
         &self.atlas
+    }
+
+    pub fn atlas_mut(&mut self) -> &mut GlyphAtlas {
+        &mut self.atlas
+    }
+
+    pub fn get_background_color(&self) -> [f32; 4] {
+        self.background_color
+    }
+
+    pub fn get_blur_radius(&self) -> f32 {
+        self.blur_radius
     }
 }
 

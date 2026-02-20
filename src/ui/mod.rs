@@ -4,6 +4,9 @@ use crate::sidebar::Sidebar;
 use crate::terminal::Terminal;
 use std::path::PathBuf;
 
+pub mod menu;
+pub use menu::*;
+
 pub struct Tab {
     pub id: u64,
     pub title: String,
