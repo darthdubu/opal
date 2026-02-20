@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <!-- Background gradient - deep dark blue-black -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="50%" stop-color="#16213e"/>
+      <stop offset="100%" stop-color="#0f0f1a"/>
+    </linearGradient>
+    
+    <!-- Glass shine gradient -->
+    <linearGradient id="glass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.15)"/>
+      <stop offset="50%" stop-color="rgba(255,255,255,0.05)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+    
+    <!-- Opal gem gradient - iridescent -->
+    <linearGradient id="opal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d4ff"/>
+      <stop offset="25%" stop-color="#7b68ee"/>
+      <stop offset="50%" stop-color="#ff6b9d"/>
+      <stop offset="75%" stop-color="#ffa500"/>
+      <stop offset="100%" stop-color="#00ff88"/>
+    </linearGradient>
+    
+    <!-- Inner glow -->
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+    </radialGradient>
+    
+    <!-- Window title bar gradient -->
+    <linearGradient id="titlebar" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2a2a4a"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </linearGradient>
+    
+    <!-- Drop shadow -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+    
+    <!-- Glow filter for the O -->
+    <filter id="glowFilter" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Main background with shadow -->
+  <rect x="64" y="64" width="896" height="896" rx="128" fill="url(#bg)" filter="url(#shadow)"/>
+  
+  <!-- Glass overlay -->
+  <rect x="64" y="64" width="896" height="896" rx="128" fill="url(#glass)"/>
+  
+  <!-- Window title bar -->
+  <path d="M96 192 L96 160 Q96 96 160 96 L864 96 Q928 96 928 160 L928 192 Z" fill="url(#titlebar)" opacity="0.8"/>
+  
+  <!-- Window traffic lights -->
+  <circle cx="160" cy="144" r="24" fill="#ff5f56"/>
+  <circle cx="224" cy="144" r="24" fill="#ffbd2e"/>
+  <circle cx="288" cy="144" r="24" fill="#27ca40"/>
+  
+  <!-- Terminal prompt symbol - the Opal O -->
+  <g filter="url(#glowFilter)">
+    <!-- Outer ring of the O -->
+    <circle cx="512" cy="560" r="180" fill="none" stroke="url(#opal)" stroke-width="32" opacity="0.9"/>
+    <!-- Inner glow circle -->
+    <circle cx="512" cy="560" r="140" fill="url(#glow)"/>
+  </g>
+  
+  <!-- Terminal cursor - blinking underscore -->
+  <rect x="620" y="500" width="24" height="80" rx="4" fill="#00d4ff" opacity="0.9">
+    <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+   <!-- Terminal text lines</rect>
+  
+  representing code/output -->
+  <g opacity="0.6">
+    <rect x="280" y="420" width="200" height="16" rx="4" fill="#7b68ee"/>
+    <rect x="280" y="456" width="320" height="16" rx="4" fill="#ffa500"/>
+    <rect x="280" y="492" width="180" height="16" rx="4" fill="#00ff88"/>
+    <rect x="280" y="528" width="280" height="16" rx="4" fill="#00d4ff"/>
+  </g>
+  
+  <!-- Decorative corner accents - Liquid Glass effect -->
+  <path d="M64 256 Q64 64 256 64 L128 64 Q64 64 64 128 Z" fill="url(#opal)" opacity="0.1"/>
+  <path d="M960 256 Q960 64 768 64 L896 64 Q960 64 960 128 Z" fill="url(#opal)" opacity="0.1"/>
+  <path d="M64 768 Q64 960 256 960 L128 960 Q64 960 64 896 Z" fill="url(#opal)" opacity="0.1"/>
+  <path d="M960 768 Q960 960 768 960 L896 960 Q960 960 960 896 Z" fill="url(#opal)" opacity="0.1"/>
+  
+  <!-- Subtle scan line effect for retro feel -->
+  <g opacity="0.03">
+    <line x1="64" y1="200" x2="960" y2="200" stroke="#fff" stroke-width="2"/>
+    <line x1="64" y1="350" x2="960" y2="350" stroke="#fff" stroke-width="2"/>
+    <line x1="64" y1="500" x2="960" y2="500" stroke="#fff" stroke-width="2"/>
+    <line x1="64" y1="650" x2="960" y2="650" stroke="#fff" stroke-width="2"/>
+    <line x1="64" y1="800" x2="960" y2="800" stroke="#fff" stroke-width="2"/>
+  </g>
+</svg>
