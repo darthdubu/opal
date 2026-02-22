@@ -240,4 +240,8 @@ impl Grid {
         self.cursor_row = row.min(self.rows.saturating_sub(1));
         self.cursor_col = col.min(self.cols.saturating_sub(1));
     }
+
+    pub fn clear_scrollback(&mut self) {
+        self.scrollback.clear();
+    }
 }

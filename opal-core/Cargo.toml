@@ -19,6 +19,9 @@ parking_lot = { workspace = true }
 anyhow = "1.0"
 bytes = "1.5"
 crossbeam = "0.8"
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+dirs = "5.0"
 
 [dev-dependencies]
 tokio-test = "0.4"

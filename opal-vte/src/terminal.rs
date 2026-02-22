@@ -94,7 +94,7 @@ impl Handler for Terminal {
                 self.grid.clear_all();
             }
             ClearMode::Saved => {
-                self.grid.scrollback.clear();
+                self.grid.clear_scrollback();
             }
         }
     }

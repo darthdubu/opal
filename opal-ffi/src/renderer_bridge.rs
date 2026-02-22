@@ -23,20 +23,23 @@ impl RendererHandle {
             }),
         })
     }
-    
+
     pub fn initialize_with_metal_device(&self, device_ptr: u64) -> bool {
         let mut state = self.state.lock().unwrap();
         state.initialized = true;
-        println!("Renderer initialized with Metal device: 0x{:016x}", device_ptr);
+        println!(
+            "Renderer initialized with Metal device: 0x{:016x}",
+            device_ptr
+        );
         true
     }
-    
+
     pub fn resize(&self, width: u32, height: u32) {
         let mut state = self.state.lock().unwrap();
         state.width = width;
         state.height = height;
     }
-    
+
     pub fn render_frame(&self) -> bool {
         let state = self.state.lock().unwrap();
         if !state.initialized {
@@ -44,12 +47,12 @@ impl RendererHandle {
         }
         true
     }
-    
+
     pub fn get_width(&self) -> u32 {
         let state = self.state.lock().unwrap();
         state.width
     }
-    
+
     pub fn get_height(&self) -> u32 {
         let state = self.state.lock().unwrap();
         state.height
@@ -83,12 +86,12 @@ impl TerminalRenderer {
             rows: Mutex::new(Vec::new()),
         })
     }
-    
+
     pub fn update_content(&self, rows: Vec<RenderRow>) {
         let mut stored_rows = self.rows.lock().unwrap();
         *stored_rows = rows;
     }
-    
+
     pub fn render(&self) -> bool {
         let _rows = self.rows.lock().unwrap();
         self.handle.render_frame()

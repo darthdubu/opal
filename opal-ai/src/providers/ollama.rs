@@ -87,10 +87,7 @@ impl AiProvider for OllamaProvider {
             )));
         }
         
-        let ollama_response: OllamaResponse = response
-            .json()
-            .await
-            .map_err(|e| AiError::Json(e))?;
+        let ollama_response: OllamaResponse = response.json().await?;
         
         Ok(Response {
             content: ollama_response.message.content,
@@ -107,7 +104,7 @@ struct OllamaRequest {
     stream: bool,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct OllamaMessage {
     role: String,
     content: String,

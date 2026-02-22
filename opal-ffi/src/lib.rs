@@ -296,42 +296,44 @@ pub struct GitManager;
 impl GitManager {
     fn get_repo_info(path: &str) -> Result<GitInfo, git2::Error> {
         let repo = git2::Repository::discover(path)?;
-        
+
         // Get current branch
         let head = repo.head()?;
         let branch = head.shorthand().map(|s| s.to_string());
-        
+
         // Get status counts
         let mut modified = 0u32;
         let mut staged = 0u32;
         let mut untracked = 0u32;
-        
+
         let statuses = repo.statuses(None)?;
         for entry in statuses.iter() {
             let status = entry.status();
             if status.contains(git2::Status::WT_NEW) {
                 untracked += 1;
-            } else if status.contains(git2::Status::INDEX_NEW) 
+            } else if status.contains(git2::Status::INDEX_NEW)
                 || status.contains(git2::Status::INDEX_MODIFIED)
                 || status.contains(git2::Status::INDEX_DELETED)
                 || status.contains(git2::Status::INDEX_RENAMED)
-                || status.contains(git2::Status::INDEX_TYPECHANGE) {
+                || status.contains(git2::Status::INDEX_TYPECHANGE)
+            {
                 staged += 1;
             } else if status.contains(git2::Status::WT_MODIFIED)
                 || status.contains(git2::Status::WT_DELETED)
                 || status.contains(git2::Status::WT_RENAMED)
-                || status.contains(git2::Status::WT_TYPECHANGE) {
+                || status.contains(git2::Status::WT_TYPECHANGE)
+            {
                 modified += 1;
             }
         }
-        
+
         // Get ahead/behind count
         let (ahead, behind) = if let Some(branch_ref) = branch.as_ref() {
             Self::get_ahead_behind(&repo, branch_ref).unwrap_or((0, 0))
         } else {
             (0, 0)
         };
-        
+
         Ok(GitInfo {
             is_repo: true,
             branch,
@@ -346,25 +348,22 @@ impl GitManager {
     fn get_ahead_behind(repo: &git2::Repository, branch: &str) -> Result<(u32, u32), git2::Error> {
         let local = repo.find_branch(branch, git2::BranchType::Local)?;
         let local_ref = local.get().peel_to_commit()?;
-        
+
         // Try to find upstream
         if let Ok(upstream) = local.upstream() {
             if let Ok(upstream_ref) = upstream.get().peel_to_commit() {
-                let (ahead, behind) = repo.graph_ahead_behind(
-                    local_ref.id(),
-                    upstream_ref.id()
-                )?;
+                let (ahead, behind) = repo.graph_ahead_behind(local_ref.id(), upstream_ref.id())?;
                 return Ok((ahead as u32, behind as u32));
             }
         }
-        
+
         Ok((0, 0))
     }
 
     fn get_recent_branches(path: &str, count: u32) -> Result<Vec<String>, git2::Error> {
         let repo = git2::Repository::discover(path)?;
         let mut branches = Vec::new();
-        
+
         for branch in repo.branches(None)? {
             if let Ok((branch, _)) = branch {
                 if let Some(name) = branch.name()? {
@@ -375,32 +374,38 @@ impl GitManager {
                 }
             }
         }
-        
+
         Ok(branches)
     }
 
     fn get_recent_commits(path: &str, count: u32) -> Result<Vec<GitCommit>, git2::Error> {
         let repo = git2::Repository::discover(path)?;
         let mut commits = Vec::new();
-        
+
         let head = repo.head()?;
-        let oid = head.target().ok_or_else(|| {
-            git2::Error::from_str("HEAD has no target")
-        })?;
-        
+        let oid = head
+            .target()
+            .ok_or_else(|| git2::Error::from_str("HEAD has no target"))?;
+
         let mut revwalk = repo.revwalk()?;
         revwalk.push(oid)?;
         revwalk.set_sorting(git2::Sort::TIME)?;
-        
+
         for oid in revwalk.take(count as usize) {
             let oid = oid?;
             let commit = repo.find_commit(oid)?;
-            
+
             let hash = commit.id().to_string();
-            let message = commit.message().unwrap_or("").lines().next().unwrap_or("").to_string();
+            let message = commit
+                .message()
+                .unwrap_or("")
+                .lines()
+                .next()
+                .unwrap_or("")
+                .to_string();
             let author = commit.author().name().unwrap_or("Unknown").to_string();
             let timestamp = commit.time().seconds() as u64;
-            
+
             commits.push(GitCommit {
                 hash,
                 message,
@@ -408,7 +413,7 @@ impl GitManager {
                 timestamp,
             });
         }
-        
+
         Ok(commits)
     }
 }
@@ -481,12 +486,10 @@ impl FuzzyMatcher {
                     let position_score = 100 - (pos as u32).min(100);
                     let length_penalty = (item.len() as u32).saturating_sub(query.len() as u32);
                     let score = position_score.saturating_sub(length_penalty / 10);
-                    
+
                     // Generate indices for matched characters
-                    let indices: Vec<u32> = (pos..pos + query.len())
-                        .map(|i| i as u32)
-                        .collect();
-                    
+                    let indices: Vec<u32> = (pos..pos + query.len()).map(|i| i as u32).collect();
+
                     Some(FuzzyMatch {
                         item: item.clone(),
                         score,
@@ -588,4 +591,118 @@ pub trait TerminalDelegate: Send + Sync {
     fn on_content_changed(&self);
     fn on_cursor_moved(&self, row: u32, col: u32);
     fn on_title_changed(&self, title: String);
+}
+
+/// FFI-compatible config struct
+#[derive(uniffi::Record, Clone)]
+pub struct ConfigFfi {
+    pub font_family: String,
+    pub font_size: f32,
+    pub font_ligatures: bool,
+    pub theme: String,
+    pub transparency: f32,
+    pub cursor_style: CursorStyleFfi,
+    pub cursor_blinking: bool,
+    pub scrollback: u32,
+    pub ai_enabled: bool,
+    pub ai_provider: String,
+    pub ai_model: String,
+}
+
+#[derive(uniffi::Enum, Clone)]
+pub enum CursorStyleFfi {
+    Block,
+    Underline,
+    Line,
+}
+
+impl From<opal_core::CursorStyle> for CursorStyleFfi {
+    fn from(style: opal_core::CursorStyle) -> Self {
+        match style {
+            opal_core::CursorStyle::Block => CursorStyleFfi::Block,
+            opal_core::CursorStyle::Underline => CursorStyleFfi::Underline,
+            opal_core::CursorStyle::Line => CursorStyleFfi::Line,
+        }
+    }
+}
+
+impl From<CursorStyleFfi> for opal_core::CursorStyle {
+    fn from(style: CursorStyleFfi) -> Self {
+        match style {
+            CursorStyleFfi::Block => opal_core::CursorStyle::Block,
+            CursorStyleFfi::Underline => opal_core::CursorStyle::Underline,
+            CursorStyleFfi::Line => opal_core::CursorStyle::Line,
+        }
+    }
+}
+
+/// Config manager for Swift interop
+#[derive(uniffi::Object)]
+pub struct ConfigManager;
+
+#[uniffi::export]
+impl ConfigManager {
+    #[uniffi::constructor]
+    pub fn new() -> Arc<Self> {
+        Arc::new(Self)
+    }
+
+    pub fn load(&self) -> ConfigFfi {
+        let config = opal_core::Config::load().unwrap_or_default();
+        ConfigFfi {
+            font_family: config.font.family,
+            font_size: config.font.size,
+            font_ligatures: config.font.ligatures,
+            theme: config.theme,
+            transparency: config.transparency,
+            cursor_style: config.cursor.style.into(),
+            cursor_blinking: config.cursor.blinking,
+            scrollback: config.scrollback as u32,
+            ai_enabled: config.ai.enabled,
+            ai_provider: config.ai.provider,
+            ai_model: config.ai.model,
+        }
+    }
+
+    pub fn save(&self, config: ConfigFfi) -> bool {
+        let core_config = opal_core::Config {
+            font: opal_core::FontConfig {
+                family: config.font_family,
+                size: config.font_size,
+                ligatures: config.font_ligatures,
+            },
+            theme: config.theme,
+            transparency: config.transparency,
+            cursor: opal_core::CursorConfig {
+                style: config.cursor_style.into(),
+                blinking: config.cursor_blinking,
+            },
+            scrollback: config.scrollback as usize,
+            ai: opal_core::AiConfig {
+                enabled: config.ai_enabled,
+                provider: config.ai_provider,
+                model: config.ai_model,
+                api_key: None, // Don't expose API key through FFI
+            },
+            keybindings: std::collections::HashMap::new(), // Use defaults
+        };
+        core_config.save().is_ok()
+    }
+
+    pub fn default_config(&self) -> ConfigFfi {
+        let config = opal_core::Config::default();
+        ConfigFfi {
+            font_family: config.font.family,
+            font_size: config.font.size,
+            font_ligatures: config.font.ligatures,
+            theme: config.theme,
+            transparency: config.transparency,
+            cursor_style: config.cursor.style.into(),
+            cursor_blinking: config.cursor.blinking,
+            scrollback: config.scrollback as u32,
+            ai_enabled: config.ai.enabled,
+            ai_provider: config.ai.provider,
+            ai_model: config.ai.model,
+        }
+    }
 }
