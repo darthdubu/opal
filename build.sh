@@ -19,7 +19,7 @@ mkdir -p Opal.app/Contents/Frameworks
 
 cp Opal/.build/release/Opal Opal.app/Contents/MacOS/
 # Copy icon files
-cp Opal/Resources/Assets.xcassets/AppIcon.appiconset/icon_512x512@2x.png Opal.app/Contents/Resources/Opal.png
+cp Opal/Resources/Opal.icns Opal.app/Contents/Resources/
 cp target/release/libopal_ffi.dylib Opal.app/Contents/Frameworks/
 chmod +x Opal.app/Contents/MacOS/Opal
 chmod +x Opal.app/Contents/Frameworks/libopal_ffi.dylib
@@ -34,9 +34,7 @@ cat > Opal.app/Contents/Info.plist << 'ENDINFO'
     <key>CFBundleExecutable</key>
     <string>Opal</string>
     <key>CFBundleIconFile</key>
-    <string>Opal</string>
-    <key>CFBundleIconName</key>
-    <string>Opal</string>
+    <string>Opal.icns</string>
     <key>CFBundleIdentifier</key>
     <string>com.opal.terminal</string>
     <key>CFBundleInfoDictionaryVersion</key>
