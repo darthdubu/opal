@@ -36,9 +36,9 @@ struct ContentView: View {
                 switch columnVisibility {
                 case .all:
                     columnVisibility = .detailOnly
-                case .detailOnly, .doubleColumn:
+                case .detailOnly, .doubleColumn, .automatic:
                     columnVisibility = .all
-                @unknown default:
+                default:
                     columnVisibility = .all
                 }
             }
