@@ -26,6 +26,26 @@ impl Pty {
         cmd.env("TERM", "xterm-256color");
         cmd.env("TERM_PROGRAM", "Opal");
         cmd.env("TERM_PROGRAM_VERSION", "1.0.0");
+
+        // Get PATH from current process or use default macOS PATH
+        let path = std::env::var("PATH").unwrap_or_else(|_| {
+            "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/opt/homebrew/sbin"
+                .to_string()
+        });
+        cmd.env("PATH", path);
+
+        // Set other important environment variables
+        if let Ok(home) = std::env::var("HOME") {
+            cmd.env("HOME", home);
+        }
+        if let Ok(user) = std::env::var("USER") {
+            cmd.env("USER", user);
+        }
+        cmd.env("SHELL", "/bin/zsh");
+
+        // Set LANG for proper locale
+        cmd.env("LANG", "en_US.UTF-8");
+
         let child = pair.slave.spawn_command(cmd)?;
 
         let reader = pair.master.try_clone_reader()?;
