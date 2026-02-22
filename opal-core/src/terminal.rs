@@ -6,6 +6,7 @@ pub struct Terminal {
     attrs: Attributes,
     fg: Color,
     bg: Color,
+    parser: vte::Parser,
 }
 
 impl Terminal {
@@ -16,12 +17,15 @@ impl Terminal {
             attrs: Attributes::default(),
             fg: Color::Default,
             bg: Color::Default,
+            parser: vte::Parser::new(),
         }
     }
 
     pub fn process_input(&mut self, data: &[u8]) {
-        let mut parser = vte::Parser::new();
+        // Temporarily take parser to avoid borrow checker issues
+        let mut parser = std::mem::take(&mut self.parser);
         parser.advance(self, data);
+        self.parser = parser;
     }
 
     pub fn resize(&mut self, cols: usize, rows: usize) {

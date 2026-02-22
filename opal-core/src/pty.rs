@@ -22,7 +22,10 @@ impl Pty {
             pixel_height: 0,
         })?;
 
-        let cmd = portable_pty::CommandBuilder::new("/bin/bash");
+        let mut cmd = portable_pty::CommandBuilder::new("/bin/zsh");
+        cmd.env("TERM", "xterm-256color");
+        cmd.env("TERM_PROGRAM", "Opal");
+        cmd.env("TERM_PROGRAM_VERSION", "1.0.0");
         let child = pair.slave.spawn_command(cmd)?;
 
         let reader = pair.master.try_clone_reader()?;

@@ -51,7 +51,7 @@ impl Default for Config {
                 ligatures: true,
             },
             theme: "opal-dark".to_string(),
-            transparency: 0.85,
+            transparency: 0.9,
             cursor: CursorConfig {
                 style: CursorStyle::Block,
                 blinking: true,
