@@ -2,8 +2,10 @@
 
 ## Current Status
 
-**Version:** 0.2.0 (Month 1 Foundation)  
-**Last Updated:** 2026-02-22  
+**Version:** 0.2.0 (Month 1 COMPLETE)  
+**Last Updated:** 2026-02-22
+
+**Status:** Month 1 foundation complete. CSI/OSC parser implemented.  
 **Strategic Plan:** `.sisyphus/plans/opal-v1-strategic-plan.md`
 
 ---
