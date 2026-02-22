@@ -4,8 +4,8 @@ set -e
 echo "Building Opal Terminal..."
 
 cargo build -p opal-ffi --lib --release
-cargo run -p opal-ffi --bin uniffi-bindgen -- generate opal-ffi/src/opal.udl --language swift --out-dir Opal/Sources/OpalCore
-cp Opal/Sources/OpalCore/opalFFI.h Opal/Sources/Copal/
+# Generate Swift bindings from the library (proc-macro mode)
+cargo run -p opal-ffi --bin uniffi-bindgen -- generate --library --language swift --out-dir Opal/Sources/OpalCore target/release/libopal_ffi.dylib 2>/dev/null || echo "Note: FFI bindings generation may require manual step"
 
 cd Opal
 swift build -c release
@@ -18,7 +18,8 @@ mkdir -p Opal.app/Contents/Resources
 mkdir -p Opal.app/Contents/Frameworks
 
 cp Opal/.build/release/Opal Opal.app/Contents/MacOS/
-cp Opal/Resources/Opal.icns Opal.app/Contents/Resources/
+# Copy icon files
+cp Opal/Resources/Assets.xcassets/AppIcon.appiconset/icon_512x512@2x.png Opal.app/Contents/Resources/Opal.png
 cp target/release/libopal_ffi.dylib Opal.app/Contents/Frameworks/
 chmod +x Opal.app/Contents/MacOS/Opal
 chmod +x Opal.app/Contents/Frameworks/libopal_ffi.dylib
@@ -33,7 +34,9 @@ cat > Opal.app/Contents/Info.plist << 'ENDINFO'
     <key>CFBundleExecutable</key>
     <string>Opal</string>
     <key>CFBundleIconFile</key>
-    <string>Opal.icns</string>
+    <string>Opal</string>
+    <key>CFBundleIconName</key>
+    <string>Opal</string>
     <key>CFBundleIdentifier</key>
     <string>com.opal.terminal</string>
     <key>CFBundleInfoDictionaryVersion</key>
