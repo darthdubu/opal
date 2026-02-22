@@ -1,0 +1,33 @@
+[package]
+name = "opal-ffi"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[lib]
+crate-type = ["staticlib", "cdylib"]
+name = "opal_ffi"
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "src/bin/uniffi-bindgen.rs"
+
+[dependencies]
+# Workspace deps
+uniffi = { workspace = true, features = ["cli"] }
+tracing = { workspace = true }
+
+# Internal deps
+opal-core = { path = "../opal-core" }
+opal-renderer = { path = "../opal-renderer" }
+
+# Feature deps
+git2 = { workspace = true }
+nucleo-matcher = { workspace = true }
+auto-palette = { workspace = true }
+
+# No build dependencies needed - using proc-macro based UniFFI
+

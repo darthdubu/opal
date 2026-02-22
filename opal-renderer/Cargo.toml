@@ -1,0 +1,25 @@
+[package]
+name = "opal-renderer"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+wgpu = { workspace = true }
+glyphon = { workspace = true }
+cosmic-text = { workspace = true }
+tracing = { workspace = true }
+color-eyre = { workspace = true }
+thiserror = { workspace = true }
+parking_lot = { workspace = true }
+raw-window-handle = "0.6"
+bytemuck = { version = "1.14", features = ["derive"] }
+anyhow = "1.0"
+winit = "0.30"
+opal-core = { path = "../opal-core" }
+
+[dev-dependencies]
+insta = "1.40"
