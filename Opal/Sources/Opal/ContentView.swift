@@ -62,7 +62,6 @@ struct ContentView: View {
         .sheet(isPresented: $showCommandPalette) {
             CommandPaletteView(viewModel: viewModel)
         }
-        .background(TransparentWindow())
         .onAppear {
             viewModel.startSession()
             setupNotifications()
