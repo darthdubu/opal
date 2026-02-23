@@ -3,7 +3,7 @@ members = ["opal-core", "opal-renderer", "opal-ffi", "opal-vte", "opal-ai"]
 resolver = "2"
 
 [workspace.package]
-version = "1.0.11"
+version = "1.0.12"
 edition = "2021"
 authors = ["Opal Contributors"]
 license = "MIT OR Apache-2.0"

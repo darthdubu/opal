@@ -16,7 +16,15 @@ class BackgroundSettings: ObservableObject {
     @Published var glassOpacity: Double = 0.25
     @Published var edgeHighlightsEnabled: Bool = true
     @Published var specularHighlightsEnabled: Bool = true
-    @Published var useMetalShader: Bool = true  // NEW: Toggle between Canvas and Metal
+    @Published var useMetalShader: Bool = true  // Toggle between Canvas and Metal
+    
+    // Advanced Metal shader effects
+    @Published var chromaticAberrationEnabled: Bool = false
+    @Published var chromaticAberrationStrength: Double = 0.003
+    @Published var bloomEnabled: Bool = true
+    @Published var bloomStrength: Double = 0.5
+    @Published var blurEnabled: Bool = false
+    @Published var blurRadius: Double = 0.003
     
     private init() {}
 }

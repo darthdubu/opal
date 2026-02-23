@@ -400,6 +400,62 @@ struct BackgroundSettingsView: View {
                         }
                     }
                 }
+            
+            Divider()
+            
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Advanced Metal Effects")
+                    .font(.headline)
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    Toggle("Bloom (glow effect)", isOn: $settings.bloomEnabled)
+                    
+                    if settings.bloomEnabled {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Bloom strength")
+                                    .frame(width: 120, alignment: .leading)
+                                Text(String(format: "%.2f", settings.bloomStrength))
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                            }
+                            Slider(value: $settings.bloomStrength, in: 0.1...1.0, step: 0.1)
+                                .frame(maxWidth: 300)
+                        }
+                    }
+                    
+                    Toggle("Chromatic Aberration", isOn: $settings.chromaticAberrationEnabled)
+                    
+                    if settings.chromaticAberrationEnabled {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("CA strength")
+                                    .frame(width: 120, alignment: .leading)
+                                Text(String(format: "%.3f", settings.chromaticAberrationStrength))
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                            }
+                            Slider(value: $settings.chromaticAberrationStrength, in: 0.001...0.01, step: 0.001)
+                                .frame(maxWidth: 300)
+                        }
+                    }
+                    
+                    Toggle("Gaussian Blur", isOn: $settings.blurEnabled)
+                    
+                    if settings.blurEnabled {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Blur radius")
+                                    .frame(width: 120, alignment: .leading)
+                                Text(String(format: "%.3f", settings.blurRadius))
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                            }
+                            Slider(value: $settings.blurRadius, in: 0.001...0.01, step: 0.001)
+                                .frame(maxWidth: 300)
+                        }
+                    }
+                }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
