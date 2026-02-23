@@ -1,5 +1,34 @@
 # Opal Development Continuity
 
+# Session: 2026-02-23 - UI Improvements
+
+## Completed
+
+### 1. Found All 4 Shaders
+Located the shader files mentioned by user:
+ `liquid_glass.wgsl` - Aurora waves with glass material overlay
+ `advanced_liquid_glass.wgsl` - Chromatic aberration, bloom, blur, liquid distortion
+ `cell.wgsl` - Terminal cell background rendering
+ `cursor.wgsl` - Cursor shader with transparency
+
+### 2. Added Color Pickers to Settings
+Replaced the 4 preset theme buttons in `BackgroundSettingsView` with:
+ Two `ColorPicker` controls for primary and secondary colors
+ Bidirectional sync between color pickers and hue sliders
+ Kept quick preset buttons as convenience shortcuts
+
+### 3. Settings Verification
+ `WindowSettings` properly syncs with `BackgroundSettings`
+ Transparency slider range confirmed: 0.0...1.0 (0-100%)
+ All background effect toggles are wired correctly
+
+## Changes
+ `Opal/Sources/Opal/SettingsView.swift` - Added color pickers
+ `Cargo.toml` - Version bumped to 1.0.10
+
+---
+
+
 ## Current Status
 
 **Version:** 0.2.0 (Month 1 COMPLETE)  

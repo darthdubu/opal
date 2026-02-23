@@ -198,13 +198,13 @@ struct AppearanceSettingsView: View {
                 
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text("Background")
-                            .frame(width: 100, alignment: .leading)
+                        Text("Background Opacity")
+                            .frame(width: 140, alignment: .leading)
                         Text("\(Int(windowSettings.backgroundOpacity * 100))%")
                             .foregroundStyle(.secondary)
                         Spacer()
                     }
-                    Slider(value: $windowSettings.backgroundOpacity, in: 0.0...0.5)
+                    Slider(value: $windowSettings.backgroundOpacity, in: 0.0...1.0)
                         .frame(maxWidth: 300)
                 }
                 
@@ -254,6 +254,9 @@ struct ThemeButton: View {
 
 struct BackgroundSettingsView: View {
     @StateObject private var settings = BackgroundSettings.shared
+    @State private var primaryColor: Color = Color(hue: 210 / 360.0, saturation: 0.8, brightness: 0.9)
+    @State private var secondaryColor: Color = Color(hue: 260 / 360.0, saturation: 0.8, brightness: 0.9)
+    
     
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -347,24 +350,55 @@ struct BackgroundSettingsView: View {
             Divider()
             
             VStack(alignment: .leading, spacing: 12) {
-                Text("Presets")
+                Text("Custom Colors")
                     .font(.headline)
-                
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack(spacing: 16) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Primary Color")
+                                .font(.subheadline)
+                            ColorPicker("", selection: $primaryColor)
+                                .labelsHidden()
+                                .frame(width: 60, height: 40)
+                                .onChange(of: primaryColor) { _, newColor in
+                                    settings.primaryHue = colorToHue(newColor)
+                                }
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Secondary Color")
+                                .font(.subheadline)
+                            ColorPicker("", selection: $secondaryColor)
+                                .labelsHidden()
+                                .frame(width: 60, height: 40)
+                                .onChange(of: secondaryColor) { _, newColor in
+                                    settings.secondaryHue = colorToHue(newColor)
+                                }
+                        }
+                        
+                        Spacer()
+                    }
+                    
+                    Divider()
+                    
+                    Text("Quick Presets")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
                 HStack(spacing: 12) {
-                    PresetButton(name: "Ocean", colors: [Color.cyan, Color.blue]) {
-                        applyPreset(primaryHue: 200, secondaryHue: 240)
-                    }
-                    PresetButton(name: "Sunset", colors: [Color.orange, Color.pink]) {
-                        applyPreset(primaryHue: 20, secondaryHue: 340)
-                    }
-                    PresetButton(name: "Forest", colors: [Color.green, Color.teal]) {
-                        applyPreset(primaryHue: 120, secondaryHue: 160)
-                    }
-                    PresetButton(name: "Purple", colors: [Color.purple, Color.indigo]) {
-                        applyPreset(primaryHue: 270, secondaryHue: 300)
+                        PresetButton(name: "Ocean", colors: [Color.cyan, Color.blue]) {
+                            applyPreset(primaryHue: 200, secondaryHue: 240)
+                        }
+                        PresetButton(name: "Sunset", colors: [Color.orange, Color.pink]) {
+                            applyPreset(primaryHue: 20, secondaryHue: 340)
+                        }
+                        PresetButton(name: "Forest", colors: [Color.green, Color.teal]) {
+                            applyPreset(primaryHue: 120, secondaryHue: 160)
+                        }
+                        PresetButton(name: "Purple", colors: [Color.purple, Color.indigo]) {
+                            applyPreset(primaryHue: 270, secondaryHue: 300)
+                        }
                     }
                 }
-            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -372,7 +406,18 @@ struct BackgroundSettingsView: View {
     private func applyPreset(primaryHue: Double, secondaryHue: Double) {
         settings.primaryHue = primaryHue
         settings.secondaryHue = secondaryHue
+        primaryColor = Color(hue: primaryHue / 360.0, saturation: 0.8, brightness: 0.9)
+        secondaryColor = Color(hue: secondaryHue / 360.0, saturation: 0.8, brightness: 0.9)
     }
+    
+    private func colorToHue(_ color: Color) -> Double {
+        let uiColor = NSColor(color)
+        var hue: CGFloat = 0
+        var saturation: CGFloat = 0
+        var brightness: CGFloat = 0
+        var alpha: CGFloat = 0
+        uiColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+        return Double(hue * 360.0)
 }
 
 struct ColorPreview: View {

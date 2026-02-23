@@ -15,7 +15,9 @@ struct ContentView: View {
                 HStack(spacing: 0) {
                     // Sidebar toggle button
                     Button(action: {
-                        showSidebar.toggle()
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showSidebar.toggle()
+                        }
                     }) {
                         Image(systemName: showSidebar ? "sidebar.left" : "sidebar.left")
                             .font(.system(size: 14))
@@ -44,12 +46,14 @@ struct ContentView: View {
                 
                 // Main content area
                 HStack(spacing: 0) {
-                    // Sidebar - capped height, not under traffic lights
-                    if showSidebar {
-                        SidebarView(viewModel: viewModel)
-                            .frame(width: sidebarWidth)
-                            .background(.ultraThinMaterial)
-                    }
+                    // Sidebar with opacity animation (safer than transform)
+                    SidebarView(viewModel: viewModel)
+                        .frame(width: sidebarWidth)
+                        .background(.ultraThinMaterial)
+                        .opacity(showSidebar ? 1 : 0)
+                        .frame(maxWidth: showSidebar ? sidebarWidth : 0, alignment: .leading)
+                        .clipped()
+                        .animation(.easeInOut(duration: 0.2), value: showSidebar)
                     
                     // Terminal area
                     TerminalContainerView(viewModel: viewModel)
@@ -59,6 +63,11 @@ struct ContentView: View {
         .sheet(isPresented: $showCommandPalette) {
             CommandPaletteView(viewModel: viewModel)
         }
+        .background(WindowAccessor { window in
+            window.isOpaque = false
+            window.backgroundColor = .clear
+            window.hasShadow = true
+        })
         .onAppear {
             viewModel.startSession()
             setupNotifications()
@@ -71,7 +80,9 @@ struct ContentView: View {
             object: nil,
             queue: .main
         ) { _ in
-            showSidebar.toggle()
+            withAnimation(.easeInOut(duration: 0.2)) {
+                showSidebar.toggle()
+            }
         }
         
         NotificationCenter.default.addObserver(
@@ -195,4 +206,22 @@ struct CommandPaletteView: View {
         }
         .frame(width: 600, height: 400)
     }
+}
+
+// Safe window accessor that doesn't cause animation conflicts
+struct WindowAccessor: NSViewRepresentable {
+    var callback: (NSWindow) -> Void
+    
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        // Defer to avoid animation conflicts
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if let window = view.window {
+                callback(window)
+            }
+        }
+        return view
+    }
+    
+    func updateNSView(_ nsView: NSView, context: Context) {}
 }
