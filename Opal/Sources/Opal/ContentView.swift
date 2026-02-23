@@ -4,18 +4,69 @@ import MetalKit
 
 struct ContentView: View {
     @StateObject private var viewModel = TerminalViewModel()
-    @State private var columnVisibility = NavigationSplitViewVisibility.all
+    @State private var showSidebar = true
     @State private var showCommandPalette = false
     
     var body: some View {
-        NavigationSplitView(columnVisibility: $columnVisibility) {
-            SidebarView(viewModel: viewModel)
-                .frame(minWidth: 200, idealWidth: 250, maxWidth: 400)
-                .navigationSplitViewColumnWidth(min: 200, ideal: 250, max: 400)
-        } detail: {
-            TerminalContainerView(viewModel: viewModel)
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                // Top toolbar with sidebar button and tabs
+                HStack(spacing: 0) {
+                    // Sidebar toggle button
+                    Button(action: {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showSidebar.toggle()
+                        }
+                    }) {
+                        Image(systemName: showSidebar ? "sidebar.left" : "sidebar.left")
+                            .font(.system(size: 14))
+                            .frame(width: 32, height: 32)
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.leading, 8)
+                    
+                    // Tab bar - fixed width for tabs
+                    HStack(spacing: 4) {
+                        Text("Terminal")
+                            .font(.system(size: 12))
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 6)
+                            .background(Color.accentColor.opacity(0.2))
+                            .cornerRadius(6)
+                            .fixedSize()
+                        
+                        Spacer()
+                    }
+                    .frame(height: 32)
+                    .padding(.horizontal, 8)
+                    
+                    // New tab button
+                    Button(action: { /* new tab - future implementation */ }) {
+                        Image(systemName: "plus")
+                            .font(.system(size: 12))
+                            .frame(width: 28, height: 28)
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.trailing, 8)
+                }
+                .frame(height: 38)
+                .background(.ultraThinMaterial)
+                
+                // Main content area
+                HStack(spacing: 0) {
+                    // Sidebar - capped height, not under traffic lights
+                    if showSidebar {
+                        SidebarView(viewModel: viewModel)
+                            .frame(minWidth: 200, idealWidth: 250, maxWidth: 300)
+                            .background(.ultraThinMaterial)
+                            .transition(.move(edge: .leading))
+                    }
+                    
+                    // Terminal area
+                    TerminalContainerView(viewModel: viewModel)
+                }
+            }
         }
-        .navigationSplitViewStyle(.balanced)
         .sheet(isPresented: $showCommandPalette) {
             CommandPaletteView(viewModel: viewModel)
         }
@@ -33,14 +84,7 @@ struct ContentView: View {
             queue: .main
         ) { _ in
             withAnimation {
-                switch columnVisibility {
-                case .all:
-                    columnVisibility = .detailOnly
-                case .detailOnly, .doubleColumn, .automatic:
-                    columnVisibility = .all
-                default:
-                    columnVisibility = .all
-                }
+                showSidebar.toggle()
             }
         }
         
@@ -121,6 +165,7 @@ struct TerminalContainerView: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            // Directory bar
             HStack {
                 Text(viewModel.currentDirectory)
                     .font(.caption)

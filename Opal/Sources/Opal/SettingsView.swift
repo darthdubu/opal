@@ -156,7 +156,7 @@ struct GeneralSettingsView: View {
 
 struct AppearanceSettingsView: View {
     @State private var theme = "opal-dark"
-    @State private var transparency = 0.9
+    @StateObject private var windowSettings = WindowSettings.shared
     @State private var blurRadius = 10.0
     
     let themes = [
@@ -200,11 +200,11 @@ struct AppearanceSettingsView: View {
                     HStack {
                         Text("Transparency")
                             .frame(width: 100, alignment: .leading)
-                        Text("\(Int(transparency * 100))%")
+                        Text("\(Int(windowSettings.transparency * 100))%")
                             .foregroundStyle(.secondary)
                         Spacer()
                     }
-                    Slider(value: $transparency, in: 0.5...1.0)
+                    Slider(value: $windowSettings.transparency, in: 0.5...1.0)
                         .frame(maxWidth: 300)
                 }
                 

@@ -23,6 +23,7 @@ impl Pty {
         })?;
 
         let mut cmd = portable_pty::CommandBuilder::new("/bin/zsh");
+        cmd.arg("-l");
         cmd.env("TERM", "xterm-256color");
         cmd.env("TERM_PROGRAM", "Opal");
         cmd.env("TERM_PROGRAM_VERSION", "1.0.0");
