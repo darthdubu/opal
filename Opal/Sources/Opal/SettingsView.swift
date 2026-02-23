@@ -198,13 +198,13 @@ struct AppearanceSettingsView: View {
                 
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text("Transparency")
+                        Text("Background")
                             .frame(width: 100, alignment: .leading)
-                        Text("\(Int(windowSettings.transparency * 100))%")
+                        Text("\(Int(windowSettings.backgroundOpacity * 100))%")
                             .foregroundStyle(.secondary)
                         Spacer()
                     }
-                    Slider(value: $windowSettings.transparency, in: 0.5...1.0)
+                    Slider(value: $windowSettings.backgroundOpacity, in: 0.0...0.5)
                         .frame(maxWidth: 300)
                 }
                 

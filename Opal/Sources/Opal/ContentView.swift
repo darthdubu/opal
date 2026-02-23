@@ -5,6 +5,7 @@ import MetalKit
 struct ContentView: View {
     @StateObject private var viewModel = TerminalViewModel()
     @State private var showSidebar = true
+    @State private var sidebarWidth: CGFloat = 250
     @State private var showCommandPalette = false
     
     var body: some View {
@@ -39,15 +40,6 @@ struct ContentView: View {
                     }
                     .frame(height: 32)
                     .padding(.horizontal, 8)
-                    
-                    // New tab button
-                    Button(action: { /* new tab - future implementation */ }) {
-                        Image(systemName: "plus")
-                            .font(.system(size: 12))
-                            .frame(width: 28, height: 28)
-                    }
-                    .buttonStyle(.plain)
-                    .padding(.trailing, 8)
                 }
                 .frame(height: 38)
                 .background(.ultraThinMaterial)
@@ -57,7 +49,7 @@ struct ContentView: View {
                     // Sidebar - capped height, not under traffic lights
                     if showSidebar {
                         SidebarView(viewModel: viewModel)
-                            .frame(minWidth: 200, idealWidth: 250, maxWidth: 300)
+                            .frame(width: sidebarWidth)
                             .background(.ultraThinMaterial)
                             .transition(.move(edge: .leading))
                     }
