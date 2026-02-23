@@ -67,6 +67,7 @@ class TerminalViewModel: ObservableObject {
     @Published var ptySession: PtySession?
     @Published var currentDirectory: String = "~"
     @Published var gitInfo: GitInfo?
+    @Published var refreshTrigger: Int = 0
     
     private var timer: Timer?
     private let gitManager = GitManager()
@@ -98,7 +99,7 @@ class TerminalViewModel: ObservableObject {
         let data = pty.read()
         if !data.isEmpty {
             terminalHandle?.processInput(data: data)
-            objectWillChange.send()
+            refreshTrigger += 1
         }
     }
     
@@ -132,7 +133,7 @@ struct TerminalContainerView: View {
             
             ZStack {
                 LiquidGlassBackground()
-                TerminalView(viewModel: viewModel)
+                TerminalView(viewModel: viewModel, refreshTrigger: viewModel.refreshTrigger)
                     .focused($isTerminalFocused)
             }
         }
