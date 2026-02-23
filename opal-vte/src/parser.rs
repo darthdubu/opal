@@ -1,11 +1,11 @@
-
-
 pub struct Parser {
     state: State,
     params: Vec<u16>,
     intermediates: Vec<u8>,
     param: u16,
     osc_string: String,
+    utf8_buffer: Vec<u8>,
+    utf8_remaining: usize,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -42,18 +42,20 @@ impl Parser {
             intermediates: Vec::new(),
             param: 0,
             osc_string: String::new(),
+            utf8_buffer: Vec::new(),
+            utf8_remaining: 0,
         }
     }
 
     pub fn parse(&mut self, input: &[u8]) -> Vec<Action> {
         let mut actions = Vec::new();
-        
+
         for &byte in input {
             if let Some(action) = self.advance(byte) {
                 actions.push(action);
             }
         }
-        
+
         actions
     }
 
@@ -73,15 +75,67 @@ impl Parser {
     }
 
     fn advance_ground(&mut self, byte: u8) -> Option<Action> {
+        if self.utf8_remaining > 0 {
+            return self.handle_utf8_continuation(byte);
+        }
+
         match byte {
             0x1b => {
                 self.state = State::Escape;
                 None
             }
             0x00..=0x1f | 0x7f => Some(Action::Execute(byte)),
-            0x20..=0x7e | 0x80..=0xff => Some(Action::Print(byte as char)),
+            0x20..=0x7e => Some(Action::Print(byte as char)),
+            0x80..=0xbf => {
+                self.utf8_buffer.push(byte);
+                self.utf8_remaining = 0;
+                self.try_decode_utf8()
+            }
+            0xc0..=0xdf => {
+                self.utf8_buffer.push(byte);
+                self.utf8_remaining = 1;
+                None
+            }
+            0xe0..=0xef => {
+                self.utf8_buffer.push(byte);
+                self.utf8_remaining = 2;
+                None
+            }
+            0xf0..=0xf7 => {
+                self.utf8_buffer.push(byte);
+                self.utf8_remaining = 3;
+                None
+            }
             _ => None,
         }
+    }
+
+    fn handle_utf8_continuation(&mut self, byte: u8) -> Option<Action> {
+        if byte >= 0x80 && byte <= 0xbf {
+            self.utf8_buffer.push(byte);
+            self.utf8_remaining -= 1;
+
+            if self.utf8_remaining == 0 {
+                self.try_decode_utf8()
+            } else {
+                None
+            }
+        } else {
+            let _ = self.utf8_buffer.drain(..);
+            self.utf8_remaining = 0;
+            self.advance_ground(byte)
+        }
+    }
+
+    fn try_decode_utf8(&mut self) -> Option<Action> {
+        if let Ok(s) = std::str::from_utf8(&self.utf8_buffer) {
+            if let Some(c) = s.chars().next() {
+                self.utf8_buffer.clear();
+                return Some(Action::Print(c));
+            }
+        }
+        self.utf8_buffer.clear();
+        None
     }
 
     fn advance_escape(&mut self, byte: u8) -> Option<Action> {
@@ -148,7 +202,6 @@ impl Parser {
                 None
             }
             0x3c..=0x3f => {
-                // Private CSI codes (including ? for DECSET/DECRST)
                 self.intermediates.push(byte);
                 None
             }
@@ -176,7 +229,10 @@ impl Parser {
         match byte {
             0x00..=0x17 | 0x19 | 0x1c..=0x1f => Some(Action::Execute(byte)),
             0x30..=0x39 => {
-                self.param = self.param.saturating_mul(10).saturating_add((byte - 0x30) as u16);
+                self.param = self
+                    .param
+                    .saturating_mul(10)
+                    .saturating_add((byte - 0x30) as u16);
                 None
             }
             0x3b => {
@@ -298,5 +354,7 @@ impl Parser {
         self.intermediates.clear();
         self.param = 0;
         self.osc_string.clear();
+        self.utf8_buffer.clear();
+        self.utf8_remaining = 0;
     }
 }
