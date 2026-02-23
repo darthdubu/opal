@@ -32,8 +32,8 @@ struct LiquidGlassBackground: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // Deep space background
-                Color.black.opacity(settings.backgroundOpacity)
+                // Transparent background - allows window transparency to show through
+                Color.clear
                 
                 // Primary aurora layer - slow flowing waves
                 AuroraWaveLayer(

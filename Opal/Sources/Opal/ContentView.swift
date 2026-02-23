@@ -15,9 +15,7 @@ struct ContentView: View {
                 HStack(spacing: 0) {
                     // Sidebar toggle button
                     Button(action: {
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            showSidebar.toggle()
-                        }
+                        showSidebar.toggle()
                     }) {
                         Image(systemName: showSidebar ? "sidebar.left" : "sidebar.left")
                             .font(.system(size: 14))
@@ -51,7 +49,6 @@ struct ContentView: View {
                         SidebarView(viewModel: viewModel)
                             .frame(width: sidebarWidth)
                             .background(.ultraThinMaterial)
-                            .transition(.move(edge: .leading))
                     }
                     
                     // Terminal area
@@ -74,9 +71,7 @@ struct ContentView: View {
             object: nil,
             queue: .main
         ) { _ in
-            withAnimation {
-                showSidebar.toggle()
-            }
+            showSidebar.toggle()
         }
         
         NotificationCenter.default.addObserver(
