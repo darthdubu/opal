@@ -37,7 +37,8 @@ impl Performer {
             0x09 => handler.tab(),
             0x0A => handler.linefeed(),
             0x0D => handler.carriage_return(),
-            _ => {} // Other control codes not yet implemented
+            0x7F => handler.backspace(),
+            _ => {}
         }
     }
 
