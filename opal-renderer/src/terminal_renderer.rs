@@ -51,8 +51,8 @@ impl TerminalRenderer {
             let mut row_text = String::new();
 
             for col in 0..grid.cols() {
-                if let Some(cell) = grid.get(col, row) {
-                    let cell_char = cell.ch;
+                if let Some(cell) = grid.get_cell(row, col) {
+                    let cell_char = cell.c;
 
                     // Handle special characters
                     let display_char = if cell_char == '\0' || cell_char == ' ' {

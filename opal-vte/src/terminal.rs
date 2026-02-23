@@ -3,6 +3,8 @@ use crate::cell::{Cell, Flags};
 use crate::color::Color;
 use crate::cursor::{Cursor, CursorStyle};
 use crate::grid::Grid;
+use crate::parser::Parser;
+use crate::performer::Performer;
 
 pub struct Terminal {
     grid: Grid,
@@ -13,6 +15,8 @@ pub struct Terminal {
     scroll_region: Option<(usize, usize)>,
     modes: Vec<Mode>,
     title: String,
+    parser: Parser,
+    performer: Performer,
 }
 
 impl Terminal {
@@ -26,6 +30,8 @@ impl Terminal {
             scroll_region: None,
             modes: Vec::new(),
             title: String::new(),
+            parser: Parser::new(),
+            performer: Performer::new(),
         }
     }
 
@@ -37,6 +43,19 @@ impl Terminal {
         &self.cursor
     }
 
+    pub fn process_bytes(&mut self, data: &[u8]) {
+        let actions = {
+            let parser = &mut self.parser;
+            parser.parse(data)
+        };
+        let performer = std::mem::take(&mut self.performer);
+        for action in actions {
+            performer.perform(self, action);
+        }
+        self.performer = performer;
+    }
+
+
     fn scroll_up_if_needed(&mut self) {
         if self.cursor.row >= self.grid.rows() {
             let scroll_region = self.scroll_region.unwrap_or((0, self.grid.rows() - 1));
@@ -46,10 +65,17 @@ impl Terminal {
             }
         }
     }
+    fn in_insert_mode(&self) -> bool {
+        self.modes.contains(&Mode::InsertMode)
+    }
 }
 
 impl Handler for Terminal {
     fn input(&mut self, c: char) {
+        if self.in_insert_mode() {
+            self.insert_blank_chars(1);
+        }
+
         let mut cell = Cell::new(c);
         cell.fg = self.fg;
         cell.bg = self.bg;
@@ -185,22 +211,72 @@ impl Handler for Terminal {
         self.grid.delete_lines(self.cursor.row, amount);
     }
 
-    fn insert_blank_chars(&mut self, _amount: usize) {
-        // Shift cells right and insert blanks
+    fn insert_blank_chars(&mut self, amount: usize) {
+        let amount = amount.min(self.grid.cols() - self.cursor.col);
+        let row = self.cursor.row;
+
+        for _ in 0..amount {
+            if let Some(line_end) = self.grid.get_cell(row, self.grid.cols() - 1) {
+                if line_end.c != ' ' {
+                    let _ = self.grid.get_cell(row, self.grid.cols() - 1);
+                }
+            }
+        }
+
+        for col in (self.cursor.col..self.grid.cols()).rev() {
+            let src_col = col.saturating_sub(amount);
+            if let (Some(src), Some(dst)) = (
+                self.grid.get_cell(row, src_col).cloned(),
+                self.grid.get_cell_mut(row, col),
+            ) {
+                *dst = src;
+            }
+        }
+
+        for col in self.cursor.col..(self.cursor.col + amount).min(self.grid.cols()) {
+            if let Some(cell) = self.grid.get_cell_mut(row, col) {
+                cell.reset();
+            }
+        }
     }
 
-    fn delete_chars(&mut self, _amount: usize) {
-        // Shift cells left
+    fn delete_chars(&mut self, amount: usize) {
+        let amount = amount.min(self.grid.cols() - self.cursor.col);
+        let row = self.cursor.row;
+
+        for col in self.cursor.col..(self.grid.cols() - amount) {
+            if let Some(src) = self.grid.get_cell(row, col + amount).cloned() {
+                if let Some(dst) = self.grid.get_cell_mut(row, col) {
+                    *dst = src;
+                }
+            }
+        }
+
+        for col in (self.grid.cols() - amount)..self.grid.cols() {
+            if let Some(cell) = self.grid.get_cell_mut(row, col) {
+                cell.reset();
+            }
+        }
     }
 
     fn set_mode(&mut self, mode: Mode) {
         if !self.modes.contains(&mode) {
             self.modes.push(mode);
         }
+        // Handle mode-specific side effects
+        match mode {
+            Mode::ShowCursor => self.cursor.visible = true,
+            _ => {}
+        }
     }
 
     fn unset_mode(&mut self, mode: Mode) {
         self.modes.retain(|m| m != &mode);
+        // Handle mode-specific side effects
+        match mode {
+            Mode::ShowCursor => self.cursor.visible = false,
+            _ => {}
+        }
     }
 
     fn set_scrolling_region(&mut self, top: usize, bottom: usize) {
@@ -208,10 +284,11 @@ impl Handler for Terminal {
     }
 
     fn bell(&mut self) {
-        // Trigger bell/alert
+        // TODO: Implement bell/alert notification
     }
 
     fn substitute(&mut self) {
-        // Handle substitution character
+        // Handle substitution character - typically display replacement char
+        self.input('\u{FFFD}');
     }
 }

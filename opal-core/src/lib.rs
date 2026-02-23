@@ -8,4 +8,4 @@ pub use input::{
     encode_key, encode_key_with_modes, encode_keypad_key, InputModes, Key, KeypadKey, MouseMode,
 };
 pub use pty::Pty;
-pub use terminal::{Attributes, Cell, Color, Cursor, Grid, Pty as PtyTrait, Terminal};
+pub use terminal::{Cell, CellFlags, Color, Cursor, Grid, Pty as PtyTrait, Terminal};

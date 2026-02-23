@@ -8,7 +8,7 @@ repository.workspace = true
 rust-version.workspace = true
 
 [dependencies]
-vte = { workspace = true }
+opal-vte = { path = "../opal-vte" }
 portable-pty = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }

@@ -11,6 +11,9 @@ pub use opal_renderer;
 mod renderer_bridge;
 pub use renderer_bridge::*;
 
+mod terminal_handle;
+pub use terminal_handle::*;
+
 /// Terminal cell representation for FFI
 #[derive(uniffi::Record, Clone)]
 pub struct TerminalCell {
@@ -79,76 +82,6 @@ impl From<&CoreColor> for TerminalColor {
 #[derive(uniffi::Object)]
 pub struct TerminalHandle {
     terminal: Mutex<Terminal>,
-}
-
-#[uniffi::export]
-impl TerminalHandle {
-    #[uniffi::constructor]
-    pub fn new() -> Arc<Self> {
-        Arc::new(Self {
-            terminal: Mutex::new(Terminal::new()),
-        })
-    }
-
-    pub fn process_input(self: Arc<Self>, data: &[u8]) {
-        let mut term = self.terminal.lock().unwrap();
-        term.process_input(data);
-    }
-
-    pub fn rows(&self) -> u32 {
-        let term = self.terminal.lock().unwrap();
-        term.get_grid().rows() as u32
-    }
-
-    pub fn cols(&self) -> u32 {
-        let term = self.terminal.lock().unwrap();
-        term.get_grid().cols() as u32
-    }
-
-    pub fn cursor_row(&self) -> u32 {
-        let term = self.terminal.lock().unwrap();
-        term.get_cursor().row as u32
-    }
-
-    pub fn cursor_col(&self) -> u32 {
-        let term = self.terminal.lock().unwrap();
-        term.get_cursor().col as u32
-    }
-
-    pub fn cursor_visible(&self) -> bool {
-        let term = self.terminal.lock().unwrap();
-        term.get_cursor().visible
-    }
-
-    pub fn resize(&self, cols: u32, rows: u32) {
-        let mut term = self.terminal.lock().unwrap();
-        term.resize(cols as usize, rows as usize);
-    }
-
-    pub fn cell_at(&self, col: u32, row: u32) -> Option<TerminalCell> {
-        let term = self.terminal.lock().unwrap();
-        term.get_grid().get(col as usize, row as usize).map(|cell| {
-            let content = if cell.ch == '\0' {
-                " ".to_string()
-            } else {
-                cell.ch.to_string()
-            };
-
-            TerminalCell {
-                content,
-                foreground: TerminalColor::from(&cell.fg),
-                background: TerminalColor::from(&cell.bg),
-                bold: cell.attrs.bold,
-                italic: cell.attrs.italic,
-                underline: cell.attrs.underline,
-                strikethrough: cell.attrs.strikethrough,
-            }
-        })
-    }
-
-    pub fn version(&self) -> String {
-        env!("CARGO_PKG_VERSION").to_string()
-    }
 }
 
 /// PTY Session handle

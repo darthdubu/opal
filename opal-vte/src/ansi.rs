@@ -91,4 +91,7 @@ pub enum Mode {
     ReportFocus,
     AltScreen,
     CursorBlink,
+    InsertMode,
+    BracketedPaste,
+    LineFeedNewLineMode,
 }

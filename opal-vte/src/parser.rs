@@ -1,6 +1,4 @@
-use crate::ansi::{ClearLineMode, ClearMode, Handler, Mode};
-use crate::cell::Flags;
-use crate::color::Color;
+
 
 pub struct Parser {
     state: State,
@@ -76,12 +74,12 @@ impl Parser {
 
     fn advance_ground(&mut self, byte: u8) -> Option<Action> {
         match byte {
-            0x00..=0x1f | 0x7f => Some(Action::Execute(byte)),
-            0x20..=0x7e | 0x80..=0xff => Some(Action::Print(byte as char)),
             0x1b => {
                 self.state = State::Escape;
                 None
             }
+            0x00..=0x1f | 0x7f => Some(Action::Execute(byte)),
+            0x20..=0x7e | 0x80..=0xff => Some(Action::Print(byte as char)),
             _ => None,
         }
     }
@@ -145,9 +143,13 @@ impl Parser {
                 self.state = State::CsiParam;
                 self.advance_csi_param(byte)
             }
-            0x3a | 0x3c..=0x3f => {
-                self.intermediates.push(byte);
+            0x3a => {
                 self.state = State::CsiIgnore;
+                None
+            }
+            0x3c..=0x3f => {
+                // Private CSI codes (including ? for DECSET/DECRST)
+                self.intermediates.push(byte);
                 None
             }
             0x20..=0x2f => {
