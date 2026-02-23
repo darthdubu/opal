@@ -1,5 +1,47 @@
 # Opal Development Continuity
 
+# Session: 2026-02-23 - Metal Shader Implementation
+
+## Summary
+
+Fixed the background to use actual Metal shaders instead of SwiftUI Canvas:
+
+### Changes
+1. **Created MetalLiquidGlassBackground.swift** - New file with:
+   - `MetalShaderView` - NSView subclass with CAMetalLayer
+   - Runtime Metal shader compilation (no separate .metallib needed)
+   - Aurora wave effects with HSV color support
+   - Chromatic aberration, bloom, and blur post-processing
+   - 60fps GPU-accelerated animation
+
+2. **Updated LiquidGlassBackground.swift** - Added:
+   - `useMetalShader` toggle setting
+   - Dynamic switching between Metal and Canvas rendering
+   - Metal is now the default for better performance
+
+3. **Updated SettingsView.swift** - Added:
+   - Toggle for 'Use Metal shaders (GPU accelerated)'
+
+4. **Fixed ContentView.swift** - Removed duplicate WindowAccessor
+
+### Technical Details
+
+The Metal implementation:
+- Compiles shaders at runtime from embedded MSL source
+- Uses a full-screen quad with vertex/fragment shaders
+- Supports all existing settings (hue, wave speed, animation toggle)
+- Falls back to Canvas rendering if Metal fails
+
+### Files Changed
+- `Opal/Sources/Opal/MetalLiquidGlassBackground.swift` (new)
+- `Opal/Sources/Opal/LiquidGlassBackground.swift`
+- `Opal/Sources/Opal/SettingsView.swift`
+- `Opal/Sources/Opal/ContentView.swift`
+- `Cargo.toml` - Version 1.0.11
+
+---
+
+
 # Session: 2026-02-23 - UI Improvements
 
 ## Completed
