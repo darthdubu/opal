@@ -207,21 +207,3 @@ struct CommandPaletteView: View {
         .frame(width: 600, height: 400)
     }
 }
-
-// Safe window accessor that doesn't cause animation conflicts
-struct WindowAccessor: NSViewRepresentable {
-    var callback: (NSWindow) -> Void
-    
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView()
-        // Defer to avoid animation conflicts
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            if let window = view.window {
-                callback(window)
-            }
-        }
-        return view
-    }
-    
-    func updateNSView(_ nsView: NSView, context: Context) {}
-}

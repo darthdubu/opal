@@ -16,13 +16,31 @@ class BackgroundSettings: ObservableObject {
     @Published var glassOpacity: Double = 0.25
     @Published var edgeHighlightsEnabled: Bool = true
     @Published var specularHighlightsEnabled: Bool = true
+    @Published var useMetalShader: Bool = true  // NEW: Toggle between Canvas and Metal
     
     private init() {}
 }
 
-/// Liquid Glass background effect for macOS 15+
-/// Creates a stunning glass morphism effect with animated aurora waves
+/// Liquid Glass background effect using Metal shaders
 struct LiquidGlassBackground: View {
+    @StateObject private var settings = BackgroundSettings.shared
+    
+    var body: some View {
+        ZStack {
+            if settings.useMetalShader {
+                // Use Metal-based shader for GPU acceleration
+                ShaderLiquidGlassBackground()
+            } else {
+                // Fallback to Canvas-based rendering
+                CanvasLiquidGlassBackground()
+            }
+        }
+    }
+}
+
+// MARK: - Canvas-based Fallback (Original Implementation)
+
+struct CanvasLiquidGlassBackground: View {
     @StateObject private var settings = BackgroundSettings.shared
     @State private var phase = 0.0
     @State private var secondaryPhase = 0.0

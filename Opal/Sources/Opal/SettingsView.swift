@@ -265,6 +265,7 @@ struct BackgroundSettingsView: View {
                     .font(.headline)
                 
                 Toggle("Enable wave animation", isOn: $settings.animationEnabled)
+                Toggle("Use Metal shaders (GPU accelerated)", isOn: $settings.useMetalShader)
                 
                 if settings.animationEnabled {
                     VStack(alignment: .leading, spacing: 8) {
