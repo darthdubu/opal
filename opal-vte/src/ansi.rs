@@ -19,6 +19,10 @@ pub trait Handler {
 
     fn set_cursor_pos(&mut self, row: usize, col: usize);
 
+    fn set_cursor_row(&mut self, row: usize);
+
+    fn set_cursor_col(&mut self, col: usize);
+
     fn move_cursor_up(&mut self, amount: usize);
 
     fn move_cursor_down(&mut self, amount: usize);
@@ -43,6 +47,8 @@ pub trait Handler {
 
     fn set_window_title(&mut self, title: String);
 
+    fn set_current_directory(&mut self, path: String);
+
     fn scroll_up(&mut self, amount: usize);
 
     fn scroll_down(&mut self, amount: usize);
@@ -60,6 +66,8 @@ pub trait Handler {
     fn unset_mode(&mut self, mode: Mode);
 
     fn set_scrolling_region(&mut self, top: usize, bottom: usize);
+
+    fn device_status(&mut self, status: u16);
 
     fn bell(&mut self);
 

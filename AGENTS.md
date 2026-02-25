@@ -15,8 +15,13 @@ We've made changes since version 0.1.0. This makes it difficult to:
 - Debug issues (users can't report accurate versions)
 - Maintain changelog accuracy
 
-**Rule**: Update the version in the workspace `Cargo.toml` with EVERY code change, no exceptions:
+**Rule**: Update the version in ALL of the following locations with EVERY code change, no exceptions:
 - `Cargo.toml` - workspace.package.version
+- `Opal/Sources/Opal/SettingsView.swift` - About section version text (line ~846)
+
+**Version locations to update:**
+1. `Cargo.toml` - Main workspace version
+2. `Opal/Sources/Opal/SettingsView.swift` - UI About section (search for `Text("X.Y.Z")` in AdvancedSettingsView)
 
 Version format: `MAJOR.MINOR.PATCH`
 - MAJOR: Breaking changes, major features
@@ -39,14 +44,13 @@ Version format: `MAJOR.MINOR.PATCH`
 
 ## Current Version Tracking
 
-**Current Version: v0.1.0**
+**Current Version: v1.0.16**
 
-Last version update: v0.1.0 (initial)
-- Project initialization with workspace structure
-- opal-core: Core terminal emulation logic
-- opal-renderer: wgpu-based GPU rendering
-- opal-ffi: UniFFI bindings for Swift interop
-- Opal: Swift/SwiftUI macOS application
+Last version update: v1.0.16 (2026-02-23)
+- Settings window converted to floating panel
+- Terminal transparency fixes for aurora shader
+- Terminal prompt positioning fixed
+- Version display updated in About section
 
 Next version: Increment based on changes (see rules above)
 

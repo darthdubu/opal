@@ -75,13 +75,18 @@ impl Performer {
             b'G' => {
                 // CHA - Cursor Horizontal Absolute
                 let col = param(1).saturating_sub(1) as usize;
-                handler.set_cursor_pos(0, col);
+                handler.set_cursor_col(col);
             }
             b'H' | b'f' => {
                 // CUP - Cursor Position or HVP - Horizontal and Vertical Position
                 let row = param(1).saturating_sub(1) as usize;
                 let col = params.get(1).copied().unwrap_or(1).saturating_sub(1) as usize;
                 handler.set_cursor_pos(row, col);
+            }
+            b'd' => {
+                // VPA - Line Position Absolute
+                let row = param(1).saturating_sub(1) as usize;
+                handler.set_cursor_row(row);
             }
 
             // Erase Functions
@@ -148,9 +153,24 @@ impl Performer {
 
             // Set Scrolling Region
             b'r' => {
-                let top = param(1).saturating_sub(1) as usize;
-                let bottom = params.get(1).copied().unwrap_or(1).saturating_sub(1) as usize;
+                let top = if params.is_empty() {
+                    0
+                } else {
+                    param(1).saturating_sub(1) as usize
+                };
+                let bottom = if params.len() < 2 {
+                    usize::MAX
+                } else {
+                    params[1].saturating_sub(1) as usize
+                };
                 handler.set_scrolling_region(top, bottom);
+            }
+
+            // Device Status Report (DSR)
+            b'n' => {
+                if !intermediates.contains(&b'?') {
+                    handler.device_status(param(0));
+                }
             }
 
             // Cursor Style
@@ -307,6 +327,14 @@ impl Performer {
                     handler.set_title(title.clone());
                 }
             }
+            Some(7) => {
+                // Set current directory via file URI (OSC 7)
+                if let Some(uri) = params.get(1) {
+                    if let Some(path) = osc7_uri_to_path(uri) {
+                        handler.set_current_directory(path);
+                    }
+                }
+            }
             _ => {} // Unknown or unimplemented OSC sequence
         }
     }
@@ -326,4 +354,29 @@ fn mode_from_u16(code: u16) -> Option<Mode> {
         20 => Some(Mode::LineFeedNewLineMode),
         _ => None,
     }
+}
+
+fn osc7_uri_to_path(uri: &str) -> Option<String> {
+    let no_scheme = uri.strip_prefix("file://")?;
+    let path_start = no_scheme.find('/')?;
+    let raw_path = &no_scheme[path_start..];
+    percent_decode(raw_path)
+}
+
+fn percent_decode(input: &str) -> Option<String> {
+    let mut out = String::with_capacity(input.len());
+    let bytes = input.as_bytes();
+    let mut i = 0usize;
+    while i < bytes.len() {
+        if bytes[i] == b'%' && i + 2 < bytes.len() {
+            let hi = (bytes[i + 1] as char).to_digit(16)?;
+            let lo = (bytes[i + 2] as char).to_digit(16)?;
+            out.push((hi * 16 + lo) as u8 as char);
+            i += 3;
+            continue;
+        }
+        out.push(bytes[i] as char);
+        i += 1;
+    }
+    Some(out)
 }

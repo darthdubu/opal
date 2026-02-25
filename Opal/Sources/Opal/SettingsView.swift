@@ -1,503 +1,529 @@
 import SwiftUI
-import OpalCore
+import AppKit
+
+private enum SettingsSection: String, CaseIterable, Identifiable {
+    case background = "Background"
+    case workspace = "Workspace"
+    case session = "Session"
+    case about = "About"
+
+    var id: String { rawValue }
+
+    var icon: String {
+        switch self {
+        case .background:
+            return "wand.and.stars"
+        case .workspace:
+            return "folder"
+        case .session:
+            return "arrow.clockwise"
+        case .about:
+            return "info.circle"
+        }
+    }
+}
 
 struct SettingsView: View {
-    @State private var selectedCategory: SettingsCategory = .general
-    
+    @State private var selectedSection: SettingsSection = .background
+
     var body: some View {
         NavigationSplitView {
-            List(selection: $selectedCategory) {
-                Section {
-                    SettingsCategoryButton(category: .general, icon: "gear", title: "General")
-                    SettingsCategoryButton(category: .appearance, icon: "paintbrush", title: "Appearance")
-                    SettingsCategoryButton(category: .background, icon: "wand.and.stars", title: "Background")
-                    SettingsCategoryButton(category: .font, icon: "textformat", title: "Font")
-                    SettingsCategoryButton(category: .cursor, icon: "cursorarrow", title: "Cursor")
-                    SettingsCategoryButton(category: .ai, icon: "brain", title: "AI")
-                    SettingsCategoryButton(category: .keys, icon: "keyboard", title: "Keys")
-                    SettingsCategoryButton(category: .advanced, icon: "gearshape.2", title: "Advanced")
-                }
+            List(SettingsSection.allCases, selection: $selectedSection) { section in
+                Label(section.rawValue, systemImage: section.icon)
+                    .tag(section)
             }
             .listStyle(.sidebar)
             .navigationTitle("Settings")
-            .frame(minWidth: 200)
+            .frame(minWidth: 190)
         } detail: {
             ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(selectedCategory.title)
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .padding(.horizontal, 20)
-                        .padding(.top, 20)
-                        .padding(.bottom, 16)
-                    
-                    Divider()
-                    
-                    settingsContent
-                        .padding(20)
+                VStack(alignment: .leading, spacing: 16) {
+                    Text(selectedSection.rawValue)
+                        .font(.title2.weight(.semibold))
+
+                    sectionContent
                 }
                 .frame(maxWidth: .infinity, alignment: .topLeading)
+                .padding(20)
             }
             .background(Color(NSColor.controlBackgroundColor))
         }
-        .frame(minWidth: 700, minHeight: 500)
+        .frame(minWidth: 760, minHeight: 540)
     }
-    
+
     @ViewBuilder
-    var settingsContent: some View {
-        switch selectedCategory {
-        case .general:
-            GeneralSettingsView()
-        case .appearance:
-            AppearanceSettingsView()
+    private var sectionContent: some View {
+        switch selectedSection {
         case .background:
-            BackgroundSettingsView()
-        case .font:
-            FontSettingsView()
-        case .cursor:
-            CursorSettingsView()
-        case .ai:
-            AISettingsView()
-        case .keys:
-            KeysSettingsView()
-        case .advanced:
-            AdvancedSettingsView()
+            BackgroundSettingsPanel()
+        case .workspace:
+            WorkspaceSettingsPanel()
+        case .session:
+            SessionSettingsPanel()
+        case .about:
+            AboutSettingsPanel()
         }
     }
 }
 
-enum SettingsCategory: String, CaseIterable, Identifiable, Hashable {
-    case general, appearance, background, font, cursor, ai, keys, advanced
-    
-    var id: String { rawValue }
-    
-    var title: String {
-        switch self {
-        case .general: return "General"
-        case .appearance: return "Appearance"
-        case .background: return "Background"
-        case .font: return "Font"
-        case .cursor: return "Cursor"
-        case .ai: return "AI"
-        case .keys: return "Keyboard"
-        case .advanced: return "Advanced"
-        }
-    }
-}
+private struct BackgroundSettingsPanel: View {
+    @StateObject private var settings = BackgroundSettings.shared
+    @State private var primaryColor = Color(hue: 210 / 360.0, saturation: 0.8, brightness: 0.9)
+    @State private var secondaryColor = Color(hue: 260 / 360.0, saturation: 0.8, brightness: 0.9)
 
-struct SettingsCategoryButton: View {
-    let category: SettingsCategory
-    let icon: String
-    let title: String
-    
     var body: some View {
-        Label(title, systemImage: icon)
-            .tag(category)
-    }
-}
+        VStack(alignment: .leading, spacing: 14) {
+            SettingsCard(
+                title: "Renderer",
+                subtitle: "Only options that currently affect the live background renderer are shown."
+            ) {
+                Toggle("Use Metal shader renderer", isOn: $settings.useMetalShader)
 
-struct GeneralSettingsView: View {
-    @State private var shell = "/bin/zsh"
-    @State private var startupCommand = ""
-    @State private var saveWindowSize = true
-    @State private var confirmBeforeClosing = false
-    @State private var scrollbackLines = 10000.0
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Shell")
-                    .font(.headline)
-                
-                Picker("Shell:", selection: $shell) {
-                    Text("zsh").tag("/bin/zsh")
-                    Text("bash").tag("/bin/bash")
-                    Text("fish").tag("/usr/local/bin/fish")
+                Picker("Style", selection: $settings.shaderStyle) {
+                    ForEach(BackgroundSettings.ShaderStyle.allCases, id: \.self) { style in
+                        Text(style.rawValue).tag(style)
+                    }
                 }
                 .pickerStyle(.segmented)
-                .frame(maxWidth: 300)
-            }
-            
-            Divider()
-            
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Startup")
-                    .font(.headline)
-                
-                HStack {
-                    Text("Startup command:")
-                        .frame(width: 140, alignment: .leading)
-                    TextField("", text: $startupCommand)
-                        .textFieldStyle(.roundedBorder)
-                        .frame(maxWidth: 400)
-                }
-                
-                Toggle("Save window size on exit", isOn: $saveWindowSize)
-                Toggle("Confirm before closing", isOn: $confirmBeforeClosing)
-            }
-            
-            Divider()
-            
-            VStack(alignment: .leading, spacing: 12) {
-                Text("History & Scrollback")
-                    .font(.headline)
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Scrollback lines: \(Int(scrollbackLines))")
-                        .font(.subheadline)
-                    Slider(value: $scrollbackLines, in: 1000...50000, step: 1000)
-                        .frame(maxWidth: 400)
-                }
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
+                .frame(maxWidth: 340)
+                .disabled(!settings.useMetalShader)
 
-struct AppearanceSettingsView: View {
-    @State private var theme = "opal-dark"
-    @StateObject private var windowSettings = WindowSettings.shared
-    @State private var blurRadius = 10.0
-    
-    let themes = [
-        ("Opal Dark", "opal-dark"),
-        ("Opal Light", "opal-light"),
-        ("Dracula", "dracula"),
-        ("Nord", "nord"),
-        ("Monokai", "monokai"),
-        ("Solarized Dark", "solarized-dark"),
-        ("Solarized Light", "solarized-light")
-    ]
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Theme")
-                    .font(.headline)
-                
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))], spacing: 12) {
-                    ForEach(themes, id: \.1) { name, id in
-                        ThemeButton(name: name, isSelected: theme == id) {
-                            theme = id
-                        }
-                    }
-                }
-                .frame(maxWidth: 400)
-                
-                HStack {
-                    Button("Import Theme...") {}
-                    Button("Export Theme...") {}
-                }
+                SettingsMetricSlider(
+                    title: "Transparency",
+                    valueText: "\(Int(settings.shaderTransparency))%",
+                    value: $settings.shaderTransparency,
+                    range: 0...100,
+                    step: 1
+                )
+                .disabled(!settings.useMetalShader)
             }
-            
-            Divider()
-            
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Window")
-                    .font(.headline)
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("Background Opacity")
-                            .frame(width: 140, alignment: .leading)
-                        Text("\(Int(windowSettings.backgroundOpacity * 100))%")
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                    }
-                    Slider(value: $windowSettings.backgroundOpacity, in: 0.0...1.0)
-                        .frame(maxWidth: 300)
-                }
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("Blur radius")
-                            .frame(width: 100, alignment: .leading)
-                        Text("\(Int(blurRadius))px")
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                    }
-                    Slider(value: $blurRadius, in: 0...30)
-                        .frame(maxWidth: 300)
-                }
-                
-                Toggle("Use system accent color", isOn: .constant(true))
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
 
-struct ThemeButton: View {
-    let name: String
-    let isSelected: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            VStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(isSelected ? Color.accentColor : Color.gray.opacity(0.3))
-                    .frame(height: 60)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 3)
-                    )
-                
-                Text(name)
-                    .font(.caption)
-                    .foregroundStyle(isSelected ? .primary : .secondary)
-            }
-        }
-        .buttonStyle(.plain)
-    }
-}
+            SettingsCard(
+                title: "Motion",
+                subtitle: "Wave animation controls used by both Metal and fallback canvas rendering."
+            ) {
+                Toggle("Animate background", isOn: $settings.animationEnabled)
 
-struct BackgroundSettingsView: View {
-    @StateObject private var settings = BackgroundSettings.shared
-    @State private var primaryColor: Color = Color(hue: 210 / 360.0, saturation: 0.8, brightness: 0.9)
-    @State private var secondaryColor: Color = Color(hue: 260 / 360.0, saturation: 0.8, brightness: 0.9)
-    
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Animation")
-                    .font(.headline)
-                
-                Toggle("Enable wave animation", isOn: $settings.animationEnabled)
-                Toggle("Use Metal shaders (GPU accelerated)", isOn: $settings.useMetalShader)
-                
-                if settings.animationEnabled {
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text("Primary speed")
-                                .frame(width: 120, alignment: .leading)
-                            Text(String(format: "%.3f", settings.primaryWaveSpeed))
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                        }
-                        Slider(value: $settings.primaryWaveSpeed, in: 0.001...0.1, step: 0.001)
-                            .frame(maxWidth: 300)
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text("Secondary speed")
-                                .frame(width: 120, alignment: .leading)
-                            Text(String(format: "%.3f", settings.secondaryWaveSpeed))
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                        }
-                        Slider(value: $settings.secondaryWaveSpeed, in: 0.001...0.1, step: 0.001)
-                            .frame(maxWidth: 300)
-                    }
-                }
-            }
-            
-            Divider()
-            
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Wave Colors")
-                    .font(.headline)
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("Primary hue")
-                            .frame(width: 100, alignment: .leading)
-                        Text("\(Int(settings.primaryHue))°")
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                    }
-                    HStack {
-                        Slider(value: $settings.primaryHue, in: 0...360, step: 1)
-                            .frame(width: 280)
-                        ColorPreview(hue: settings.primaryHue)
-                            .frame(width: 40, height: 24)
-                    }
-                }
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("Secondary hue")
-                            .frame(width: 100, alignment: .leading)
-                        Text("\(Int(settings.secondaryHue))°")
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                    }
-                    HStack {
-                        Slider(value: $settings.secondaryHue, in: 0...360, step: 1)
-                            .frame(width: 280)
-                        ColorPreview(hue: settings.secondaryHue)
-                            .frame(width: 40, height: 24)
-                    }
-                }
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("Wave count")
-                            .frame(width: 100, alignment: .leading)
-                        Text("\(settings.waveCount)")
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                    }
-                    Slider(value: .init(
+                SettingsMetricSlider(
+                    title: "Primary speed",
+                    valueText: String(format: "%.3f", settings.primaryWaveSpeed),
+                    value: $settings.primaryWaveSpeed,
+                    range: 0.001...0.12,
+                    step: 0.001
+                )
+                .disabled(!settings.animationEnabled)
+
+                SettingsMetricSlider(
+                    title: "Secondary speed",
+                    valueText: String(format: "%.3f", settings.secondaryWaveSpeed),
+                    value: $settings.secondaryWaveSpeed,
+                    range: 0.001...0.12,
+                    step: 0.001
+                )
+                .disabled(!settings.animationEnabled)
+
+                SettingsMetricSlider(
+                    title: "Wave count",
+                    valueText: "\(settings.waveCount)",
+                    value: Binding(
                         get: { Double(settings.waveCount) },
                         set: { settings.waveCount = Int($0) }
-                    ), in: 1...8, step: 1)
-                    .frame(maxWidth: 300)
+                    ),
+                    range: 1...8,
+                    step: 1
+                )
+            }
+
+            SettingsCard(
+                title: "Palette",
+                subtitle: "Primary/secondary hues and presets used by shader color generation."
+            ) {
+                HStack(spacing: 22) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Primary")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        ColorPicker("", selection: $primaryColor)
+                            .labelsHidden()
+                    }
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Secondary")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        ColorPicker("", selection: $secondaryColor)
+                            .labelsHidden()
+                    }
+                    Spacer()
+                }
+
+                SettingsMetricSlider(
+                    title: "Primary hue",
+                    valueText: "\(Int(settings.primaryHue))°",
+                    value: $settings.primaryHue,
+                    range: 0...360,
+                    step: 1
+                )
+
+                SettingsMetricSlider(
+                    title: "Secondary hue",
+                    valueText: "\(Int(settings.secondaryHue))°",
+                    value: $settings.secondaryHue,
+                    range: 0...360,
+                    step: 1
+                )
+
+                HStack(spacing: 8) {
+                    SettingsPresetButton(title: "Ocean", colors: [Color.cyan, Color.blue]) {
+                        applyPreset(primary: 200, secondary: 240)
+                    }
+                    SettingsPresetButton(title: "Sunset", colors: [Color.orange, Color.pink]) {
+                        applyPreset(primary: 20, secondary: 340)
+                    }
+                    SettingsPresetButton(title: "Forest", colors: [Color.green, Color.teal]) {
+                        applyPreset(primary: 120, secondary: 160)
+                    }
+                    SettingsPresetButton(title: "Purple", colors: [Color.purple, Color.indigo]) {
+                        applyPreset(primary: 270, secondary: 300)
+                    }
                 }
             }
-            
-            Divider()
-            
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Custom Colors")
-                    .font(.headline)
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack(spacing: 16) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Primary Color")
-                                .font(.subheadline)
-                            ColorPicker("", selection: $primaryColor)
-                                .labelsHidden()
-                                .frame(width: 60, height: 40)
-                                .onChange(of: primaryColor) { _, newColor in
-                                    settings.primaryHue = colorToHue(newColor)
-                                }
-                        }
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Secondary Color")
-                                .font(.subheadline)
-                            ColorPicker("", selection: $secondaryColor)
-                                .labelsHidden()
-                                .frame(width: 60, height: 40)
-                                .onChange(of: secondaryColor) { _, newColor in
-                                    settings.secondaryHue = colorToHue(newColor)
-                                }
-                        }
-                        
-                        Spacer()
-                    }
-                    
-                    Divider()
-                    
-                    Text("Quick Presets")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                HStack(spacing: 12) {
-                        PresetButton(name: "Ocean", colors: [Color.cyan, Color.blue]) {
-                            applyPreset(primaryHue: 200, secondaryHue: 240)
-                        }
-                        PresetButton(name: "Sunset", colors: [Color.orange, Color.pink]) {
-                            applyPreset(primaryHue: 20, secondaryHue: 340)
-                        }
-                        PresetButton(name: "Forest", colors: [Color.green, Color.teal]) {
-                            applyPreset(primaryHue: 120, secondaryHue: 160)
-                        }
-                        PresetButton(name: "Purple", colors: [Color.purple, Color.indigo]) {
-                            applyPreset(primaryHue: 270, secondaryHue: 300)
-                        }
-                    }
-                }
-            
-            Divider()
-            
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Advanced Metal Effects")
-                    .font(.headline)
-                
-                VStack(alignment: .leading, spacing: 16) {
-                    Toggle("Bloom (glow effect)", isOn: $settings.bloomEnabled)
-                    
-                    if settings.bloomEnabled {
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text("Bloom strength")
-                                    .frame(width: 120, alignment: .leading)
-                                Text(String(format: "%.2f", settings.bloomStrength))
-                                    .foregroundStyle(.secondary)
-                                Spacer()
-                            }
-                            Slider(value: $settings.bloomStrength, in: 0.1...1.0, step: 0.1)
-                                .frame(maxWidth: 300)
-                        }
-                    }
-                    
-                    Toggle("Chromatic Aberration", isOn: $settings.chromaticAberrationEnabled)
-                    
-                    if settings.chromaticAberrationEnabled {
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text("CA strength")
-                                    .frame(width: 120, alignment: .leading)
-                                Text(String(format: "%.3f", settings.chromaticAberrationStrength))
-                                    .foregroundStyle(.secondary)
-                                Spacer()
-                            }
-                            Slider(value: $settings.chromaticAberrationStrength, in: 0.001...0.01, step: 0.001)
-                                .frame(maxWidth: 300)
-                        }
-                    }
-                    
-                    Toggle("Gaussian Blur", isOn: $settings.blurEnabled)
-                    
-                    if settings.blurEnabled {
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text("Blur radius")
-                                    .frame(width: 120, alignment: .leading)
-                                Text(String(format: "%.3f", settings.blurRadius))
-                                    .foregroundStyle(.secondary)
-                                Spacer()
-                            }
-                            Slider(value: $settings.blurRadius, in: 0.001...0.01, step: 0.001)
-                                .frame(maxWidth: 300)
-                        }
-                    }
-                }
+
+            SettingsCard(
+                title: "Metal Effects",
+                subtitle: "These controls are active only when Metal is enabled."
+            ) {
+                BackgroundEffectPreviewTile(settings: settings)
+
+                SettingsEffectRow(
+                    title: "Bloom",
+                    description: "Glow around brighter highlights.",
+                    isEnabled: $settings.bloomEnabled,
+                    strength: $settings.bloomStrength,
+                    range: 0.0...2.0,
+                    step: 0.05,
+                    valueText: { String(format: "%.2f", $0) }
+                )
+                .disabled(!settings.useMetalShader)
+
+                SettingsEffectRow(
+                    title: "Chromatic Aberration",
+                    description: "Subtle RGB split near edges.",
+                    isEnabled: $settings.chromaticAberrationEnabled,
+                    strength: $settings.chromaticAberrationStrength,
+                    range: 0.0...0.03,
+                    step: 0.001,
+                    valueText: { String(format: "%.3f", $0) }
+                )
+                .disabled(!settings.useMetalShader)
+
+                SettingsEffectRow(
+                    title: "Gaussian Blur",
+                    description: "Soft blur for liquid glass diffusion.",
+                    isEnabled: $settings.blurEnabled,
+                    strength: $settings.blurRadius,
+                    range: 0.0...0.03,
+                    step: 0.001,
+                    valueText: { String(format: "%.3f", $0) }
+                )
+                .disabled(!settings.useMetalShader)
+            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .onAppear(perform: syncColors)
+        .onChange(of: settings.primaryHue) { _, _ in syncColors() }
+        .onChange(of: settings.secondaryHue) { _, _ in syncColors() }
+        .onChange(of: primaryColor) { _, color in
+            settings.primaryHue = hue(from: color)
+        }
+        .onChange(of: secondaryColor) { _, color in
+            settings.secondaryHue = hue(from: color)
+        }
     }
-    
-    private func applyPreset(primaryHue: Double, secondaryHue: Double) {
-        settings.primaryHue = primaryHue
-        settings.secondaryHue = secondaryHue
-        primaryColor = Color(hue: primaryHue / 360.0, saturation: 0.8, brightness: 0.9)
-        secondaryColor = Color(hue: secondaryHue / 360.0, saturation: 0.8, brightness: 0.9)
+
+    private func applyPreset(primary: Double, secondary: Double) {
+        settings.primaryHue = primary
+        settings.secondaryHue = secondary
+        syncColors()
     }
-    
-    private func colorToHue(_ color: Color) -> Double {
-        let uiColor = NSColor(color)
+
+    private func syncColors() {
+        primaryColor = Color(hue: settings.primaryHue / 360.0, saturation: 0.8, brightness: 0.9)
+        secondaryColor = Color(hue: settings.secondaryHue / 360.0, saturation: 0.8, brightness: 0.9)
+    }
+
+    private func hue(from color: Color) -> Double {
+        let nsColor = NSColor(color)
         var hue: CGFloat = 0
         var saturation: CGFloat = 0
         var brightness: CGFloat = 0
         var alpha: CGFloat = 0
-        uiColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+        nsColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
         return Double(hue * 360.0)
-}
-
-struct ColorPreview: View {
-    let hue: Double
-    
-    var body: some View {
-        RoundedRectangle(cornerRadius: 4)
-            .fill(Color(hue: hue / 360.0, saturation: 0.8, brightness: 0.9))
     }
 }
 
-struct PresetButton: View {
-    let name: String
+private struct WorkspaceSettingsPanel: View {
+    @AppStorage("opal.default.editor") private var preferredEditor = "micro"
+    @AppStorage("opal.sidebar.visible") private var sidebarVisible = true
+    @State private var editorStatus = ""
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            SettingsCard(
+                title: "Default Editor",
+                subtitle: "Used by sidebar file opening actions."
+            ) {
+                TextField("micro", text: $preferredEditor)
+                    .textFieldStyle(.roundedBorder)
+                    .font(.system(.body, design: .monospaced))
+                    .onSubmit {
+                        normalizeEditor()
+                    }
+
+                HStack(spacing: 8) {
+                    Button("micro") { preferredEditor = "micro"; refreshEditorStatus() }
+                        .buttonStyle(.bordered)
+                    Button("nvim") { preferredEditor = "nvim"; refreshEditorStatus() }
+                        .buttonStyle(.bordered)
+                    Button("code") { preferredEditor = "code"; refreshEditorStatus() }
+                        .buttonStyle(.bordered)
+                }
+
+                if !editorStatus.isEmpty {
+                    Text(editorStatus)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            SettingsCard(
+                title: "Layout",
+                subtitle: "Workspace layout settings that are currently implemented."
+            ) {
+                Toggle("Show sidebar by default", isOn: $sidebarVisible)
+            }
+        }
+        .onAppear(perform: refreshEditorStatus)
+        .onChange(of: preferredEditor) { _, _ in
+            refreshEditorStatus()
+        }
+    }
+
+    private func normalizeEditor() {
+        preferredEditor = preferredEditor.trimmingCharacters(in: .whitespacesAndNewlines)
+        if preferredEditor.isEmpty {
+            preferredEditor = "micro"
+        }
+        refreshEditorStatus()
+    }
+
+    private func refreshEditorStatus() {
+        let editor = preferredEditor.trimmingCharacters(in: .whitespacesAndNewlines)
+        if editor.isEmpty {
+            editorStatus = "Enter an editor command, for example: micro"
+            return
+        }
+
+        if isEditorAvailable(editor) {
+            editorStatus = "Available: \(editor)"
+        } else if editor == "micro" {
+            editorStatus = "micro is not installed. Install with: brew install micro"
+        } else {
+            editorStatus = "\(editor) not found in PATH. Install it or choose another command."
+        }
+    }
+
+    private func isEditorAvailable(_ editor: String) -> Bool {
+        if editor.contains("/") {
+            return FileManager.default.isExecutableFile(atPath: editor)
+        }
+
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/which")
+        process.arguments = [editor]
+        process.standardOutput = Pipe()
+        process.standardError = Pipe()
+
+        do {
+            try process.run()
+            process.waitUntilExit()
+            return process.terminationStatus == 0
+        } catch {
+            return false
+        }
+    }
+}
+
+private struct SessionSettingsPanel: View {
+    @AppStorage("opal.session.autorestore") private var autoRestore = true
+    @State private var snapshot: SessionSnapshot?
+
+    private static let snapshotKey = "opal.session.snapshot.v1"
+
+    struct SessionSnapshot: Decodable {
+        let currentDirectory: String
+        let recentCommands: [String]
+        let preferredEditor: String
+        let savedAt: TimeInterval
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            SettingsCard(
+                title: "Restore",
+                subtitle: "Session restore currently includes working directory and recent command history."
+            ) {
+                Toggle("Restore previous session on launch", isOn: $autoRestore)
+
+                if let snapshot {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Saved directory")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text(snapshot.currentDirectory)
+                            .font(.system(.caption, design: .monospaced))
+                            .lineLimit(2)
+                            .textSelection(.enabled)
+
+                        Text("Commands saved: \(snapshot.recentCommands.count)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        Text("Saved at: \(formattedDate(snapshot.savedAt))")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                } else {
+                    Text("No saved session snapshot found.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                HStack(spacing: 8) {
+                    Button("Refresh") {
+                        loadSnapshot()
+                    }
+                    .buttonStyle(.bordered)
+
+                    Button("Delete Saved Snapshot") {
+                        UserDefaults.standard.removeObject(forKey: Self.snapshotKey)
+                        loadSnapshot()
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(snapshot == nil)
+                }
+            }
+        }
+        .onAppear(perform: loadSnapshot)
+    }
+
+    private func loadSnapshot() {
+        guard let data = UserDefaults.standard.data(forKey: Self.snapshotKey),
+              let decoded = try? JSONDecoder().decode(SessionSnapshot.self, from: data) else {
+            snapshot = nil
+            return
+        }
+        snapshot = decoded
+    }
+
+    private func formattedDate(_ timestamp: TimeInterval) -> String {
+        let date = Date(timeIntervalSince1970: timestamp)
+        return DateFormatter.localizedString(from: date, dateStyle: .medium, timeStyle: .short)
+    }
+}
+
+private struct AboutSettingsPanel: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            SettingsCard(
+                title: "Version",
+                subtitle: "Build and runtime information exposed by the app."
+            ) {
+                HStack {
+                    Text("Opal")
+                    Spacer()
+                    Text("1.1.3")
+                        .foregroundStyle(.secondary)
+                }
+
+                HStack {
+                    Text("Shell Build")
+                    Spacer()
+                    Text("Seashell \(readBundledSeashellBuildVersion())")
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            SettingsCard(
+                title: "Links",
+                subtitle: "Project resources."
+            ) {
+                Link("GitHub", destination: URL(string: "https://github.com/opal-terminal/opal")!)
+                Link("Releases", destination: URL(string: "https://github.com/opal-terminal/opal/releases")!)
+            }
+        }
+    }
+}
+
+private struct SettingsCard<Content: View>: View {
+    let title: String
+    let subtitle: String
+    let content: Content
+
+    init(title: String, subtitle: String, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self.subtitle = subtitle
+        self.content = content()
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(title)
+                .font(.headline)
+            Text(subtitle)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            content
+        }
+        .padding(14)
+        .background(Color.gray.opacity(0.08), in: RoundedRectangle(cornerRadius: 11))
+    }
+}
+
+private struct SettingsMetricSlider: View {
+    let title: String
+    let valueText: String
+    @Binding var value: Double
+    let range: ClosedRange<Double>
+    let step: Double
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text(title)
+                    .frame(width: 155, alignment: .leading)
+                Text(valueText)
+                    .foregroundStyle(.secondary)
+                Spacer()
+            }
+            Slider(value: $value, in: range, step: step)
+                .frame(maxWidth: 340)
+        }
+    }
+}
+
+private struct SettingsPresetButton: View {
+    let title: String
     let colors: [Color]
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             VStack(spacing: 4) {
                 RoundedRectangle(cornerRadius: 6)
                     .fill(LinearGradient(colors: colors, startPoint: .leading, endPoint: .trailing))
-                    .frame(width: 60, height: 30)
-                Text(name)
+                    .frame(width: 64, height: 30)
+                Text(title)
                     .font(.caption2)
             }
         }
@@ -505,322 +531,115 @@ struct PresetButton: View {
     }
 }
 
-struct FontSettingsView: View {
-    @State private var fontFamily = "SF Mono"
-    @State private var fontSize = 14.0
-    @State private var lineHeight = 1.2
-    @State private var letterSpacing = 0.0
-    @State private var ligatures = true
-    @State private var boldAsBright = true
-    
-    let fonts = ["SF Mono", "Monaco", "Menlo", "JetBrains Mono", "Fira Code", "Cascadia Code"]
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Font Family")
-                    .font(.headline)
-                
-                Picker("", selection: $fontFamily) {
-                    ForEach(fonts, id: \.self) { font in
-                        Text(font).tag(font)
-                    }
-                }
-                .pickerStyle(.menu)
-                .frame(width: 200)
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("Size")
-                            .frame(width: 60, alignment: .leading)
-                        Text("\(Int(fontSize))pt")
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                    }
-                    Slider(value: $fontSize, in: 8...24, step: 1)
-                        .frame(maxWidth: 200)
-                }
-                
-                Toggle("Enable ligatures", isOn: $ligatures)
-                Toggle("Render bold as bright", isOn: $boldAsBright)
-            }
-            
-            Divider()
-            
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Spacing")
-                    .font(.headline)
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("Line height")
-                            .frame(width: 100, alignment: .leading)
-                        Text(String(format: "%.1f", lineHeight))
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                    }
-                    Slider(value: $lineHeight, in: 1.0...2.0, step: 0.1)
-                        .frame(maxWidth: 200)
-                }
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("Letter spacing")
-                            .frame(width: 100, alignment: .leading)
-                        Text("\(Int(letterSpacing))px")
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                    }
-                    Slider(value: $letterSpacing, in: -2...5, step: 1)
-                        .frame(maxWidth: 200)
-                }
-            }
-            
-            Divider()
-            
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Preview")
-                    .font(.headline)
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Hello, World!")
-                    Text("!= <= >= =>")
-                    Text("0123456789")
-                }
-                .font(.custom(fontFamily, size: fontSize))
-                .padding()
-                .background(Color.black.opacity(0.1))
-                .cornerRadius(8)
-                .frame(maxWidth: 400)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
-struct CursorSettingsView: View {
-    @State private var cursorStyle = 0
-    @State private var cursorBlinking = true
-    @State private var cursorBlinkInterval = 0.5
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Cursor Style")
-                    .font(.headline)
-                
-                HStack(spacing: 20) {
-                    CursorStyleButton(
-                        title: "Block",
-                        isSelected: cursorStyle == 0
-                    ) { cursorStyle = 0 }
-                    
-                    CursorStyleButton(
-                        title: "Underline", 
-                        isSelected: cursorStyle == 1
-                    ) { cursorStyle = 1 }
-                    
-                    CursorStyleButton(
-                        title: "Line",
-                        isSelected: cursorStyle == 2
-                    ) { cursorStyle = 2 }
-                }
-                
-                Toggle("Blinking cursor", isOn: $cursorBlinking)
-                
-                if cursorBlinking {
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text("Blink interval")
-                                .frame(width: 100, alignment: .leading)
-                            Text("\(String(format: "%.1f", cursorBlinkInterval))s")
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                        }
-                        Slider(value: $cursorBlinkInterval, in: 0.1...1.0, step: 0.1)
-                            .frame(maxWidth: 200)
-                    }
-                }
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
-struct CursorStyleButton: View {
+private struct SettingsEffectRow: View {
     let title: String
-    let isSelected: Bool
+    let description: String
+    @Binding var isEnabled: Bool
+    @Binding var strength: Double
+    let range: ClosedRange<Double>
+    let step: Double
+    let valueText: (Double) -> String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Toggle(title, isOn: $isEnabled)
+            Text(description)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            if isEnabled {
+                SettingsMetricSlider(
+                    title: "Intensity",
+                    valueText: valueText(strength),
+                    value: $strength,
+                    range: range,
+                    step: step
+                )
+            }
+        }
+    }
+}
+
+struct BackgroundEffectPreviewTile: View {
+    @ObservedObject var settings: BackgroundSettings
+    @State private var previewFocus: MetalLiquidGlassBackground.PreviewFocus = .none
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Effect Preview")
+                .font(.subheadline.weight(.semibold))
+
+            ZStack(alignment: .bottomLeading) {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.black.opacity(0.2))
+
+                if settings.useMetalShader {
+                    MetalLiquidGlassBackground(settings: settings, previewFocus: previewFocus)
+                        .allowsHitTesting(false)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                } else {
+                    CanvasLiquidGlassBackground()
+                        .allowsHitTesting(false)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+
+                Text(previewLabel)
+                    .font(.caption.weight(.semibold))
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.black.opacity(0.35), in: Capsule())
+                    .padding(8)
+            }
+            .frame(height: 112)
+
+            HStack(spacing: 8) {
+                PreviewButton(title: "Bloom") { runPreview(.bloom) }
+                PreviewButton(title: "Chromatic") { runPreview(.chromatic) }
+                PreviewButton(title: "Blur") { runPreview(.blur) }
+                PreviewButton(title: "All") { runPreview(.all) }
+            }
+            .disabled(!settings.useMetalShader)
+
+            Text("Buttons temporarily boost each effect without changing your saved values.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding(10)
+        .background(Color.gray.opacity(0.1), in: RoundedRectangle(cornerRadius: 10))
+    }
+
+    private var previewLabel: String {
+        switch previewFocus {
+        case .none:
+            return "Live"
+        case .bloom:
+            return "Bloom Boost"
+        case .chromatic:
+            return "Chromatic Boost"
+        case .blur:
+            return "Blur Boost"
+        case .all:
+            return "All Effects Boost"
+        }
+    }
+
+    private func runPreview(_ focus: MetalLiquidGlassBackground.PreviewFocus) {
+        previewFocus = focus
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+            if previewFocus == focus {
+                previewFocus = .none
+            }
+        }
+    }
+}
+
+private struct PreviewButton: View {
+    let title: String
     let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            VStack {
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(isSelected ? Color.accentColor : Color.gray.opacity(0.3))
-                    .frame(width: 40, height: 40)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 4)
-                            .stroke(isSelected ? Color.accentColor : Color.gray, lineWidth: isSelected ? 0 : 1)
-                    )
-                Text(title)
-                    .font(.caption)
-            }
-        }
-        .buttonStyle(.plain)
-    }
-}
 
-struct AISettingsView: View {
-    @State private var aiEnabled = true
-    @State private var provider = "ollama"
-    @State private var model = "codellama"
-    @State private var apiKey = ""
-    @State private var temperature = 0.7
-    
     var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("AI Provider")
-                    .font(.headline)
-                
-                Toggle("Enable AI features", isOn: $aiEnabled)
-                
-                if aiEnabled {
-                    Picker("Provider:", selection: $provider) {
-                        Text("Ollama (Local)").tag("ollama")
-                        Text("OpenRouter").tag("openrouter")
-                        Text("OpenAI").tag("openai")
-                        Text("Claude").tag("claude")
-                    }
-                    .pickerStyle(.menu)
-                    .frame(width: 200)
-                    
-                    HStack {
-                        Text("Model:")
-                            .frame(width: 80, alignment: .leading)
-                        TextField("", text: $model)
-                            .textFieldStyle(.roundedBorder)
-                            .frame(maxWidth: 200)
-                    }
-                    
-                    if provider != "ollama" {
-                        HStack {
-                            Text("API Key:")
-                                .frame(width: 80, alignment: .leading)
-                            SecureField("", text: $apiKey)
-                                .textFieldStyle(.roundedBorder)
-                                .frame(maxWidth: 300)
-                        }
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text("Temperature")
-                                .frame(width: 100, alignment: .leading)
-                            Text("\(String(format: "%.1f", temperature))")
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                        }
-                        Slider(value: $temperature, in: 0...1, step: 0.1)
-                            .frame(maxWidth: 200)
-                    }
-                }
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
-struct KeysSettingsView: View {
-    let shortcuts = [
-        ("New Tab", "Cmd+T"),
-        ("Close Tab", "Cmd+W"),
-        ("Next Tab", "Cmd+Shift+]"),
-        ("Previous Tab", "Cmd+Shift+["),
-        ("Command Palette", "Cmd+Shift+P"),
-        ("AI Chat", "Cmd+1"),
-        ("Settings", "Cmd+,"),
-    ]
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            Text("Keyboard Shortcuts")
-                .font(.headline)
-            
-            VStack(spacing: 0) {
-                ForEach(shortcuts, id: \.0) { name, shortcut in
-                    HStack {
-                        Text(name)
-                        Spacer()
-                        Text(shortcut)
-                            .font(.system(.body, design: .monospaced))
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.vertical, 8)
-                    
-                    if name != shortcuts.last?.0 {
-                        Divider()
-                    }
-                }
-            }
-            .padding()
-            .background(Color.gray.opacity(0.1))
-            .cornerRadius(8)
-            
-            HStack {
-                Button("Reset to Defaults") {}
-                    .buttonStyle(.bordered)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
-struct AdvancedSettingsView: View {
-    @State private var gpuAcceleration = true
-    @State private var debugMode = false
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Performance")
-                    .font(.headline)
-                
-                Toggle("GPU acceleration", isOn: $gpuAcceleration)
-            }
-            
-            Divider()
-            
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Developer")
-                    .font(.headline)
-                
-                Toggle("Debug mode", isOn: $debugMode)
-                
-                Button("Open Log Directory...") {}
-                
-                Button("Reset All Settings") {}
-                    .foregroundStyle(.red)
-            }
-            
-            Divider()
-            
-            VStack(alignment: .leading, spacing: 12) {
-                Text("About")
-                    .font(.headline)
-                
-                HStack {
-                    Text("Version")
-                    Spacer()
-                    Text("1.0.5")
-                        .foregroundStyle(.secondary)
-                }
-                
-                Link("Website", destination: URL(string: "https://opal.sh")!)
-                Link("GitHub", destination: URL(string: "https://github.com/opal-terminal/opal")!)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        Button(title, action: action)
+            .buttonStyle(.borderedProminent)
+            .controlSize(.small)
     }
 }
 

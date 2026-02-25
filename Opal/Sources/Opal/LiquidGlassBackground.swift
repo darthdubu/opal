@@ -3,30 +3,144 @@ import SwiftUI
 /// Settings manager for background customization
 class BackgroundSettings: ObservableObject {
     static let shared = BackgroundSettings()
-    
-    @Published var animationEnabled: Bool = true
-    @Published var primaryWaveSpeed: Double = 0.02
-    @Published var secondaryWaveSpeed: Double = 0.015
-    @Published var primaryWaveOpacity: Double = 0.08
-    @Published var secondaryWaveOpacity: Double = 0.06
-    @Published var primaryHue: Double = 210
-    @Published var secondaryHue: Double = 260
-    @Published var waveCount: Int = 4
-    @Published var backgroundOpacity: Double = 0.2
-    @Published var glassOpacity: Double = 0.25
-    @Published var edgeHighlightsEnabled: Bool = true
-    @Published var specularHighlightsEnabled: Bool = true
-    @Published var useMetalShader: Bool = true  // Toggle between Canvas and Metal
-    
+
+    @Published var animationEnabled: Bool = true { didSet { persistIfReady() } }
+    @Published var primaryWaveSpeed: Double = 0.02 { didSet { persistIfReady() } }
+    @Published var secondaryWaveSpeed: Double = 0.015 { didSet { persistIfReady() } }
+    @Published var primaryWaveOpacity: Double = 0.08 { didSet { persistIfReady() } }
+    @Published var secondaryWaveOpacity: Double = 0.06 { didSet { persistIfReady() } }
+    @Published var primaryHue: Double = 210 { didSet { persistIfReady() } }
+    @Published var secondaryHue: Double = 260 { didSet { persistIfReady() } }
+    @Published var waveCount: Int = 4 { didSet { persistIfReady() } }
+    @Published var backgroundOpacity: Double = 0.2 { didSet { persistIfReady() } }
+    @Published var glassOpacity: Double = 0.25 { didSet { persistIfReady() } }
+    @Published var edgeHighlightsEnabled: Bool = true { didSet { persistIfReady() } }
+    @Published var specularHighlightsEnabled: Bool = true { didSet { persistIfReady() } }
+    @Published var useMetalShader: Bool = true { didSet { persistIfReady() } }  // Toggle between Canvas and Metal
+
     // Advanced Metal shader effects
-    @Published var chromaticAberrationEnabled: Bool = false
-    @Published var chromaticAberrationStrength: Double = 0.003
-    @Published var bloomEnabled: Bool = true
-    @Published var bloomStrength: Double = 0.5
-    @Published var blurEnabled: Bool = false
-    @Published var blurRadius: Double = 0.003
-    
-    private init() {}
+    @Published var chromaticAberrationEnabled: Bool = false { didSet { persistIfReady() } }
+    @Published var chromaticAberrationStrength: Double = 0.003 { didSet { persistIfReady() } }
+    @Published var bloomEnabled: Bool = true { didSet { persistIfReady() } }
+    @Published var bloomStrength: Double = 0.5 { didSet { persistIfReady() } }
+    @Published var blurEnabled: Bool = false { didSet { persistIfReady() } }
+    @Published var blurRadius: Double = 0.003 { didSet { persistIfReady() } }
+
+    // Shader appearance
+    @Published var shaderTransparency: Double = 85.0 { didSet { persistIfReady() } }  // 0-100%
+    @Published var shaderStyle: ShaderStyle = .aurora { didSet { persistIfReady() } }  // Aurora or Ocean
+
+    enum ShaderStyle: String, CaseIterable {
+        case aurora = "Aurora"
+        case ocean = "Ocean Waves"
+    }
+
+    private enum StorageKey {
+        static let animationEnabled = "opal.background.animationEnabled"
+        static let primaryWaveSpeed = "opal.background.primaryWaveSpeed"
+        static let secondaryWaveSpeed = "opal.background.secondaryWaveSpeed"
+        static let primaryWaveOpacity = "opal.background.primaryWaveOpacity"
+        static let secondaryWaveOpacity = "opal.background.secondaryWaveOpacity"
+        static let primaryHue = "opal.background.primaryHue"
+        static let secondaryHue = "opal.background.secondaryHue"
+        static let waveCount = "opal.background.waveCount"
+        static let backgroundOpacity = "opal.background.backgroundOpacity"
+        static let glassOpacity = "opal.background.glassOpacity"
+        static let edgeHighlightsEnabled = "opal.background.edgeHighlightsEnabled"
+        static let specularHighlightsEnabled = "opal.background.specularHighlightsEnabled"
+        static let useMetalShader = "opal.background.useMetalShader"
+        static let chromaticAberrationEnabled = "opal.background.chromaticAberrationEnabled"
+        static let chromaticAberrationStrength = "opal.background.chromaticAberrationStrength"
+        static let bloomEnabled = "opal.background.bloomEnabled"
+        static let bloomStrength = "opal.background.bloomStrength"
+        static let blurEnabled = "opal.background.blurEnabled"
+        static let blurRadius = "opal.background.blurRadius"
+        static let shaderTransparency = "opal.background.shaderTransparency"
+        static let shaderStyle = "opal.background.shaderStyle"
+    }
+
+    private let defaults = UserDefaults.standard
+    private var isHydrating = false
+
+    private init() {
+        hydrateFromDefaults()
+    }
+
+    private func hydrateFromDefaults() {
+        isHydrating = true
+        defer { isHydrating = false }
+
+        animationEnabled = bool(for: StorageKey.animationEnabled, defaultValue: animationEnabled)
+        primaryWaveSpeed = double(for: StorageKey.primaryWaveSpeed, defaultValue: primaryWaveSpeed)
+        secondaryWaveSpeed = double(for: StorageKey.secondaryWaveSpeed, defaultValue: secondaryWaveSpeed)
+        primaryWaveOpacity = double(for: StorageKey.primaryWaveOpacity, defaultValue: primaryWaveOpacity)
+        secondaryWaveOpacity = double(for: StorageKey.secondaryWaveOpacity, defaultValue: secondaryWaveOpacity)
+        primaryHue = double(for: StorageKey.primaryHue, defaultValue: primaryHue)
+        secondaryHue = double(for: StorageKey.secondaryHue, defaultValue: secondaryHue)
+        waveCount = max(1, min(8, int(for: StorageKey.waveCount, defaultValue: waveCount)))
+        backgroundOpacity = double(for: StorageKey.backgroundOpacity, defaultValue: backgroundOpacity)
+        glassOpacity = double(for: StorageKey.glassOpacity, defaultValue: glassOpacity)
+        edgeHighlightsEnabled = bool(for: StorageKey.edgeHighlightsEnabled, defaultValue: edgeHighlightsEnabled)
+        specularHighlightsEnabled = bool(for: StorageKey.specularHighlightsEnabled, defaultValue: specularHighlightsEnabled)
+        useMetalShader = bool(for: StorageKey.useMetalShader, defaultValue: useMetalShader)
+        chromaticAberrationEnabled = bool(for: StorageKey.chromaticAberrationEnabled, defaultValue: chromaticAberrationEnabled)
+        chromaticAberrationStrength = double(for: StorageKey.chromaticAberrationStrength, defaultValue: chromaticAberrationStrength)
+        bloomEnabled = bool(for: StorageKey.bloomEnabled, defaultValue: bloomEnabled)
+        bloomStrength = double(for: StorageKey.bloomStrength, defaultValue: bloomStrength)
+        blurEnabled = bool(for: StorageKey.blurEnabled, defaultValue: blurEnabled)
+        blurRadius = double(for: StorageKey.blurRadius, defaultValue: blurRadius)
+        shaderTransparency = max(0, min(100, double(for: StorageKey.shaderTransparency, defaultValue: shaderTransparency)))
+
+        let style = defaults.string(forKey: StorageKey.shaderStyle) ?? shaderStyle.rawValue
+        shaderStyle = ShaderStyle(rawValue: style) ?? .aurora
+    }
+
+    private func persistIfReady() {
+        guard !isHydrating else { return }
+
+        defaults.set(animationEnabled, forKey: StorageKey.animationEnabled)
+        defaults.set(primaryWaveSpeed, forKey: StorageKey.primaryWaveSpeed)
+        defaults.set(secondaryWaveSpeed, forKey: StorageKey.secondaryWaveSpeed)
+        defaults.set(primaryWaveOpacity, forKey: StorageKey.primaryWaveOpacity)
+        defaults.set(secondaryWaveOpacity, forKey: StorageKey.secondaryWaveOpacity)
+        defaults.set(primaryHue, forKey: StorageKey.primaryHue)
+        defaults.set(secondaryHue, forKey: StorageKey.secondaryHue)
+        defaults.set(waveCount, forKey: StorageKey.waveCount)
+        defaults.set(backgroundOpacity, forKey: StorageKey.backgroundOpacity)
+        defaults.set(glassOpacity, forKey: StorageKey.glassOpacity)
+        defaults.set(edgeHighlightsEnabled, forKey: StorageKey.edgeHighlightsEnabled)
+        defaults.set(specularHighlightsEnabled, forKey: StorageKey.specularHighlightsEnabled)
+        defaults.set(useMetalShader, forKey: StorageKey.useMetalShader)
+        defaults.set(chromaticAberrationEnabled, forKey: StorageKey.chromaticAberrationEnabled)
+        defaults.set(chromaticAberrationStrength, forKey: StorageKey.chromaticAberrationStrength)
+        defaults.set(bloomEnabled, forKey: StorageKey.bloomEnabled)
+        defaults.set(bloomStrength, forKey: StorageKey.bloomStrength)
+        defaults.set(blurEnabled, forKey: StorageKey.blurEnabled)
+        defaults.set(blurRadius, forKey: StorageKey.blurRadius)
+        defaults.set(shaderTransparency, forKey: StorageKey.shaderTransparency)
+        defaults.set(shaderStyle.rawValue, forKey: StorageKey.shaderStyle)
+    }
+
+    private func bool(for key: String, defaultValue: Bool) -> Bool {
+        if defaults.object(forKey: key) == nil {
+            return defaultValue
+        }
+        return defaults.bool(forKey: key)
+    }
+
+    private func double(for key: String, defaultValue: Double) -> Double {
+        if defaults.object(forKey: key) == nil {
+            return defaultValue
+        }
+        return defaults.double(forKey: key)
+    }
+
+    private func int(for key: String, defaultValue: Int) -> Int {
+        if defaults.object(forKey: key) == nil {
+            return defaultValue
+        }
+        return defaults.integer(forKey: key)
+    }
 }
 
 /// Liquid Glass background effect using Metal shaders
@@ -37,7 +151,7 @@ struct LiquidGlassBackground: View {
         ZStack {
             if settings.useMetalShader {
                 // Use Metal-based shader for GPU acceleration
-                ShaderLiquidGlassBackground()
+                MetalLiquidGlassBackground(settings: settings)
             } else {
                 // Fallback to Canvas-based rendering
                 CanvasLiquidGlassBackground()

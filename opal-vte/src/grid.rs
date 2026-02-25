@@ -140,30 +140,80 @@ impl Grid {
     }
 
     pub fn clear_from_cursor(&mut self) {
-        let idx = self.cursor_row * self.cols + self.cursor_col;
+        self.clear_from(self.cursor_row, self.cursor_col);
+    }
+
+    pub fn clear_to_cursor(&mut self) {
+        self.clear_to(self.cursor_row, self.cursor_col);
+    }
+
+    pub fn clear_from(&mut self, row: usize, col: usize) {
+        if self.rows == 0 || self.cols == 0 {
+            return;
+        }
+
+        let row = row.min(self.rows - 1);
+        let col = col.min(self.cols - 1);
+        let idx = row * self.cols + col;
         for cell in &mut self.cells[idx..] {
             cell.reset();
         }
     }
 
-    pub fn clear_to_cursor(&mut self) {
-        let idx = self.cursor_row * self.cols + self.cursor_col;
+    pub fn clear_to(&mut self, row: usize, col: usize) {
+        if self.rows == 0 || self.cols == 0 {
+            return;
+        }
+
+        let row = row.min(self.rows - 1);
+        let col = col.min(self.cols - 1);
+        let idx = row * self.cols + col;
         for cell in &mut self.cells[..=idx] {
             cell.reset();
         }
     }
 
     pub fn scroll_up(&mut self, amount: usize) {
-        let amount = amount.min(self.rows);
+        if self.rows == 0 {
+            return;
+        }
+        self.scroll_up_region(0, self.rows - 1, amount);
+    }
 
-        for row in 0..amount {
-            let start = row * self.cols;
-            let end = start + self.cols;
-            let line: Vec<Cell> = self.cells[start..end].to_vec();
-            self.scrollback.push(line);
+    pub fn scroll_down(&mut self, amount: usize) {
+        if self.rows == 0 {
+            return;
+        }
+        self.scroll_down_region(0, self.rows - 1, amount);
+    }
+
+    pub fn scroll_up_region(&mut self, top: usize, bottom: usize, amount: usize) {
+        if self.rows == 0 || self.cols == 0 {
+            return;
         }
 
-        for row in amount..self.rows {
+        let top = top.min(self.rows - 1);
+        let bottom = bottom.min(self.rows - 1);
+        if top > bottom {
+            return;
+        }
+
+        let region_rows = bottom - top + 1;
+        let amount = amount.min(region_rows);
+        if amount == 0 {
+            return;
+        }
+
+        if top == 0 {
+            for row in top..(top + amount) {
+                let start = row * self.cols;
+                let end = start + self.cols;
+                let line: Vec<Cell> = self.cells[start..end].to_vec();
+                self.scrollback.push(line);
+            }
+        }
+
+        for row in (top + amount)..=bottom {
             for col in 0..self.cols {
                 let src_idx = row * self.cols + col;
                 let dst_idx = (row - amount) * self.cols + col;
@@ -171,23 +221,39 @@ impl Grid {
             }
         }
 
-        for row in (self.rows - amount)..self.rows {
+        for row in (bottom + 1 - amount)..=bottom {
             self.clear_line(row);
         }
     }
 
-    pub fn scroll_down(&mut self, amount: usize) {
-        let amount = amount.min(self.rows);
+    pub fn scroll_down_region(&mut self, top: usize, bottom: usize, amount: usize) {
+        if self.rows == 0 || self.cols == 0 {
+            return;
+        }
 
-        for row in (0..(self.rows - amount)).rev() {
-            for col in 0..self.cols {
-                let src_idx = row * self.cols + col;
-                let dst_idx = (row + amount) * self.cols + col;
-                self.cells[dst_idx] = self.cells[src_idx].clone();
+        let top = top.min(self.rows - 1);
+        let bottom = bottom.min(self.rows - 1);
+        if top > bottom {
+            return;
+        }
+
+        let region_rows = bottom - top + 1;
+        let amount = amount.min(region_rows);
+        if amount == 0 {
+            return;
+        }
+
+        if amount < region_rows {
+            for row in (top..=(bottom - amount)).rev() {
+                for col in 0..self.cols {
+                    let src_idx = row * self.cols + col;
+                    let dst_idx = (row + amount) * self.cols + col;
+                    self.cells[dst_idx] = self.cells[src_idx].clone();
+                }
             }
         }
 
-        for row in 0..amount {
+        for row in top..(top + amount) {
             self.clear_line(row);
         }
     }

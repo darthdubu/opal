@@ -1,6 +1,6 @@
 use opal_core::{
-    encode_key, encode_key_with_modes, encode_keypad_key, Cell, CellFlags, Color, Cursor, Grid,
-    InputModes, Key, KeypadKey, MouseMode, Terminal,
+    encode_key, encode_key_with_modes, encode_keypad_key, Cell, CellFlags, Color, InputModes, Key,
+    KeypadKey, MouseMode, Terminal,
 };
 
 #[test]
@@ -280,13 +280,13 @@ fn test_grid_resize() {
     let mut term = Terminal::new(24, 80);
 
     term.process_bytes(b"Test text");
-    // Resize method doesn't exist in current implementation - skip for now
-    // term.resize(40, 12);
+    term.resize(12, 40);
 
-    // Grid dimensions are private, but we can verify terminal still functions
+    assert_eq!(term.grid().rows(), 12);
+    assert_eq!(term.grid().cols(), 40);
+
     term.process_bytes(b"More text after");
-    // Just verify it doesn't panic and cursor is valid
-    assert!(term.cursor().col <= 80);
+    assert!(term.cursor().col < 40);
 }
 
 #[test]

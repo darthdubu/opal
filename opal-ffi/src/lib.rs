@@ -91,12 +91,37 @@ pub struct PtySession {
     terminal: Arc<TerminalHandle>,
 }
 
+#[derive(uniffi::Record, Clone)]
+pub struct ShellRuntimeStatusFfi {
+    pub active_shell: String,
+    pub active_shell_path: String,
+    pub attempted_shell_path: String,
+    pub fallback_reason: String,
+    pub seashell_version: String,
+}
+
 #[uniffi::export]
 impl PtySession {
     #[uniffi::constructor]
     pub fn new(cols: u32, rows: u32) -> Arc<Self> {
-        let session =
-            CorePtySession::new(cols as u16, rows as u16).expect("Failed to create PTY session");
+        let session = CorePtySession::new(cols as u16, rows as u16)
+            .expect("Failed to create PTY session");
+
+        Arc::new(Self {
+            terminal: TerminalHandle::new(),
+            session: Mutex::new(session),
+        })
+    }
+
+    #[uniffi::constructor]
+    pub fn new_with_shell(cols: u32, rows: u32, preferred_shell: String) -> Arc<Self> {
+        let preferred = if preferred_shell.trim().is_empty() {
+            None
+        } else {
+            Some(preferred_shell.as_str())
+        };
+        let session = CorePtySession::new_with_shell(cols as u16, rows as u16, preferred)
+            .expect("Failed to create PTY session");
 
         Arc::new(Self {
             terminal: TerminalHandle::new(),
@@ -126,6 +151,38 @@ impl PtySession {
 
     pub fn get_terminal(&self) -> Arc<TerminalHandle> {
         Arc::clone(&self.terminal)
+    }
+
+    pub fn shell_runtime_status(&self) -> ShellRuntimeStatusFfi {
+        let session = self.session.lock().unwrap();
+        let status = session.shell_status();
+        ShellRuntimeStatusFfi {
+            active_shell: status.active_shell.clone(),
+            active_shell_path: status.active_shell_path.clone(),
+            attempted_shell_path: status.attempted_shell_path.clone(),
+            fallback_reason: status.fallback_reason.clone(),
+            seashell_version: status.seashell_version.clone(),
+        }
+    }
+
+    pub fn active_shell(&self) -> String {
+        self.shell_runtime_status().active_shell
+    }
+
+    pub fn active_shell_path(&self) -> String {
+        self.shell_runtime_status().active_shell_path
+    }
+
+    pub fn attempted_shell_path(&self) -> String {
+        self.shell_runtime_status().attempted_shell_path
+    }
+
+    pub fn fallback_reason(&self) -> String {
+        self.shell_runtime_status().fallback_reason
+    }
+
+    pub fn seashell_version(&self) -> String {
+        self.shell_runtime_status().seashell_version
     }
 }
 
@@ -220,6 +277,13 @@ pub struct GitInfo {
     pub modified: u32,
     pub staged: u32,
     pub untracked: u32,
+}
+
+#[derive(uniffi::Record, Clone)]
+pub struct GitChangedFile {
+    pub path: String,
+    pub status: String,
+    pub staged: bool,
 }
 
 /// Git manager
@@ -349,6 +413,44 @@ impl GitManager {
 
         Ok(commits)
     }
+
+    fn get_changed_files(path: &str, limit: u32) -> Result<Vec<GitChangedFile>, git2::Error> {
+        let repo = git2::Repository::discover(path)?;
+        let statuses = repo.statuses(None)?;
+        let mut files = Vec::new();
+
+        for entry in statuses.iter().take(limit as usize) {
+            let status = entry.status();
+            let rel = entry.path().unwrap_or("").to_string();
+            if rel.is_empty() {
+                continue;
+            }
+
+            let (status_text, staged) = if status.contains(git2::Status::INDEX_NEW) {
+                ("Added".to_string(), true)
+            } else if status.contains(git2::Status::INDEX_MODIFIED) {
+                ("Staged".to_string(), true)
+            } else if status.contains(git2::Status::INDEX_DELETED) {
+                ("Deleted".to_string(), true)
+            } else if status.contains(git2::Status::WT_NEW) {
+                ("Untracked".to_string(), false)
+            } else if status.contains(git2::Status::WT_MODIFIED) {
+                ("Modified".to_string(), false)
+            } else if status.contains(git2::Status::WT_DELETED) {
+                ("Deleted".to_string(), false)
+            } else {
+                ("Changed".to_string(), false)
+            };
+
+            files.push(GitChangedFile {
+                path: rel,
+                status: status_text,
+                staged,
+            });
+        }
+
+        Ok(files)
+    }
 }
 
 #[uniffi::export]
@@ -376,6 +478,10 @@ impl GitManager {
 
     pub fn recent_commits(&self, path: String, count: u32) -> Vec<GitCommit> {
         Self::get_recent_commits(&path, count).unwrap_or_default()
+    }
+
+    pub fn changed_files(&self, path: String, limit: u32) -> Vec<GitChangedFile> {
+        Self::get_changed_files(&path, limit).unwrap_or_default()
     }
 }
 

@@ -1,6 +1,6 @@
-use std::sync::{Arc, Mutex};
-use crate::{TerminalHandle, TerminalCell, TerminalColor};
+use crate::{TerminalCell, TerminalColor, TerminalHandle};
 use opal_core::Terminal;
+use std::sync::{Arc, Mutex};
 
 #[uniffi::export]
 impl TerminalHandle {
@@ -14,6 +14,12 @@ impl TerminalHandle {
     pub fn process_input(self: Arc<Self>, data: &[u8]) {
         let mut term = self.terminal.lock().unwrap();
         term.process_bytes(data);
+    }
+
+    pub fn process_input_with_responses(self: Arc<Self>, data: &[u8]) -> Vec<u8> {
+        let mut term = self.terminal.lock().unwrap();
+        term.process_bytes(data);
+        term.take_outbound()
     }
 
     pub fn rows(&self) -> u32 {
@@ -41,9 +47,15 @@ impl TerminalHandle {
         term.cursor().visible
     }
 
-    pub fn resize(&self, _cols: u32, _rows: u32) {}
+    pub fn current_directory(&self) -> String {
+        let term = self.terminal.lock().unwrap();
+        term.current_directory().to_string()
+    }
 
-
+    pub fn resize(&self, cols: u32, rows: u32) {
+        let mut term = self.terminal.lock().unwrap();
+        term.resize(rows as usize, cols as usize);
+    }
 
     pub fn cell_at(&self, col: u32, row: u32) -> Option<TerminalCell> {
         let term = self.terminal.lock().unwrap();

@@ -28,4 +28,5 @@ Cargo.lock
 .env.local
 
 # Opal specific
-/opal
+# Keep ignore rules explicit so Swift app sources under `Opal/` remain trackable.
+Opal/.build/
