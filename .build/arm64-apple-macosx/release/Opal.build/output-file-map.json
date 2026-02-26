@@ -1,0 +1,91 @@
+{
+  "": {
+    "dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/Opal.d",
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/Opal.o",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/master.swiftdeps"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/BackgroundProfile.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BackgroundProfile.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BackgroundProfile~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BackgroundProfile.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BackgroundProfile.dia"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/BuildInfo.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BuildInfo.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BuildInfo~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BuildInfo.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BuildInfo.dia"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/ContentView.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/ContentView.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/ContentView~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/ContentView.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/ContentView.dia"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/LiquidGlassBackground.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/LiquidGlassBackground.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/LiquidGlassBackground~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/LiquidGlassBackground.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/LiquidGlassBackground.dia"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/MetalLiquidGlassBackground.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/MetalLiquidGlassBackground.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/MetalLiquidGlassBackground~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/MetalLiquidGlassBackground.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/MetalLiquidGlassBackground.dia"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/OpalNextApp.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/OpalNextApp.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/OpalNextApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/OpalNextApp.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/OpalNextApp.dia"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/RuntimeBridge.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeBridge.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeBridge~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeBridge.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeBridge.dia"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/RuntimeStatusStore.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeStatusStore.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeStatusStore~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeStatusStore.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeStatusStore.dia"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/SettingsView.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SettingsView.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SettingsView~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SettingsView.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SettingsView.dia"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/TabStore.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TabStore.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TabStore~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TabStore.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TabStore.dia"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/TerminalAppearance.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalAppearance.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalAppearance~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalAppearance.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalAppearance.dia"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/TerminalView.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalView.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalView~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalView.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalView.dia"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/TerminalViewModel.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalViewModel.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalViewModel~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalViewModel.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalViewModel.dia"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNext/WindowUtils.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/WindowUtils.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/WindowUtils~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/WindowUtils.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/WindowUtils.dia"
+  }
+}

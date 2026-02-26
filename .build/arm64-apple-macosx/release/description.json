@@ -1,0 +1,681 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.Opal-arm64-apple-macosx26.0-release.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/sources",
+      "importPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/BackgroundProfile.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/BuildInfo.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/ContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/LiquidGlassBackground.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/MetalLiquidGlassBackground.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/OpalNextApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/RuntimeBridge.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/RuntimeStatusStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/SettingsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/TabStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/TerminalAppearance.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/TerminalView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/TerminalViewModel.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/WindowUtils.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules/OpalCore.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "Opal",
+      "moduleOutputPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules/Opal.swiftmodule",
+      "objects" : [
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BackgroundProfile.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BuildInfo.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/ContentView.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/LiquidGlassBackground.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/MetalLiquidGlassBackground.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/OpalNextApp.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeBridge.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeStatusStore.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SettingsView.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TabStore.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalAppearance.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalView.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalViewModel.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/WindowUtils.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-whole-module-optimization",
+        "-num-threads",
+        "10",
+        "-serialize-diagnostics",
+        "-O",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-Xcc",
+        "-fmodule-map-file=/Users/june/projects/Opal/Sources/Copal/module.modulemap",
+        "-module-cache-path",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "Opal_main",
+        "-swift-version",
+        "5",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "opal"
+      ],
+      "outputFileMapPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BackgroundProfile.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BuildInfo.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/ContentView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/LiquidGlassBackground.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/MetalLiquidGlassBackground.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/OpalNextApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeBridge.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeStatusStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SettingsView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TabStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalAppearance.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalViewModel.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/WindowUtils.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules/Opal.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/june/projects/Opal/Sources/OpalNext/BackgroundProfile.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/BuildInfo.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/ContentView.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/LiquidGlassBackground.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/MetalLiquidGlassBackground.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/OpalNextApp.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/RuntimeBridge.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/RuntimeStatusStore.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/SettingsView.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/TabStore.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/TerminalAppearance.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/TerminalView.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/TerminalViewModel.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/WindowUtils.swift"
+      ],
+      "tempsPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build",
+      "wholeModuleOptimization" : true
+    },
+    "C.OpalCore-arm64-apple-macosx26.0-release.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/sources",
+      "importPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNextCore/opal_ffi.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "OpalCore",
+      "moduleOutputPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules/OpalCore.swiftmodule",
+      "objects" : [
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/opal_ffi.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-whole-module-optimization",
+        "-num-threads",
+        "10",
+        "-serialize-diagnostics",
+        "-O",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-Xcc",
+        "-fmodule-map-file=/Users/june/projects/Opal/Sources/Copal/module.modulemap",
+        "-module-cache-path",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/include/OpalCore-Swift.h",
+        "-swift-version",
+        "5",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "opal"
+      ],
+      "outputFileMapPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/opal_ffi.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules/OpalCore.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/june/projects/Opal/Sources/OpalNextCore/opal_ffi.swift"
+      ],
+      "tempsPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build",
+      "wholeModuleOptimization" : true
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "Opal" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "Opal",
+      "-package-name",
+      "opal",
+      "-c",
+      "/Users/june/projects/Opal/Sources/OpalNext/BackgroundProfile.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/BuildInfo.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/ContentView.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/LiquidGlassBackground.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/MetalLiquidGlassBackground.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/OpalNextApp.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/RuntimeBridge.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/RuntimeStatusStore.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/SettingsView.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/TabStore.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/TerminalAppearance.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/TerminalView.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/TerminalViewModel.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/WindowUtils.swift",
+      "-I",
+      "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-whole-module-optimization",
+      "-num-threads",
+      "10",
+      "-serialize-diagnostics",
+      "-O",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-Xcc",
+      "-fmodule-map-file=/Users/june/projects/Opal/Sources/Copal/module.modulemap",
+      "-module-cache-path",
+      "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "Opal_main",
+      "-swift-version",
+      "5",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "opal",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "OpalCore" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "OpalCore",
+      "-package-name",
+      "opal",
+      "-c",
+      "/Users/june/projects/Opal/Sources/OpalNextCore/opal_ffi.swift",
+      "-I",
+      "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-whole-module-optimization",
+      "-num-threads",
+      "10",
+      "-serialize-diagnostics",
+      "-O",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-Xcc",
+      "-fmodule-map-file=/Users/june/projects/Opal/Sources/Copal/module.modulemap",
+      "-module-cache-path",
+      "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/include/OpalCore-Swift.h",
+      "-swift-version",
+      "5",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "opal",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "Opal" : [
+      "OpalCore",
+      "Copal"
+    ],
+    "OpalCore" : [
+      "Copal"
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/BackgroundProfile.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/BuildInfo.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/ContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/LiquidGlassBackground.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/MetalLiquidGlassBackground.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/OpalNextApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/RuntimeBridge.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/RuntimeStatusStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/SettingsView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/TabStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/TerminalAppearance.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/TerminalView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/TerminalViewModel.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/WindowUtils.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/sources"
+    },
+    "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BackgroundProfile.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/BuildInfo.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/ContentView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/LiquidGlassBackground.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/MetalLiquidGlassBackground.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/OpalNextApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeBridge.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeStatusStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SettingsView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TabStore.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalAppearance.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalViewModel.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/WindowUtils.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/opal_ffi.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.product/Objects.LinkFileList"
+    },
+    "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNextCore/opal_ffi.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/sources"
+    },
+    "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"
+    }
+  }
+}

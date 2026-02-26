@@ -5,6 +5,8 @@ use std::path::{Path, PathBuf};
 use std::sync::mpsc::{channel, Receiver};
 use std::sync::{Arc, Mutex};
 
+const OPAL_VERSION: &str = "1.2.6";
+
 #[derive(Clone, Debug, Default)]
 pub struct ShellRuntimeStatus {
     pub active_shell: String,
@@ -27,7 +29,11 @@ impl Pty {
         Ok(pty)
     }
 
-    pub fn new_with_shell(cols: u16, rows: u16, preferred_shell: Option<&str>) -> anyhow::Result<(Self, ShellRuntimeStatus)> {
+    pub fn new_with_shell(
+        cols: u16,
+        rows: u16,
+        preferred_shell: Option<&str>,
+    ) -> anyhow::Result<(Self, ShellRuntimeStatus)> {
         let pty_system = portable_pty::native_pty_system();
 
         let pair = pty_system.openpty(PtySize {
@@ -47,7 +53,7 @@ impl Pty {
         }
         cmd.env("TERM", "xterm-256color");
         cmd.env("TERM_PROGRAM", "Opal");
-        cmd.env("TERM_PROGRAM_VERSION", "1.1.3");
+        cmd.env("TERM_PROGRAM_VERSION", OPAL_VERSION);
 
         // Get PATH from current process or use default macOS PATH
         let path = std::env::var("PATH").unwrap_or_else(|_| {
@@ -76,7 +82,7 @@ impl Pty {
                 zsh_cmd.arg("-l");
                 zsh_cmd.env("TERM", "xterm-256color");
                 zsh_cmd.env("TERM_PROGRAM", "Opal");
-                zsh_cmd.env("TERM_PROGRAM_VERSION", "1.1.3");
+                zsh_cmd.env("TERM_PROGRAM_VERSION", OPAL_VERSION);
                 if let Ok(home) = std::env::var("HOME") {
                     zsh_cmd.env("HOME", home);
                 }
@@ -195,7 +201,11 @@ impl PtySession {
         Self::new_with_shell(cols, rows, None)
     }
 
-    pub fn new_with_shell(cols: u16, rows: u16, preferred_shell: Option<&str>) -> anyhow::Result<Self> {
+    pub fn new_with_shell(
+        cols: u16,
+        rows: u16,
+        preferred_shell: Option<&str>,
+    ) -> anyhow::Result<Self> {
         let (pty, shell_status) = Pty::new_with_shell(cols, rows, preferred_shell)?;
         let pty = Arc::new(pty);
         Ok(Self { pty, shell_status })
@@ -264,6 +274,13 @@ fn resolve_shell(preferred_shell: Option<&str>) -> ResolvedShell {
 }
 
 fn resolve_seashell_path() -> Option<PathBuf> {
+    if let Ok(override_path) = std::env::var("OPAL_SEASHELL_PATH") {
+        let path = PathBuf::from(override_path);
+        if is_executable(&path) {
+            return Some(path);
+        }
+    }
+
     if let Ok(override_path) = std::env::var("OPAL_SEASHELL_OVERRIDE") {
         let path = PathBuf::from(override_path);
         if is_executable(&path) {
@@ -283,7 +300,7 @@ fn resolve_seashell_path() -> Option<PathBuf> {
         return Some(sibling);
     }
 
-    find_in_path("sea")
+    find_in_path("sea").filter(|candidate| !is_probably_cargo_wrapper(candidate))
 }
 
 fn is_executable(path: &Path) -> bool {
@@ -312,6 +329,28 @@ fn find_in_path(executable: &str) -> Option<PathBuf> {
         }
     }
     None
+}
+
+fn is_probably_cargo_wrapper(path: &Path) -> bool {
+    let meta = match std::fs::metadata(path) {
+        Ok(meta) => meta,
+        Err(_) => return false,
+    };
+
+    // Wrapper scripts are small; avoid scanning large binaries.
+    if meta.len() > 64 * 1024 {
+        return false;
+    }
+
+    let bytes = match std::fs::read(path) {
+        Ok(bytes) => bytes,
+        Err(_) => return false,
+    };
+
+    let has_shebang = bytes.starts_with(b"#!");
+    let has_cargo_run = bytes.windows(b"cargo run".len()).any(|w| w == b"cargo run");
+    let has_sea_cli = bytes.windows(b"sea-cli".len()).any(|w| w == b"sea-cli");
+    has_shebang && has_cargo_run && has_sea_cli
 }
 
 fn read_seashell_version(shell_path: &Path) -> String {

@@ -1,5 +1,0 @@
-module opal_ffiFFI {
-    header "opal_ffiFFI.h"
-    export *
-    link "opal_ffi"
-}

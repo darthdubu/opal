@@ -30,3 +30,4 @@ Cargo.lock
 # Opal specific
 # Keep ignore rules explicit so Swift app sources under `Opal/` remain trackable.
 Opal/.build/
+OpalNext/.build/

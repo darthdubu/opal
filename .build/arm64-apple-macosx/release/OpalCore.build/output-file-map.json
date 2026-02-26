@@ -1,0 +1,13 @@
+{
+  "": {
+    "dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/OpalCore.d",
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/OpalCore.o",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/master.swiftdeps"
+  },
+  "/Users/june/projects/Opal/Sources/OpalNextCore/opal_ffi.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/opal_ffi.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/opal_ffi~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/opal_ffi.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/opal_ffi.dia"
+  }
+}

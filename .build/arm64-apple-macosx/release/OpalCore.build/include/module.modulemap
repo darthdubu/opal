@@ -1,0 +1,3 @@
+module OpalCore {
+    header "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/include/OpalCore-Swift.h"
+}

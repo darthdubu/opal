@@ -1,6 +1,14 @@
 # Session: 2026-02-24 - Prompt/Cursor Stability Deep Dive
 
 ## [PLANS]
+- 2026-02-26T23:07Z [USER] Update installed Opal bundle to latest Seashell runtime.
+- 2026-02-26T21:41Z [USER] Generate a new icon concept (mermaid holding opal stone) with simple flat Apple-style language and apply it to the app.
+- 2026-02-26T21:37Z [USER] Fix runtime Seashell launch failure (`zsh` fallback with Cargo.toml error from `~/bin/sea`) so Opal and Seashell work together reliably.
+- 2026-02-25T20:38Z [USER] Replace icon again with an Apple design-language direction featuring an opal gemstone.
+- 2026-02-25T20:25Z [USER] Add configurable `OPAL_SEASHELL_PATH` override, rename app identity from OpalNext to Opal, and regenerate a completely new icon.
+- 2026-02-25T20:12Z [USER] Update Opal to use the new Seashell rewrite available at `../seashell`.
+- 2026-02-25T14:27Z [USER] Create a new OpalNext app icon that reflects Opal + Seashell as an interconnected product identity.
+- 2026-02-25T05:16Z [USER] Implement full in-repo rewrite plan by creating parallel `OpalNext/` app path (calm core scope) with its own build pipeline and quality-gated validation.
 - 2026-02-25T00:21Z [USER] Hide tab bar when only one tab is open and ship a new app icon aligned to “gorgeous, calm, high-performance terminal” branding.
 - 2026-02-24T19:15Z [USER] Fix shader settings persistence so values survive app relaunches.
 - 2026-02-24T19:09Z [USER] Remove newly added shader controls from toolbar and redesign settings to only expose controls that actually work in Opal.
@@ -12,6 +20,22 @@
 - 2026-02-24T04:16Z [ASSUMPTION] Prioritize `opal-vte` control-sequence semantics and Swift `TerminalView` cursor rendering path, since both affect prompt placement.
 
 ## [DECISIONS]
+- 2026-02-26T21:41Z [CODE] Followed installed `imagegen` skill prompting constraints (flat styling, clear subject silhouette, avoid visual clutter) and produced final icon locally due unavailable API credentials.
+- 2026-02-26T21:41Z [CODE] Replaced icon family with a flat mermaid-holding-opal composition across `Resources/Opal*` and compatibility `Resources/OpalNext*` assets (`icon-master`, `.iconset`, `.icns`).
+- 2026-02-26T21:37Z [CODE] Hardened shell resolution by adding `OPAL_SEASHELL_PATH` support in Rust core, exporting all Seashell override env vars from Swift runtime, and filtering PATH-discovered Cargo wrapper scripts.
+- 2026-02-26T21:37Z [CODE] Rebuilt and bundled standalone compiled Seashell binary (`../seashell/target/release/sea`) inside app resources to avoid dependence on development wrapper scripts.
+- 2026-02-25T20:38Z [CODE] Replaced prior icon with a cleaner Apple-style composition: restrained cool gradient tile, faceted opal gemstone centerpiece, subtle glass highlights, and soft depth shadow.
+- 2026-02-25T20:25Z [CODE] Promoted local package/app identity to `Opal` (`Package.swift` product/target names, app/about strings, notification namespace) while keeping source directory paths unchanged.
+- 2026-02-25T20:25Z [CODE] Seashell executable resolution now checks `OPAL_SEASHELL_PATH` first, then `../seashell/sea`, then bundled shell.
+- 2026-02-25T20:25Z [CODE] Replaced icon artwork with a new opal-core + shell-spiral visual and exported fresh `Opal*` and compatibility `OpalNext*` icon assets (`.png`, `.iconset`, `.icns`).
+- 2026-02-25T20:12Z [CODE] Updated `TerminalViewModel` to resolve `../seashell/sea` first and only fall back to bundled Seashell when the local rewrite is unavailable.
+- 2026-02-25T14:27Z [CODE] Generated a dedicated OpalNext icon concept with an interlocked opal-orb + seashell spiral motif and shipped it as both master PNG and bundled ICNS.
+- 2026-02-25T05:16Z [CODE] Added new rewrite app package at `OpalNext/` with minimal shell-first UI architecture (`TabStore`, `TerminalViewModel`, `BackgroundProfile`, `RuntimeStatusStore`) while leaving legacy `Opal/` behavior untouched.
+- 2026-02-25T05:16Z [CODE] Added `build-next.sh` to produce `OpalNext.app` with temporary bundle id `com.opal.terminal.next`, Seashell bundling, and `SeashellBuild.txt` metadata.
+- 2026-02-25T05:16Z [CODE] Implemented calm settings surface in `OpalNext` limited to working controls (background/effects preview, typography, cursor, shell runtime diagnostics, session restore).
+- 2026-02-25T03:20Z [CODE] History sidebar now renders structured command cards (status/duration/cwd/source/timestamp actions) instead of plain string rows to make shell history actionable.
+- 2026-02-25T03:20Z [CODE] `TerminalViewModel` history sync now prefers Seashell JSON contract (`sea -c "history-search --json"`) and falls back to shell history files when unavailable.
+- 2026-02-25T03:20Z [CODE] Added explicit Seashell executable resolution order (bundled env, bundled resource, common install paths, `which sea`) for resilient host-shell integration.
 - 2026-02-25T00:21Z [CODE] Implemented real tab session lifecycle in `ContentView` (`newTab`/`closeTab` notifications) and conditional tab strip rendering only when tab count > 1.
 - 2026-02-25T00:21Z [CODE] Replaced app icon assets with a newly generated “calm opal terminal” design across AppIcon PNG set, `icon-master.png`, and `Opal.icns`.
 - 2026-02-24T19:15Z [CODE] Implemented `BackgroundSettings` persistence via `UserDefaults` for all shader/motion/palette/effect fields with hydrate-on-init and save-on-change behavior.
@@ -38,6 +62,32 @@
 - 2026-02-24T04:16Z [CODE] Switched Swift cursor rendering to inline text attributes + range scrolling in `TerminalView.swift` to avoid overlay drift.
 
 ## [PROGRESS]
+- 2026-02-26T23:07Z [TOOL] Built Seashell `sea-cli` release from local `../seashell` at `v1.5.2` and replaced bundled runtime in `/Applications/Opal.app/Contents/Resources/seashell/sea`.
+- 2026-02-26T23:07Z [TOOL] Updated `/Applications/Opal.app/Contents/Resources/SeashellBuild.txt` to `version=1.5.2` and re-signed app bundle.
+- 2026-02-26T21:41Z [TOOL] Regenerated icon assets at 1024 master resolution and repackaged/reinstalled `/Applications/Opal.app` with updated icon and version metadata.
+- 2026-02-26T21:41Z [TOOL] `swift build -c release` succeeded after icon/version updates; app bundle installed and signature verified.
+- 2026-02-26T21:37Z [TOOL] Built `opal-ffi` release after core shell-resolution updates and built `sea-cli` release in `../seashell`.
+- 2026-02-26T21:37Z [TOOL] Ran `swift package clean` + `swift build -c release`, packaged `/tmp/Opal.app` with bundled `Resources/seashell/sea`, then installed to `/Applications/Opal.app`.
+- 2026-02-25T21:35Z [TOOL] Restored deleted Rust workspace paths required for linking (`Cargo.toml`, `build.sh`, `rebuild.sh`, `opal-core`, `opal-ffi`, `opal-renderer`, `opal-vte`, `opal-ai`).
+- 2026-02-25T21:35Z [TOOL] Built `opal-ffi` in release with `CARGO_TARGET_DIR=../target`, then ran `swift package clean` and `swift build -c release` successfully.
+- 2026-02-25T21:35Z [TOOL] Packaged fresh `/tmp/Opal.app` (bundled `Opal` binary, `libopal_ffi.dylib`, `Opal.icns`, generated `SeashellBuild.txt`) and installed to `/Applications/Opal.app` via `ditto`.
+- 2026-02-25T20:44Z [TOOL] Attempted clean rebuild/install request; workspace has no build script and no existing `/Applications/Opal.app` bundle to copy forward.
+- 2026-02-25T20:38Z [TOOL] Regenerated `Resources/Opal-icon-master.png`, `Resources/Opal.icns`, and full `Opal.iconset` (plus compatibility `OpalNext*` assets) at 1024px master resolution.
+- 2026-02-25T20:38Z [TOOL] `swift build` rerun after version bump; compile passed and link failed with existing missing `../target/release/libopal_ffi`.
+- 2026-02-25T20:25Z [TOOL] Installed curated `imagegen` skill via skill-installer to satisfy requested skill-based icon workflow; live model generation was unavailable in this environment due missing `OPENAI_API_KEY`.
+- 2026-02-25T20:25Z [TOOL] `swift build` compiled all Swift modules under renamed `Opal` targets and failed at link with existing missing `../target/release/libopal_ffi`.
+- 2026-02-25T20:12Z [TOOL] Ran `swift build`; compile completed for modules and failed at link with pre-existing missing `../target/release/libopal_ffi` path.
+- 2026-02-25T14:27Z [TOOL] Rebuilt `OpalNext.app` with `./build-next.sh`; packaged app now includes updated `OpalNext.icns` and Seashell bundle metadata.
+- 2026-02-25T14:27Z [TOOL] `cargo test -p opal-vte -p opal-core` passed after icon/version update.
+- 2026-02-25T14:27Z [TOOL] `cargo clippy -p opal-vte -p opal-core --all-targets` completed with existing non-blocking warnings.
+- 2026-02-25T05:16Z [TOOL] `cargo test -p opal-vte -p opal-core` passed after `OpalNext` scaffold and version bump changes.
+- 2026-02-25T05:16Z [TOOL] `cargo clippy -p opal-vte -p opal-core --all-targets` completed with existing non-blocking warnings.
+- 2026-02-25T05:16Z [TOOL] `swift build -c release --package-path OpalNext` passed after fixing initial compile errors in new tab store and terminal type imports.
+- 2026-02-25T05:16Z [TOOL] `./build-next.sh` succeeded and produced signed `OpalNext.app` with bundled Seashell runtime metadata.
+- 2026-02-25T03:20Z [TOOL] `cargo test -p opal-vte -p opal-core` passed after history integration and version updates.
+- 2026-02-25T03:20Z [TOOL] `cargo clippy -p opal-vte -p opal-core --all-targets` completed with existing non-blocking warnings.
+- 2026-02-25T03:20Z [TOOL] `./build.sh` succeeded after history integration changes and version bump.
+- 2026-02-25T03:20Z [TOOL] Installed rebuilt app to `/Applications/Opal.app`.
 - 2026-02-25T00:21Z [TOOL] `cargo test -p opal-vte -p opal-core` passed after tab lifecycle + icon updates.
 - 2026-02-25T00:21Z [TOOL] `cargo clippy -p opal-vte -p opal-core --all-targets` completed with existing non-blocking warnings.
 - 2026-02-25T00:21Z [TOOL] `./build.sh` succeeded and packaged updated UI behavior/icon assets.
@@ -67,6 +117,20 @@
 - 2026-02-24T04:16Z [TOOL] Implemented and verified targeted regression tests in `opal-vte` for wrap/linefeed scrolling/CHA/DECSTBM defaults.
 
 ## [DISCOVERIES]
+- 2026-02-26T23:07Z [TOOL] Installed app previously bundled Seashell `v1.4.4`; after runtime replacement, `/Applications/Opal.app/Contents/Resources/seashell/sea --version` reports `seashell v1.5.2`.
+- 2026-02-26T21:41Z [TOOL] `OPENAI_API_KEY` remains unset, so live OpenAI image API calls from `imagegen` skill are unavailable in this environment; local deterministic generation remains the viable path.
+- 2026-02-26T21:37Z [TOOL] `/Users/june/bin/sea` is a Cargo wrapper script (`cargo run -p sea-cli`) that fails when launched outside the Seashell repo; PATH fallback selecting this caused observed runtime errors.
+- 2026-02-26T21:37Z [TOOL] Bundled compiled Seashell binary reports `seashell v1.4.4` from `/Applications/Opal.app/Contents/Resources/seashell/sea --version`.
+- 2026-02-25T21:35Z [TOOL] Swift release binary linked to absolute `libopal_ffi` path; patched packaged binary with `install_name_tool` to `@executable_path/../Frameworks/libopal_ffi.dylib` for app-local runtime loading.
+- 2026-02-25T20:44Z [TOOL] Required linker artifact `../target/release/libopal_ffi*` is missing and no alternative copy exists in nearby directories, so current Swift target cannot link into an app bundle.
+- 2026-02-25T20:25Z [TOOL] `OPENAI_API_KEY` is unset in this environment, preventing live API-backed image generation from the newly installed `imagegen` skill.
+- 2026-02-25T20:25Z [TOOL] Pillow-based ICNS/iconset export remains reliable for producing full macOS icon asset families in this checkout.
+- 2026-02-25T20:12Z [TOOL] Current tree links Swift package against `-L../target/release -lopal_ffi`; local validation can compile Swift sources but cannot link until that Rust artifact exists.
+- 2026-02-25T14:27Z [TOOL] Pillow ICNS export remains the reliable path in this environment; icon generation produced valid `OpalNext.icns` and iconset PNG sizes in one step.
+- 2026-02-25T05:16Z [TOOL] Swift package builds for `OpalNext` require unsandboxed cache access (`~/.cache/clang`), matching prior SwiftPM behavior in this environment.
+- 2026-02-25T05:16Z [CODE] New rewrite target initially failed due missing `OpalNextCore` type imports in `TerminalView` and `TabStore` initialization ordering; both were corrected.
+- 2026-02-25T03:20Z [CODE] Plain shell history files lack execution metadata (exit/duration/cwd), so Seashell JSON ingestion is required for rich command cards.
+- 2026-02-25T03:20Z [TOOL] Cargo/Swift build/test commands in this environment require unsandboxed execution due target/cache lockfile permissions.
 - 2026-02-25T00:21Z [CODE] Existing “tab bar” behavior was effectively a static header chip; command menu tab actions were previously unwired to session creation/closure.
 - 2026-02-25T00:21Z [TOOL] `iconutil -c icns` rejected generated iconsets in this environment; direct ICNS export via Pillow produced a valid `Opal.icns` consumed by app bundle build.
 - 2026-02-24T19:15Z [CODE] Root cause: `BackgroundSettings` used only in-memory defaults and had no storage read/write path, so shader values reset every launch.
@@ -82,6 +146,24 @@
 - 2026-02-24T04:16Z [CODE] `Grid::clear_from_cursor` and `clear_to_cursor` used internal grid cursor fields that were not synced with terminal cursor state.
 
 ## [OUTCOMES]
+- 2026-02-26T23:07Z [TOOL] Latest local Seashell runtime now bundled and active in installed `/Applications/Opal.app` without changing Opal app version metadata (`1.2.6`).
+- 2026-02-26T21:41Z [CODE] Version surfaces bumped to `1.2.6` (`Cargo.toml`, `Sources/OpalNext/BuildInfo.swift`, `Opal/Sources/Opal/SettingsView.swift`, runtime `TERM_PROGRAM_VERSION`) for the icon refresh release.
+- 2026-02-26T21:41Z [TOOL] `/Applications/Opal.app` now carries v`1.2.6` and includes the new mermaid+opal icon set.
+- 2026-02-26T21:37Z [CODE] Version surfaces bumped to `1.2.5` (`Cargo.toml`, `Sources/OpalNext/BuildInfo.swift`, legacy `Opal/Sources/Opal/SettingsView.swift`) for Seashell companion reliability fixes.
+- 2026-02-26T21:37Z [TOOL] Reinstalled `/Applications/Opal.app` (v1.2.5) with bundled standalone Seashell runtime and valid code signature.
+- 2026-02-25T21:35Z [TOOL] Clean rebuild and reinstall completed; `/Applications/Opal.app` exists, passes `codesign --verify --deep --strict`, and Info.plist reports version `1.2.4`.
+- 2026-02-25T20:38Z [CODE] Version bumped to `1.2.4` (`BuildInfo.swift`) for the Apple-style opal gemstone icon refresh.
+- 2026-02-25T20:25Z [CODE] Version bumped to `1.2.3` (`BuildInfo.swift`) for Opal rename + `OPAL_SEASHELL_PATH` override + icon replacement.
+- 2026-02-25T20:25Z [CODE] User-visible naming now says `Opal` (not `Opal Next`) in app metadata and settings about surface.
+- 2026-02-25T20:12Z [CODE] Version bumped to `1.2.2` in OpalNext (`BuildInfo.swift`) while switching Seashell runtime resolution to prefer local rewrite path `../seashell/sea`.
+- 2026-02-25T14:27Z [CODE] Version bumped to `1.2.1` across tracked surfaces for the new OpalNext icon release.
+- 2026-02-25T14:27Z [CODE] OpalNext branding now has a dedicated icon identity representing the Opal/Seashell relationship and is included in packaged app output.
+- 2026-02-25T05:16Z [CODE] Workspace version surfaces were bumped to `1.2.0` (`Cargo.toml`, legacy About/version metadata, PTY `TERM_PROGRAM_VERSION`, and bundle script version fields) to track rewrite introduction.
+- 2026-02-25T05:16Z [CODE] `OpalNext` calm-core rewrite track is now bootstrapped in parallel with legacy app and includes deterministic tabs, session restore controls, Seashell fallback diagnostics badge, and scoped settings UX.
+- 2026-02-25T05:16Z [TOOL] Packaging pipeline now supports both legacy (`build.sh`) and rewrite (`build-next.sh`) outputs, with `OpalNext.app` generated successfully.
+- 2026-02-25T03:20Z [CODE] Version bumped to `1.1.4` across required surfaces for history card + Seashell JSON contract integration.
+- 2026-02-25T03:20Z [CODE] Opal now presents richer, metadata-aware history UX with Seashell-first data source and automatic fallback behavior.
+- 2026-02-25T03:20Z [TOOL] Rebuilt and installed `/Applications/Opal.app` containing `v1.1.4`.
 - 2026-02-25T00:21Z [CODE] Version bumped to `1.1.3` across required version surfaces for tab-strip + icon refresh work.
 - 2026-02-25T00:21Z [CODE] Tab strip now remains hidden with one tab and appears only for multi-tab state.
 - 2026-02-25T00:21Z [CODE] New icon branding applied to both app resources and bundle icon file.
