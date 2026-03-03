@@ -10,10 +10,13 @@ let package = Package(
             targets: ["Opal"]
         ),
     ],
+    dependencies: [
+        .package(path: "../sunshine")
+    ],
     targets: [
         .executableTarget(
             name: "Opal",
-            dependencies: ["OpalCore"],
+            dependencies: ["OpalCore", .product(name: "AutoUpdate", package: "sunshine")],
             path: "Sources/OpalNext"
         ),
         .target(

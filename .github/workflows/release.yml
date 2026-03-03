@@ -1,0 +1,183 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+env:
+  APP_NAME: Opal
+
+jobs:
+  release:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Opal
+        uses: actions/checkout@v4
+
+      - name: Checkout Sunshine
+        uses: actions/checkout@v4
+        with:
+          repository: opal-terminal/sunshine
+          path: sunshine
+
+      - name: Link Sunshine path dependency
+        run: |
+          if [ ! -e "$GITHUB_WORKSPACE/../sunshine" ]; then
+            ln -s "$GITHUB_WORKSPACE/sunshine" "$GITHUB_WORKSPACE/../sunshine"
+          fi
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Validate release version
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          CARGO_VERSION=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n 1)
+          BUILDINFO_VERSION=$(sed -n 's/^let opalVersion = "\(.*\)"/\1/p' Sources/OpalNext/BuildInfo.swift | head -n 1)
+
+          if [ -z "$CARGO_VERSION" ] || [ -z "$BUILDINFO_VERSION" ]; then
+            echo "Failed to parse version files."
+            exit 1
+          fi
+
+          if [ "$TAG_VERSION" != "$CARGO_VERSION" ]; then
+            echo "Tag version ($TAG_VERSION) does not match Cargo.toml ($CARGO_VERSION)."
+            exit 1
+          fi
+
+          if [ "$TAG_VERSION" != "$BUILDINFO_VERSION" ]; then
+            echo "Tag version ($TAG_VERSION) does not match BuildInfo.swift ($BUILDINFO_VERSION)."
+            exit 1
+          fi
+
+      - name: Build Rust FFI
+        run: cargo build -p opal-ffi --lib --release
+
+      - name: Build Swift app
+        run: swift build -c release
+
+      - name: Package app bundle
+        run: |
+          mkdir -p build/release/$APP_NAME.app/Contents/{MacOS,Resources,Frameworks}
+
+          cp .build/release/$APP_NAME build/release/$APP_NAME.app/Contents/MacOS/$APP_NAME
+          cp Resources/Opal.icns build/release/$APP_NAME.app/Contents/Resources/Opal.icns
+          cp target/release/libopal_ffi.dylib build/release/$APP_NAME.app/Contents/Frameworks/libopal_ffi.dylib
+
+          chmod +x build/release/$APP_NAME.app/Contents/MacOS/$APP_NAME
+          chmod +x build/release/$APP_NAME.app/Contents/Frameworks/libopal_ffi.dylib
+
+          install_name_tool -id "@rpath/libopal_ffi.dylib" build/release/$APP_NAME.app/Contents/Frameworks/libopal_ffi.dylib
+          install_name_tool -change "${GITHUB_WORKSPACE}/target/release/deps/libopal_ffi.dylib" "@rpath/libopal_ffi.dylib" build/release/$APP_NAME.app/Contents/MacOS/$APP_NAME || true
+          install_name_tool -add_rpath "@executable_path/../Frameworks" build/release/$APP_NAME.app/Contents/MacOS/$APP_NAME || true
+
+          cat > build/release/$APP_NAME.app/Contents/Info.plist <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleDevelopmentRegion</key>
+              <string>English</string>
+              <key>CFBundleExecutable</key>
+              <string>Opal</string>
+              <key>CFBundleIconFile</key>
+              <string>Opal.icns</string>
+              <key>CFBundleIdentifier</key>
+              <string>com.opal.terminal</string>
+              <key>CFBundleInfoDictionaryVersion</key>
+              <string>6.0</string>
+              <key>CFBundleName</key>
+              <string>Opal</string>
+              <key>CFBundlePackageType</key>
+              <string>APPL</string>
+              <key>CFBundleShortVersionString</key>
+              <string>${GITHUB_REF_NAME#v}</string>
+              <key>CFBundleVersion</key>
+              <string>${GITHUB_REF_NAME#v}</string>
+              <key>LSMinimumSystemVersion</key>
+              <string>14.0</string>
+              <key>NSHighResolutionCapable</key>
+              <true/>
+              <key>LSApplicationCategoryType</key>
+              <string>public.app-category.utilities</string>
+              <key>NSRequiresAquaSystemAppearance</key>
+              <false/>
+          </dict>
+          </plist>
+          PLIST
+
+          codesign --force --deep --sign - build/release/$APP_NAME.app
+
+      - name: Zip app
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent "build/release/$APP_NAME.app" "build/release/$APP_NAME.zip"
+
+      - name: Create EdDSA signature
+        env:
+          EDDSA_PRIVATE_KEY_BASE64: ${{ secrets.EDDSA_PRIVATE_KEY_BASE64 }}
+        run: |
+          if [ -z "$EDDSA_PRIVATE_KEY_BASE64" ]; then
+            echo "Missing required secret: EDDSA_PRIVATE_KEY_BASE64"
+            exit 1
+          fi
+
+          cat > build/sign.swift <<'SWIFT'
+          import CryptoKit
+          import Foundation
+
+          struct Signer {
+              static func run() throws {
+                  guard CommandLine.arguments.count == 3 else {
+                      throw NSError(domain: "sign", code: 1, userInfo: [NSLocalizedDescriptionKey: "Usage: sign.swift <zip> <private-key-base64>"])
+                  }
+
+                  let zipPath = CommandLine.arguments[1]
+                  let keyBase64 = CommandLine.arguments[2]
+
+                  guard let keyData = Data(base64Encoded: keyBase64) else {
+                      throw NSError(domain: "sign", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid private key base64"])
+                  }
+
+                  let privateKey = try Curve25519.Signing.PrivateKey(rawRepresentation: keyData)
+                  let payload = try Data(contentsOf: URL(fileURLWithPath: zipPath))
+                  let signature = try privateKey.signature(for: payload).base64EncodedString()
+                  print(signature)
+              }
+          }
+
+          try Signer.run()
+          SWIFT
+
+          SIGNATURE=$(swift build/sign.swift "build/release/$APP_NAME.zip" "$EDDSA_PRIVATE_KEY_BASE64")
+          echo "$SIGNATURE" > "build/release/$APP_NAME.sig"
+
+      - name: Generate Sunshine manifest
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          FILE_SIZE=$(stat -f%z "build/release/$APP_NAME.zip")
+          SIGNATURE=$(cat "build/release/$APP_NAME.sig")
+          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${GITHUB_REF_NAME}/$APP_NAME.zip"
+
+          cat > build/release/update-manifest.json <<JSON
+          {
+            "version": "$VERSION",
+            "downloadURL": "$DOWNLOAD_URL",
+            "changelog": "See GitHub release notes.",
+            "signature": "$SIGNATURE",
+            "size": $FILE_SIZE
+          }
+          JSON
+
+      - name: Publish release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            build/release/${{ env.APP_NAME }}.zip
+            build/release/${{ env.APP_NAME }}.sig
+            build/release/update-manifest.json

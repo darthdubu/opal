@@ -1,6 +1,14 @@
 # Session: 2026-02-24 - Prompt/Cursor Stability Deep Dive
 
 ## [PLANS]
+- 2026-03-03T05:52Z [USER] Automatically configure GitHub Actions so Opal releases produce Sunshine update assets (zip/signature/manifest) on tag publish.
+- 2026-03-03T05:32Z [USER] Implement Sunshine auto-update support by integrating local `../sunshine` package and add an `Updates` settings tab.
+- 2026-03-03T05:24Z [USER] Investigate startup crash on macOS 26.3 and fix tab-bar visibility handling in `ContentView`.
+- 2026-03-03T05:09Z [USER] Run a clean rebuild and reinstall of `Opal.app` into `/Applications`.
+- 2026-03-03T05:04Z [USER] Add configurable default shell control in Settings > Shell and remove duplicate in-app tab bar so only native top tab bar remains with one-tab auto-hide.
+- 2026-02-27T01:55Z [USER] Update installed Opal runtime to latest local Seashell build.
+- 2026-02-26T23:23Z [USER] Restore shader color controls in Settings so users can change shader colors again.
+- 2026-02-26T23:21Z [USER] Remove duplicate in-app tab bar behavior by keeping native top tab bar only, auto-hiding when only one tab exists, and route Shell badge click to Settings > About.
 - 2026-02-26T23:07Z [USER] Update installed Opal bundle to latest Seashell runtime.
 - 2026-02-26T21:41Z [USER] Generate a new icon concept (mermaid holding opal stone) with simple flat Apple-style language and apply it to the app.
 - 2026-02-26T21:37Z [USER] Fix runtime Seashell launch failure (`zsh` fallback with Cargo.toml error from `~/bin/sea`) so Opal and Seashell work together reliably.
@@ -20,6 +28,17 @@
 - 2026-02-24T04:16Z [ASSUMPTION] Prioritize `opal-vte` control-sequence semantics and Swift `TerminalView` cursor rendering path, since both affect prompt placement.
 
 ## [DECISIONS]
+- 2026-03-03T05:52Z [CODE] Added `.github/workflows/release.yml` to build Opal on tag `v*`, sign release zip with `EDDSA_PRIVATE_KEY_BASE64`, generate Sunshine `update-manifest.json`, and publish artifacts to GitHub Releases.
+- 2026-03-03T05:52Z [CODE] Workflow checks out `opal-terminal/sunshine` and symlinks it to `../sunshine` so existing local path dependency in `Package.swift` resolves in CI.
+- 2026-03-03T05:32Z [CODE] Added local SwiftPM dependency on `../sunshine` (`AutoUpdate` product) and created `SunshineUpdateStore` as the Opal-facing bridge for update checks/download/install.
+- 2026-03-03T05:32Z [CODE] Added new `Updates` settings section with Sunshine configuration (owner/repo/public key/launch checks), manual check action, and live update state controls.
+- 2026-03-03T05:24Z [CODE] Replaced KVC-based tab bar visibility access (`valueForKey(\"tabBarVisible\")`) with selector-safe `responds(to:)` + `perform` calls to avoid Objective-C undefined-key exceptions on newer macOS.
+- 2026-03-03T05:04Z [CODE] Removed custom in-window toolbar from `ContentView` to eliminate the second bar; the app now relies on native macOS tab bar as the single tab UI surface.
+- 2026-03-03T05:04Z [CODE] Added persisted shell preference (`opal.shell.default`) in Shell settings with segmented choices (`Seashell`/`zsh`), applied at session startup.
+- 2026-02-26T23:23Z [CODE] Reintroduced shader color configuration in `OpalNext` background settings via explicit primary/secondary color pickers and hue sliders backed by `BackgroundProfile.primaryHue`/`secondaryHue`.
+- 2026-02-26T23:21Z [CODE] Switched tab UX to native macOS tabs for `ContentView` windows; removed internal `TabStrip` rendering path and internal multi-tab session switching from the toolbar/menu handlers.
+- 2026-02-26T23:21Z [CODE] Implemented one-tab native tab-bar auto-hide via `toggleTabBar` with KVC-based visibility check (`tabBarVisible`) for SDK compatibility.
+- 2026-02-26T23:21Z [CODE] Shell runtime badge in toolbar is now actionable and opens Settings focused on the About section.
 - 2026-02-26T21:41Z [CODE] Followed installed `imagegen` skill prompting constraints (flat styling, clear subject silhouette, avoid visual clutter) and produced final icon locally due unavailable API credentials.
 - 2026-02-26T21:41Z [CODE] Replaced icon family with a flat mermaid-holding-opal composition across `Resources/Opal*` and compatibility `Resources/OpalNext*` assets (`icon-master`, `.iconset`, `.icns`).
 - 2026-02-26T21:37Z [CODE] Hardened shell resolution by adding `OPAL_SEASHELL_PATH` support in Rust core, exporting all Seashell override env vars from Swift runtime, and filtering PATH-discovered Cargo wrapper scripts.
@@ -62,6 +81,25 @@
 - 2026-02-24T04:16Z [CODE] Switched Swift cursor rendering to inline text attributes + range scrolling in `TerminalView.swift` to avoid overlay drift.
 
 ## [PROGRESS]
+- 2026-03-03T05:52Z [TOOL] Added release automation docs in `.github/SUNSHINE_UPDATES.md` and bumped version surfaces to `1.3.1` (`Cargo.toml`, `Sources/OpalNext/BuildInfo.swift`, `Opal/Sources/Opal/SettingsView.swift`).
+- 2026-03-03T05:32Z [TOOL] `cargo test -p opal-core` passed (33 tests) after Sunshine integration version bump.
+- 2026-03-03T05:32Z [TOOL] `swift build -c release` passed with local `../sunshine` package integrated and new Settings > Updates UI compiled successfully.
+- 2026-03-03T05:24Z [TOOL] `swift build -c release` passed after tab-bar visibility crash fix; only a non-blocking selector-style warning remained.
+- 2026-03-03T05:24Z [TOOL] `cargo test -p opal-core` passed (33 tests) after version bump to `1.2.10`.
+- 2026-03-03T05:24Z [TOOL] Repackaged and reinstalled `/Applications/Opal.app` with version `1.2.10`; code signature verification passed.
+- 2026-03-03T05:09Z [TOOL] Performed clean rebuild (`cargo clean`, `swift package clean`), rebuilt `opal-ffi` release + UniFFI Swift bindings, and rebuilt Swift app in release.
+- 2026-03-03T05:09Z [TOOL] Packaged fresh `/tmp/Opal.app`, embedded `libopal_ffi.dylib` + Seashell runtime, installed to `/Applications/Opal.app`, and verified signature/version metadata.
+- 2026-03-03T05:04Z [TOOL] `swift build -c release` passed after removing custom toolbar and adding default-shell settings wiring.
+- 2026-03-03T05:04Z [TOOL] `cargo clippy -p opal-core --all-targets` completed successfully; only existing `opal-vte` advisories remain.
+- 2026-03-03T05:04Z [TOOL] `cargo test -p opal-core` passed (33 tests).
+- 2026-02-27T01:55Z [TOOL] Built `sea-cli` release from `/Users/june/projects/seashell` (local HEAD `fc46869`) and replaced `/Applications/Opal.app/Contents/Resources/seashell/sea`.
+- 2026-02-27T01:55Z [TOOL] Updated `/Applications/Opal.app/Contents/Resources/SeashellBuild.txt` to `version=v1.5.6`, re-signed app, and verified bundled runtime reports `seashell v1.5.6`.
+- 2026-02-26T23:23Z [TOOL] `swift build -c release` passed after adding shader color controls back into `Sources/OpalNext/SettingsView.swift`.
+- 2026-02-26T23:23Z [TOOL] `cargo clippy -p opal-core --all-targets` completed successfully; only existing `opal-vte` advisories remain.
+- 2026-02-26T23:23Z [TOOL] `cargo test -p opal-core` passed (33 tests).
+- 2026-02-26T23:21Z [TOOL] `swift build -c release` passed after replacing unavailable typed AppKit APIs with selector/KVC-compatible native tab operations.
+- 2026-02-26T23:21Z [TOOL] `cargo clippy -p opal-core --all-targets` completed successfully (existing non-blocking warnings in `opal-vte` unchanged).
+- 2026-02-26T23:21Z [TOOL] `cargo test -p opal-core` passed (33 tests total across unit + integration suites).
 - 2026-02-26T23:07Z [TOOL] Built Seashell `sea-cli` release from local `../seashell` at `v1.5.2` and replaced bundled runtime in `/Applications/Opal.app/Contents/Resources/seashell/sea`.
 - 2026-02-26T23:07Z [TOOL] Updated `/Applications/Opal.app/Contents/Resources/SeashellBuild.txt` to `version=1.5.2` and re-signed app bundle.
 - 2026-02-26T21:41Z [TOOL] Regenerated icon assets at 1024 master resolution and repackaged/reinstalled `/Applications/Opal.app` with updated icon and version metadata.
@@ -117,6 +155,10 @@
 - 2026-02-24T04:16Z [TOOL] Implemented and verified targeted regression tests in `opal-vte` for wrap/linefeed scrolling/CHA/DECSTBM defaults.
 
 ## [DISCOVERIES]
+- 2026-03-03T05:52Z [TOOL] Because Opal currently references Sunshine via local path (`../sunshine`), CI must fetch Sunshine separately and provide that sibling path before `swift build` can succeed.
+- 2026-03-03T05:32Z [TOOL] SwiftPM manifest argument order matters for this toolchain (`products` must appear before `dependencies` in `Package(...)`); initial build failed until reordered.
+- 2026-03-03T05:24Z [TOOL] On macOS 26.3, `valueForKey(\"tabBarVisible\")` can throw `NSUnknownKeyException` during window setup; dynamic selector checks prevent crash while preserving tab-bar show/hide behavior.
+- 2026-02-26T23:21Z [TOOL] Current macOS SDK target in this environment does not expose typed `NSWindow.newTab` or `NSWindow.isTabBarVisible`; selector-based action dispatch and KVC visibility checks compile and work around this.
 - 2026-02-26T23:07Z [TOOL] Installed app previously bundled Seashell `v1.4.4`; after runtime replacement, `/Applications/Opal.app/Contents/Resources/seashell/sea --version` reports `seashell v1.5.2`.
 - 2026-02-26T21:41Z [TOOL] `OPENAI_API_KEY` remains unset, so live OpenAI image API calls from `imagegen` skill are unavailable in this environment; local deterministic generation remains the viable path.
 - 2026-02-26T21:37Z [TOOL] `/Users/june/bin/sea` is a Cargo wrapper script (`cargo run -p sea-cli`) that fails when launched outside the Seashell repo; PATH fallback selecting this caused observed runtime errors.
@@ -146,6 +188,20 @@
 - 2026-02-24T04:16Z [CODE] `Grid::clear_from_cursor` and `clear_to_cursor` used internal grid cursor fields that were not synced with terminal cursor state.
 
 ## [OUTCOMES]
+- 2026-03-03T05:52Z [CODE] Added GitHub release automation for Sunshine update delivery and documented required secret + tag workflow; release assets are now standardized as `Opal.zip`, `Opal.sig`, and `update-manifest.json`.
+- 2026-03-03T05:52Z [CODE] Version surfaces bumped to `1.3.1` for GitHub Actions Sunshine integration.
+- 2026-03-03T05:32Z [CODE] Version surfaces bumped to `1.3.0` (`Cargo.toml`, `Sources/OpalNext/BuildInfo.swift`, `Opal/Sources/Opal/SettingsView.swift`, `opal-core/src/pty.rs`) for Sunshine updates feature release.
+- 2026-03-03T05:32Z [CODE] Opal now includes Sunshine-backed updates support and a dedicated Settings > Updates tab for configuration and manual update lifecycle actions.
+- 2026-03-03T05:24Z [CODE] Version surfaces bumped to `1.2.10` (`Cargo.toml`, `Sources/OpalNext/BuildInfo.swift`, `Opal/Sources/Opal/SettingsView.swift`, `opal-core/src/pty.rs`) for crash fix release.
+- 2026-03-03T05:24Z [TOOL] Installed `/Applications/Opal.app` now contains the tab-bar crash fix and bundled Seashell `v1.5.6`.
+- 2026-03-03T05:09Z [TOOL] `/Applications/Opal.app` is now a clean rebuilt install with app version `1.2.9` and bundled Seashell `v1.5.6` (`commit=fc46869`).
+- 2026-03-03T05:04Z [CODE] Version surfaces bumped to `1.2.9` (`Cargo.toml`, `Sources/OpalNext/BuildInfo.swift`, `Opal/Sources/Opal/SettingsView.swift`, `opal-core/src/pty.rs`) for shell settings + tab bar consolidation updates.
+- 2026-03-03T05:04Z [CODE] Users can now choose default shell from Settings > Shell; duplicate in-app bar removed so only native top tab bar remains and auto-hide behavior is enforced for single-tab windows.
+- 2026-02-27T01:55Z [TOOL] Installed `/Applications/Opal.app` now bundles Seashell `v1.5.6` from local `../seashell` without changing Opal app version metadata.
+- 2026-02-26T23:23Z [CODE] Version surfaces bumped to `1.2.8` (`Cargo.toml`, `Sources/OpalNext/BuildInfo.swift`, `Opal/Sources/Opal/SettingsView.swift`, `opal-core/src/pty.rs`) for shader color controls restoration.
+- 2026-02-26T23:23Z [CODE] Background settings once again expose shader color tuning controls (primary/secondary) with persistence through existing `BackgroundProfile` storage keys.
+- 2026-02-26T23:21Z [CODE] Version surfaces bumped to `1.2.7` (`Cargo.toml`, `Sources/OpalNext/BuildInfo.swift`, `Opal/Sources/Opal/SettingsView.swift`, `opal-core/src/pty.rs`) for native-tab UX + Shell->About navigation changes.
+- 2026-02-26T23:21Z [CODE] Opal now keeps only the native top tab bar behavior, hides tab bar when there is one tab, and opens Settings About when clicking the Shell status badge.
 - 2026-02-26T23:07Z [TOOL] Latest local Seashell runtime now bundled and active in installed `/Applications/Opal.app` without changing Opal app version metadata (`1.2.6`).
 - 2026-02-26T21:41Z [CODE] Version surfaces bumped to `1.2.6` (`Cargo.toml`, `Sources/OpalNext/BuildInfo.swift`, `Opal/Sources/Opal/SettingsView.swift`, runtime `TERM_PROGRAM_VERSION`) for the icon refresh release.
 - 2026-02-26T21:41Z [TOOL] `/Applications/Opal.app` now carries v`1.2.6` and includes the new mermaid+opal icon set.
