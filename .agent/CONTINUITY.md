@@ -86,6 +86,8 @@
 - 2026-02-24T04:16Z [CODE] Switched Swift cursor rendering to inline text attributes + range scrolling in `TerminalView.swift` to avoid overlay drift.
 
 ## [PROGRESS]
+- 2026-03-03T06:35Z [TOOL] Release workflow run `22611275078` for tag `v1.3.5` completed successfully after linker-path shim fix; all release steps passed including signing/manifest publish.
+- 2026-03-03T06:35Z [TOOL] Verified GitHub Release `v1.3.5` assets exist: `Opal.zip`, `Opal.sig`, `update-manifest.json`.
 - 2026-03-03T06:31Z [TOOL] Release run `22611018305` (`v1.3.4`) failed in `Build Swift app` with `ld: library 'opal_ffi' not found`; root cause traced to missing `../target/release` path in runner workspace.
 - 2026-03-03T06:31Z [TOOL] Post-fix local validation for `1.3.5`: `swift build -c release`, `cargo test -p opal-core`, and `cargo clippy -p opal-core --all-targets` passed (existing `opal-vte` warnings unchanged).
 - 2026-03-03T06:28Z [TOOL] Release run `22610822136` for tag `v1.3.3` failed at `Build Swift app` due missing committed `TerminalViewModel.defaultShellPreferenceKey`.
@@ -206,6 +208,7 @@
 - 2026-02-24T04:16Z [CODE] `Grid::clear_from_cursor` and `clear_to_cursor` used internal grid cursor fields that were not synced with terminal cursor state.
 
 ## [OUTCOMES]
+- 2026-03-03T06:35Z [CODE] End-to-end Sunshine update delivery is operational on GitHub (`darthdubu/opal`) with secret-backed signing and published updater assets for `v1.3.5`.
 - 2026-03-03T06:31Z [CODE] Prepared `1.3.5` release candidate with CI linker path compatibility fix for `opal_ffi` and unchanged runtime update-key defaults.
 - 2026-03-03T06:28Z [CODE] Prepared `1.3.4` release candidate with workflow/dependency/key defaults fixed and Swift compile parity restored for CI release builds.
 - 2026-03-03T06:24Z [CODE] Release pipeline credentials are now configured (`EDDSA_PRIVATE_KEY_BASE64` secret set) and app defaults include Sunshine public key; follow-up release target version set to `1.3.3`.
