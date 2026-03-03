@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Sunshine
         uses: actions/checkout@v4
         with:
-          repository: opal-terminal/sunshine
+          repository: darthdubu/sunshine
           path: sunshine
 
       - name: Link Sunshine path dependency

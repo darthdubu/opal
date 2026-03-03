@@ -27,6 +27,9 @@ final class SunshineUpdateStore: ObservableObject {
         if UserDefaults.standard.object(forKey: DefaultsKey.repository) == nil {
             UserDefaults.standard.set("opal", forKey: DefaultsKey.repository)
         }
+        if UserDefaults.standard.object(forKey: DefaultsKey.publicKey) == nil {
+            UserDefaults.standard.set("w2lueAOiaDVfjtN0WaYq81dYy3G4qPjtiKd1BDAe/pw=", forKey: DefaultsKey.publicKey)
+        }
         if UserDefaults.standard.object(forKey: DefaultsKey.launchChecks) == nil {
             UserDefaults.standard.set(true, forKey: DefaultsKey.launchChecks)
         }
