@@ -1,0 +1,3 @@
+module AutoUpdate {
+    header "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/include/AutoUpdate-Swift.h"
+}

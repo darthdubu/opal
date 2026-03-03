@@ -58,6 +58,12 @@
     "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SettingsView.swiftdeps",
     "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SettingsView.dia"
   },
+  "/Users/june/projects/Opal/Sources/OpalNext/SunshineUpdateStore.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SunshineUpdateStore.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SunshineUpdateStore~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SunshineUpdateStore.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SunshineUpdateStore.dia"
+  },
   "/Users/june/projects/Opal/Sources/OpalNext/TabStore.swift": {
     "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TabStore.swift.o",
     "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TabStore~partial.swiftmodule",

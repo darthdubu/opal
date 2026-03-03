@@ -1,0 +1,109 @@
+{
+  "": {
+    "dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdate.d",
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdate.o",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/master.swiftdeps"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/AutoUpdate.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdate.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdate~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdate.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdate.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/AutoUpdateManager.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdateManager.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdateManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdateManager.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdateManager.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/Crypto/EdDSAKeyGenerator.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/EdDSAKeyGenerator.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/EdDSAKeyGenerator~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/EdDSAKeyGenerator.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/EdDSAKeyGenerator.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/Crypto/SignatureVerifier.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/SignatureVerifier.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/SignatureVerifier~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/SignatureVerifier.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/SignatureVerifier.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/Download/DownloadManager.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/DownloadManager.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/DownloadManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/DownloadManager.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/DownloadManager.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/GitHub/GitHubReleasesClient.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/GitHubReleasesClient.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/GitHubReleasesClient~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/GitHubReleasesClient.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/GitHubReleasesClient.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/Installer/BundleInstaller.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/BundleInstaller.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/BundleInstaller~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/BundleInstaller.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/BundleInstaller.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/Launch/LaunchUpdateChecker.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/LaunchUpdateChecker.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/LaunchUpdateChecker~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/LaunchUpdateChecker.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/LaunchUpdateChecker.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/ReleaseInfo.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/ReleaseInfo.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/ReleaseInfo~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/ReleaseInfo.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/ReleaseInfo.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateError.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateError.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateError~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateError.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateError.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateManifest.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateManifest.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateManifest~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateManifest.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateManifest.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateState.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateState.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateState~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateState.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateState.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/State/UpdateStateMachine.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateStateMachine.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateStateMachine~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateStateMachine.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateStateMachine.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Theme/UpdateTheme.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateTheme.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateTheme~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateTheme.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateTheme.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Toast/UpdateToastErrorView.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastErrorView.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastErrorView~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastErrorView.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastErrorView.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Toast/UpdateToastView.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastView.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastView~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastView.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastView.dia"
+  },
+  "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Window/UpdateDetailWindow.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateDetailWindow.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateDetailWindow~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateDetailWindow.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateDetailWindow.dia"
+  }
+}

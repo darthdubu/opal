@@ -1,0 +1,13 @@
+{
+  "": {
+    "dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/UpdateHelper.d",
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/UpdateHelper.o",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/master.swiftdeps"
+  },
+  "/Users/june/projects/sunshine/Sources/UpdateHelper/main.swift": {
+    "object": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/main.swift.o",
+    "swiftmodule": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/main.swiftdeps",
+    "diagnostics": "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/main.dia"
+  }
+}

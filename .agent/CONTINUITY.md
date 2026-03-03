@@ -28,6 +28,7 @@
 - 2026-02-24T04:16Z [ASSUMPTION] Prioritize `opal-vte` control-sequence semantics and Swift `TerminalView` cursor rendering path, since both affect prompt placement.
 
 ## [DECISIONS]
+- 2026-03-03T07:03Z [CODE] Restored titlebar translucency consistency by injecting a dedicated `NSVisualEffectView` (`.titlebar` material) into the window frame view and refreshing its frame during deferred window updates.
 - 2026-03-03T06:31Z [CODE] Added `Link target path for Swift linker flags` step in release workflow to symlink `${GITHUB_WORKSPACE}/../target` -> `${GITHUB_WORKSPACE}/target`, matching current Swift package `-L../target/release` linkage expectations in CI.
 - 2026-03-03T06:28Z [CODE] Committed `TerminalViewModel` default-shell preference key + shell selection wiring that Settings depended on; missing this in tagged code caused Release CI `swift build` failure.
 - 2026-03-03T06:24Z [CODE] Updated release workflow Sunshine checkout target from `opal-terminal/sunshine` to `darthdubu/sunshine` after first tagged release run failed with repository-not-found.
@@ -86,6 +87,7 @@
 - 2026-02-24T04:16Z [CODE] Switched Swift cursor rendering to inline text attributes + range scrolling in `TerminalView.swift` to avoid overlay drift.
 
 ## [PROGRESS]
+- 2026-03-03T07:03Z [TOOL] `swift build -c release` passed after titlebar material fix and version bump to `1.3.6`; only existing selector-style warning remains.
 - 2026-03-03T06:35Z [TOOL] Release workflow run `22611275078` for tag `v1.3.5` completed successfully after linker-path shim fix; all release steps passed including signing/manifest publish.
 - 2026-03-03T06:35Z [TOOL] Verified GitHub Release `v1.3.5` assets exist: `Opal.zip`, `Opal.sig`, `update-manifest.json`.
 - 2026-03-03T06:31Z [TOOL] Release run `22611018305` (`v1.3.4`) failed in `Build Swift app` with `ld: library 'opal_ffi' not found`; root cause traced to missing `../target/release` path in runner workspace.
@@ -172,6 +174,7 @@
 - 2026-02-24T04:16Z [TOOL] Implemented and verified targeted regression tests in `opal-vte` for wrap/linefeed scrolling/CHA/DECSTBM defaults.
 
 ## [DISCOVERIES]
+- 2026-03-03T07:03Z [TOOL] With full-size transparent window content, titlebar blur can disappear unless an explicit titlebar material layer is added above content in the frame view.
 - 2026-03-03T06:31Z [TOOL] Opal Swift target currently links `opal_ffi` via relative path `-L../target/release`; GitHub runner checkout layout lacks that sibling by default, requiring explicit path shim in workflow.
 - 2026-03-03T06:28Z [TOOL] GitHub Actions builds from committed repo state only; uncommitted local `TerminalViewModel` changes masked missing symbol errors during local runs.
 - 2026-03-03T06:24Z [TOOL] First `Release` run for tag `v1.3.2` failed at `Checkout Sunshine` because `opal-terminal/sunshine` was not resolvable in GitHub Actions context.
@@ -208,6 +211,10 @@
 - 2026-02-24T04:16Z [CODE] `Grid::clear_from_cursor` and `clear_to_cursor` used internal grid cursor fields that were not synced with terminal cursor state.
 
 ## [OUTCOMES]
+- 2026-03-03T07:03Z [CODE] Implemented visual consistency fix for traffic-light/titlebar area blur and bumped version surfaces to `1.3.6`.
+- 2026-03-03T06:50Z [CODE] Added `Project-specific overrides` subsection under `AGENTS.md` Sunshine guidance to isolate local mapping values while preserving generic workflow instructions.
+- 2026-03-03T06:47Z [CODE] Refactored `AGENTS.md` Sunshine guidance into a project-agnostic template and added a canonical release checklist for reusable tag/release/update verification workflows.
+- 2026-03-03T06:42Z [CODE] Added `Sunshine Updates` guidance section to `AGENTS.md` documenting GitHub Actions setup, release steps, settings integration points, and key-handling rules.
 - 2026-03-03T06:35Z [CODE] End-to-end Sunshine update delivery is operational on GitHub (`darthdubu/opal`) with secret-backed signing and published updater assets for `v1.3.5`.
 - 2026-03-03T06:31Z [CODE] Prepared `1.3.5` release candidate with CI linker path compatibility fix for `opal_ffi` and unchanged runtime update-key defaults.
 - 2026-03-03T06:28Z [CODE] Prepared `1.3.4` release candidate with workflow/dependency/key defaults fixed and Swift compile parity restored for CI release builds.

@@ -17,6 +17,260 @@
 
   ],
   "swiftCommands" : {
+    "C.AutoUpdate-arm64-apple-macosx26.0-release.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/sources",
+      "importPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/AutoUpdate.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/AutoUpdateManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Crypto/EdDSAKeyGenerator.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Crypto/SignatureVerifier.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Download/DownloadManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/GitHub/GitHubReleasesClient.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Installer/BundleInstaller.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Launch/LaunchUpdateChecker.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/ReleaseInfo.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateError.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateManifest.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateState.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/State/UpdateStateMachine.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Theme/UpdateTheme.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Toast/UpdateToastErrorView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Toast/UpdateToastView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Window/UpdateDetailWindow.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "AutoUpdate",
+      "moduleOutputPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules/AutoUpdate.swiftmodule",
+      "objects" : [
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdate.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdateManager.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/EdDSAKeyGenerator.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/SignatureVerifier.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/DownloadManager.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/GitHubReleasesClient.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/BundleInstaller.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/LaunchUpdateChecker.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/ReleaseInfo.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateError.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateManifest.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateState.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateStateMachine.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateTheme.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastErrorView.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastView.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateDetailWindow.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx13.0",
+        "-whole-module-optimization",
+        "-num-threads",
+        "10",
+        "-serialize-diagnostics",
+        "-O",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/include/AutoUpdate-Swift.h",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "sunshine"
+      ],
+      "outputFileMapPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdate.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdateManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/EdDSAKeyGenerator.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/SignatureVerifier.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/DownloadManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/GitHubReleasesClient.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/BundleInstaller.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/LaunchUpdateChecker.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/ReleaseInfo.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateError.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateManifest.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateState.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateStateMachine.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateTheme.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastErrorView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateDetailWindow.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules/AutoUpdate.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/AutoUpdate.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/AutoUpdateManager.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/Crypto/EdDSAKeyGenerator.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/Crypto/SignatureVerifier.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/Download/DownloadManager.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/GitHub/GitHubReleasesClient.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/Installer/BundleInstaller.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/Launch/LaunchUpdateChecker.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/ReleaseInfo.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateError.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateManifest.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateState.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/State/UpdateStateMachine.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Theme/UpdateTheme.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Toast/UpdateToastErrorView.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Toast/UpdateToastView.swift",
+        "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Window/UpdateDetailWindow.swift"
+      ],
+      "tempsPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build",
+      "wholeModuleOptimization" : true
+    },
     "C.Opal-arm64-apple-macosx26.0-release.module" : {
       "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
       "fileList" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/sources",
@@ -60,6 +314,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/SunshineUpdateStore.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/june/projects/Opal/Sources/OpalNext/TabStore.swift"
         },
         {
@@ -88,6 +346,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules/AutoUpdate.swiftmodule"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/sources"
         }
       ],
@@ -104,6 +366,7 @@
         "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeBridge.swift.o",
         "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/RuntimeStatusStore.swift.o",
         "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SettingsView.swift.o",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SunshineUpdateStore.swift.o",
         "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TabStore.swift.o",
         "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalAppearance.swift.o",
         "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TerminalView.swift.o",
@@ -204,6 +467,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SunshineUpdateStore.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/TabStore.swift.o"
         },
         {
@@ -238,6 +505,7 @@
         "/Users/june/projects/Opal/Sources/OpalNext/RuntimeBridge.swift",
         "/Users/june/projects/Opal/Sources/OpalNext/RuntimeStatusStore.swift",
         "/Users/june/projects/Opal/Sources/OpalNext/SettingsView.swift",
+        "/Users/june/projects/Opal/Sources/OpalNext/SunshineUpdateStore.swift",
         "/Users/june/projects/Opal/Sources/OpalNext/TabStore.swift",
         "/Users/june/projects/Opal/Sources/OpalNext/TerminalAppearance.swift",
         "/Users/june/projects/Opal/Sources/OpalNext/TerminalView.swift",
@@ -342,12 +610,190 @@
       ],
       "tempsPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build",
       "wholeModuleOptimization" : true
+    },
+    "C.UpdateHelper-arm64-apple-macosx26.0-release.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/sources",
+      "importPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/UpdateHelper/main.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules/AutoUpdate.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "UpdateHelper",
+      "moduleOutputPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules/UpdateHelper.swiftmodule",
+      "objects" : [
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/main.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx13.0",
+        "-whole-module-optimization",
+        "-num-threads",
+        "10",
+        "-serialize-diagnostics",
+        "-O",
+        "-j10",
+        "-DSWIFT_PACKAGE",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "UpdateHelper_main",
+        "-parse-as-library",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "sunshine"
+      ],
+      "outputFileMapPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/main.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules/UpdateHelper.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/june/projects/sunshine/Sources/UpdateHelper/main.swift"
+      ],
+      "tempsPath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build",
+      "wholeModuleOptimization" : true
     }
   },
   "swiftFrontendCommands" : {
 
   },
   "swiftTargetScanArgs" : {
+    "AutoUpdate" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "AutoUpdate",
+      "-package-name",
+      "sunshine",
+      "-c",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/AutoUpdate.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/AutoUpdateManager.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/Crypto/EdDSAKeyGenerator.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/Crypto/SignatureVerifier.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/Download/DownloadManager.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/GitHub/GitHubReleasesClient.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/Installer/BundleInstaller.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/Launch/LaunchUpdateChecker.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/ReleaseInfo.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateError.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateManifest.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateState.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/State/UpdateStateMachine.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Theme/UpdateTheme.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Toast/UpdateToastErrorView.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Toast/UpdateToastView.swift",
+      "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Window/UpdateDetailWindow.swift",
+      "-I",
+      "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules",
+      "-target",
+      "arm64-apple-macosx13.0",
+      "-whole-module-optimization",
+      "-num-threads",
+      "10",
+      "-serialize-diagnostics",
+      "-O",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/include/AutoUpdate-Swift.h",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "sunshine",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
     "Opal" : [
       "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
       "-module-name",
@@ -364,6 +810,7 @@
       "/Users/june/projects/Opal/Sources/OpalNext/RuntimeBridge.swift",
       "/Users/june/projects/Opal/Sources/OpalNext/RuntimeStatusStore.swift",
       "/Users/june/projects/Opal/Sources/OpalNext/SettingsView.swift",
+      "/Users/june/projects/Opal/Sources/OpalNext/SunshineUpdateStore.swift",
       "/Users/june/projects/Opal/Sources/OpalNext/TabStore.swift",
       "/Users/june/projects/Opal/Sources/OpalNext/TerminalAppearance.swift",
       "/Users/june/projects/Opal/Sources/OpalNext/TerminalView.swift",
@@ -490,15 +937,86 @@
       "opal",
       "-driver-use-frontend-path",
       "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "UpdateHelper" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "UpdateHelper",
+      "-package-name",
+      "sunshine",
+      "-c",
+      "/Users/june/projects/sunshine/Sources/UpdateHelper/main.swift",
+      "-I",
+      "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Modules",
+      "-target",
+      "arm64-apple-macosx13.0",
+      "-whole-module-optimization",
+      "-num-threads",
+      "10",
+      "-serialize-diagnostics",
+      "-O",
+      "-j10",
+      "-DSWIFT_PACKAGE",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "UpdateHelper_main",
+      "-parse-as-library",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "sunshine",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
     ]
   },
   "targetDependencyMap" : {
+    "AutoUpdate" : [
+
+    ],
     "Opal" : [
+      "AutoUpdate",
       "OpalCore",
       "Copal"
     ],
     "OpalCore" : [
       "Copal"
+    ],
+    "UpdateHelper" : [
+      "AutoUpdate"
     ]
   },
   "testDiscoveryCommands" : {
@@ -513,6 +1031,84 @@
     }
   },
   "writeCommands" : {
+    "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/AutoUpdate.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/AutoUpdateManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Crypto/EdDSAKeyGenerator.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Crypto/SignatureVerifier.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Download/DownloadManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/GitHub/GitHubReleasesClient.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Installer/BundleInstaller.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Launch/LaunchUpdateChecker.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/ReleaseInfo.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateError.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateManifest.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateState.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/State/UpdateStateMachine.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Theme/UpdateTheme.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Toast/UpdateToastErrorView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Toast/UpdateToastView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Window/UpdateDetailWindow.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/sources"
+    },
     "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/sources" : {
       "alwaysOutOfDate" : false,
       "inputs" : [
@@ -558,6 +1154,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/june/projects/Opal/Sources/OpalNext/SunshineUpdateStore.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/june/projects/Opal/Sources/OpalNext/TabStore.swift"
         },
         {
@@ -585,6 +1185,74 @@
         {
           "kind" : "virtual",
           "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdate.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdateManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/BundleInstaller.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/DownloadManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/EdDSAKeyGenerator.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/GitHubReleasesClient.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/LaunchUpdateChecker.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/ReleaseInfo.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/SignatureVerifier.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateDetailWindow.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateError.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateManifest.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateState.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateStateMachine.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateTheme.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastErrorView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastView.swift.o"
         },
         {
           "kind" : "file",
@@ -621,6 +1289,10 @@
         {
           "kind" : "file",
           "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SettingsView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/Opal.build/SunshineUpdateStore.swift.o"
         },
         {
           "kind" : "file",
@@ -663,6 +1335,20 @@
       ],
       "outputFilePath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/OpalCore.build/sources"
     },
+    "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/sunshine/Sources/UpdateHelper/main.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/sources"
+    },
     "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt" : {
       "alwaysOutOfDate" : true,
       "inputs" : [
@@ -676,6 +1362,88 @@
         }
       ],
       "outputFilePath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"
+    },
+    "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/update-helper.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdate.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/AutoUpdateManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/BundleInstaller.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/DownloadManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/EdDSAKeyGenerator.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/GitHubReleasesClient.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/LaunchUpdateChecker.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/ReleaseInfo.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/SignatureVerifier.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateDetailWindow.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateError.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateManifest.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateState.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateStateMachine.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateTheme.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastErrorView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/AutoUpdate.build/UpdateToastView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/UpdateHelper.build/main.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/june/projects/Opal/.build/arm64-apple-macosx/release/update-helper.product/Objects.LinkFileList"
     }
   }
 }

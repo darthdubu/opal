@@ -4,7 +4,20 @@
 
     ],
     "dependencies" : [
-
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "sunshine",
+          "kind" : "fileSystem",
+          "location" : "/Users/june/projects/sunshine",
+          "name" : "AutoUpdate"
+        },
+        "state" : {
+          "name" : "fileSystem",
+          "path" : "/Users/june/projects/sunshine"
+        },
+        "subpath" : "sunshine"
+      }
     ],
     "prebuilts" : [
 

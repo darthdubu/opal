@@ -227,6 +227,84 @@ Opal/
 - Test PTY integration manually (platform-specific)
 - Test rendering with different terminal applications
 
+## Sunshine Updates
+
+Use this section when wiring or maintaining Sunshine auto-updates in any app.
+
+### Project mapping (fill this first)
+
+- `APP_NAME`: name of distributable app bundle/zip (example: `MyApp`)
+- `OWNER`: GitHub owner/org for releases (example: `my-org`)
+- `REPO`: GitHub repository name (example: `my-app`)
+- `SUNSHINE_REPO`: GitHub repo that hosts Sunshine package source if CI must check it out separately
+- `WORKFLOW_FILE`: `.github/workflows/release.yml`
+
+### GitHub Actions release pipeline requirements
+
+- Trigger on tags matching `v*`.
+- Create zipped app artifact: `${APP_NAME}.zip`.
+- Create EdDSA signature artifact: `${APP_NAME}.sig`.
+- Create Sunshine manifest artifact: `update-manifest.json`.
+- Upload all artifacts to the GitHub Release for that tag.
+- Required secret: `EDDSA_PRIVATE_KEY_BASE64`.
+- If your build uses local path package dependencies (for example `../sunshine`), CI must recreate those paths before building.
+
+### Canonical release checklist (known-good process)
+
+- [ ] Confirm `main` is green (build/tests/lint or equivalent).
+- [ ] Bump app version in all required surfaces for the project.
+- [ ] Ensure workflow version validation (if present) matches the new tag version.
+- [ ] Confirm GitHub secret `EDDSA_PRIVATE_KEY_BASE64` is set in the target repo.
+- [ ] Commit and push version + release-related changes to `main`.
+- [ ] Create and push release tag: `vX.Y.Z`.
+- [ ] Verify GitHub Actions `Release` workflow completes successfully.
+- [ ] Verify release assets exist:
+  - `${APP_NAME}.zip`
+  - `${APP_NAME}.sig`
+  - `update-manifest.json`
+- [ ] Verify `update-manifest.json` points to the exact release tag URL and correct file size/signature.
+- [ ] Perform one manual in-app update check from the Settings updates screen.
+
+### App settings integration pattern (generic)
+
+- Add a dedicated settings page/section for updates (example label: `Updates`).
+- Persist these values in app settings storage:
+  - `owner`
+  - `repository`
+  - `publicKey`
+  - `launchCheckEnabled`
+- Initialize Sunshine manager with:
+  - `owner`, `repository`
+  - `currentVersion`
+  - `appName`
+  - `publicKey` (recommended default)
+  - `automaticLaunchCheckEnabled`
+- Expose manual controls:
+  - `Check Now`
+  - `Download`
+  - `Install`
+- Render current updater state and last error in UI.
+
+### Security rules
+
+- Never commit private signing keys.
+- Store private signing key only in GitHub Secret `EDDSA_PRIVATE_KEY_BASE64`.
+- Keep public key in app config/defaults to enforce signature verification.
+
+### Project-specific overrides
+
+Use this small block to pin only repo-local details:
+
+- `APP_NAME`: `Opal`
+- `OWNER`: `darthdubu`
+- `REPO`: `opal`
+- `SUNSHINE_REPO`: `darthdubu/sunshine`
+- `WORKFLOW_FILE`: `.github/workflows/release.yml`
+- `SETTINGS_STORE_FILE`: `Sources/OpalNext/SunshineUpdateStore.swift`
+- `SETTINGS_UI_FILE`: `Sources/OpalNext/SettingsView.swift`
+- `PACKAGE_MANIFEST`: `Package.swift`
+- `LAST_VERIFIED_RELEASE_TAG`: `v1.3.5`
+
 ## Other Guidelines
 
 - Test changes thoroughly before committing

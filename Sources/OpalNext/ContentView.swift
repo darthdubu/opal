@@ -2,42 +2,25 @@ import AppKit
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.openWindow) private var openWindow
-
-    @StateObject private var tabStore = TabStore()
+    @StateObject private var terminalVM = TerminalViewModel()
     @State private var didRegisterObservers = false
+    @State private var currentWindow: NSWindow?
+    private let titlebarMaterialViewIdentifier = NSUserInterfaceItemIdentifier("OpalTitlebarMaterialView")
 
     var body: some View {
-        VStack(spacing: 0) {
-            TopToolbar(
-                activeViewModel: tabStore.selectedTab.terminalVM,
-                onNewTab: addTab,
-                onRestore: { tabStore.selectedTab.terminalVM.restoreSession(manual: true) },
-                onOpenSettings: { openWindow(id: "settings") }
-            )
-            .frame(height: 44)
-            .background(.ultraThinMaterial)
-
-            if tabStore.tabs.count > 1 {
-                TabStrip(
-                    tabs: tabStore.tabs,
-                    selectedTabID: $tabStore.selectedTabID,
-                    onClose: { tabStore.close(tabID: $0) }
-                )
-                .frame(height: 34)
-                .background(.ultraThinMaterial)
-                .transition(.opacity)
-            }
-
-            TerminalSurface(viewModel: tabStore.selectedTab.terminalVM)
-        }
+        TerminalSurface(viewModel: terminalVM)
         .background(Color.clear)
         .background(WindowAccessor { window in
+            currentWindow = window
             window.isOpaque = false
             window.backgroundColor = .clear
             window.titlebarAppearsTransparent = true
             window.styleMask.insert(.fullSizeContentView)
             window.isMovableByWindowBackground = true
+            window.tabbingMode = .preferred
+            installTitlebarMaterialIfNeeded(for: window)
+            updateNativeTabBarVisibility(for: window)
+            scheduleTabBarRefresh(for: window)
 
             if let contentView = window.contentView {
                 contentView.wantsLayer = true
@@ -54,16 +37,17 @@ struct ContentView: View {
                 registerNotifications()
                 didRegisterObservers = true
             }
-            tabStore.selectedTab.terminalVM.startSessionIfNeeded()
-        }
-        .onChange(of: tabStore.selectedTabID) { _, _ in
-            tabStore.selectedTab.terminalVM.startSessionIfNeeded()
+            terminalVM.startSessionIfNeeded()
+            if let window = currentWindow {
+                installTitlebarMaterialIfNeeded(for: window)
+                updateNativeTabBarVisibility(for: window)
+                scheduleTabBarRefresh(for: window)
+            }
         }
     }
 
-    private func addTab() {
-        let tab = tabStore.newTab()
-        tab.terminalVM.startSessionIfNeeded()
+    private func openNativeTab() {
+        NSApp.sendAction(Selector(("newTab:")), to: nil, from: nil)
     }
 
     private func registerNotifications() {
@@ -72,7 +56,10 @@ struct ContentView: View {
             object: nil,
             queue: .main
         ) { _ in
-            addTab()
+            openNativeTab()
+            if let window = currentWindow {
+                scheduleTabBarRefresh(for: window)
+            }
         }
 
         NotificationCenter.default.addObserver(
@@ -80,7 +67,10 @@ struct ContentView: View {
             object: nil,
             queue: .main
         ) { _ in
-            tabStore.closeSelectedTab()
+            NSApp.sendAction(#selector(NSWindow.performClose(_:)), to: nil, from: nil)
+            if let window = currentWindow {
+                scheduleTabBarRefresh(for: window)
+            }
         }
 
         NotificationCenter.default.addObserver(
@@ -88,7 +78,7 @@ struct ContentView: View {
             object: nil,
             queue: .main
         ) { _ in
-            tabStore.selectedTab.terminalVM.restoreSession(manual: true)
+            terminalVM.restoreSession(manual: true)
         }
 
         NotificationCenter.default.addObserver(
@@ -96,122 +86,70 @@ struct ContentView: View {
             object: nil,
             queue: .main
         ) { _ in
-            tabStore.selectedTab.terminalVM.clearScreen()
-        }
-    }
-}
-
-private struct TopToolbar: View {
-    @ObservedObject var activeViewModel: TerminalViewModel
-
-    let onNewTab: () -> Void
-    let onRestore: () -> Void
-    let onOpenSettings: () -> Void
-
-    var body: some View {
-        HStack(spacing: 10) {
-            Button(action: onNewTab) {
-                Image(systemName: "plus")
-                    .font(.system(size: 14, weight: .semibold))
-                    .frame(width: 28, height: 28)
-            }
-            .buttonStyle(.plain)
-            .help("New tab")
-
-            Spacer(minLength: 8)
-
-            Button(action: onRestore) {
-                Label("Restore", systemImage: "arrow.clockwise")
-                    .font(.caption.weight(.semibold))
-                    .padding(.horizontal, 9)
-                    .padding(.vertical, 4)
-                    .background(Color.gray.opacity(0.17), in: Capsule())
-            }
-            .buttonStyle(.plain)
-            .disabled(!activeViewModel.hasSavedSession)
-            .opacity(activeViewModel.hasSavedSession ? 1.0 : 0.5)
-            .help("Restore saved directory + command context")
-
-            ShellBadge(status: activeViewModel.runtimeStatus)
-
-            Button(action: onOpenSettings) {
-                Image(systemName: "gearshape")
-                    .font(.system(size: 13, weight: .semibold))
-                    .frame(width: 28, height: 28)
-                    .background(Color.gray.opacity(0.16), in: RoundedRectangle(cornerRadius: 8))
-            }
-            .buttonStyle(.plain)
-            .help("Settings")
-        }
-        .padding(.horizontal, 10)
-    }
-}
-
-private struct ShellBadge: View {
-    let status: RuntimeStatusBadgeModel
-
-    var body: some View {
-        HStack(spacing: 6) {
-            Circle()
-                .fill(status.isFallback ? Color.orange.opacity(0.9) : Color.green.opacity(0.8))
-                .frame(width: 7, height: 7)
-            Text(status.badgeText)
-                .font(.caption.weight(.semibold))
-        }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 5)
-        .background(Color.gray.opacity(0.18), in: Capsule())
-        .help(status.diagnosticsText)
-    }
-}
-
-private struct TabStrip: View {
-    let tabs: [TabSession]
-    @Binding var selectedTabID: UUID
-    let onClose: (UUID) -> Void
-
-    var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 6) {
-                ForEach(Array(tabs.enumerated()), id: \.element.id) { index, tab in
-                    HStack(spacing: 6) {
-                        Button {
-                            selectedTabID = tab.id
-                        } label: {
-                            Text(tabTitle(for: tab, index: index))
-                                .lineLimit(1)
-                                .font(.caption.weight(.semibold))
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 5)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 7)
-                                        .fill(tab.id == selectedTabID ? Color.accentColor.opacity(0.28) : Color.gray.opacity(0.15))
-                                )
-                        }
-                        .buttonStyle(.plain)
-
-                        Button {
-                            onClose(tab.id)
-                        } label: {
-                            Image(systemName: "xmark")
-                                .font(.system(size: 10, weight: .semibold))
-                                .foregroundStyle(.secondary)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-            }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 5)
+            terminalVM.clearScreen()
         }
     }
 
-    private func tabTitle(for tab: TabSession, index: Int) -> String {
-        let title = tab.title
-        if title == "Terminal" {
-            return "Tab \(index + 1)"
+    private func updateNativeTabBarVisibility(for window: NSWindow) {
+        let tabCount = window.tabbedWindows?.count ?? 1
+        let shouldShowTabBar = tabCount > 1
+        let setSelector = Selector(("setTabBarVisible:"))
+        if window.responds(to: setSelector) {
+            _ = window.perform(setSelector, with: NSNumber(value: shouldShowTabBar))
+            return
         }
-        return title
+
+        let isVisibleSelector = Selector(("isTabBarVisible"))
+        let toggleSelector = Selector(("toggleTabBar:"))
+        if window.responds(to: isVisibleSelector),
+           let result = window.perform(isVisibleSelector)?.takeUnretainedValue() as? NSNumber {
+            let isTabBarVisible = result.boolValue
+            if isTabBarVisible != shouldShowTabBar, window.responds(to: toggleSelector) {
+                _ = window.perform(toggleSelector, with: nil)
+            }
+        }
+    }
+
+    private func scheduleTabBarRefresh(for window: NSWindow) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            installTitlebarMaterialIfNeeded(for: window)
+            updateNativeTabBarVisibility(for: window)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            installTitlebarMaterialIfNeeded(for: window)
+            updateNativeTabBarVisibility(for: window)
+        }
+    }
+
+    private func installTitlebarMaterialIfNeeded(for window: NSWindow) {
+        guard let frameView = window.contentView?.superview else {
+            return
+        }
+
+        let titlebarHeight = max(38, window.frame.height - window.contentLayoutRect.height)
+        let materialFrame = NSRect(
+            x: 0,
+            y: frameView.bounds.height - titlebarHeight,
+            width: frameView.bounds.width,
+            height: titlebarHeight
+        )
+
+        if let existing = frameView.subviews.first(where: { $0.identifier == titlebarMaterialViewIdentifier }) as? NSVisualEffectView {
+            existing.frame = materialFrame
+            return
+        }
+
+        let materialView = NSVisualEffectView(frame: materialFrame)
+        materialView.identifier = titlebarMaterialViewIdentifier
+        materialView.material = .titlebar
+        materialView.blendingMode = .withinWindow
+        materialView.state = .active
+        materialView.isEmphasized = false
+        materialView.autoresizingMask = [.width, .minYMargin]
+        materialView.wantsLayer = true
+        materialView.layer?.backgroundColor = NSColor.clear.cgColor
+
+        frameView.addSubview(materialView, positioned: .above, relativeTo: window.contentView)
     }
 }
 

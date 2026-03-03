@@ -1,0 +1,17 @@
+/Users/june/projects/sunshine/Sources/AutoUpdate/AutoUpdate.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/AutoUpdateManager.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/Crypto/EdDSAKeyGenerator.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/Crypto/SignatureVerifier.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/Download/DownloadManager.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/GitHub/GitHubReleasesClient.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/Installer/BundleInstaller.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/Launch/LaunchUpdateChecker.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/Models/ReleaseInfo.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateError.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateManifest.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/Models/UpdateState.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/State/UpdateStateMachine.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Theme/UpdateTheme.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Toast/UpdateToastErrorView.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Toast/UpdateToastView.swift
+/Users/june/projects/sunshine/Sources/AutoUpdate/UI/Window/UpdateDetailWindow.swift
