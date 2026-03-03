@@ -1,6 +1,6 @@
 import Foundation
 
-let opalVersion = "1.3.1"
+let opalVersion = "1.3.2"
 
 func readBundledSeashellBuildVersion() -> String {
     guard let resourceURL = Bundle.main.resourceURL else {

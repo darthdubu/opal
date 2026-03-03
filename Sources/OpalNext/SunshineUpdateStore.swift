@@ -22,7 +22,7 @@ final class SunshineUpdateStore: ObservableObject {
 
     private init() {
         if UserDefaults.standard.object(forKey: DefaultsKey.owner) == nil {
-            UserDefaults.standard.set("opal-terminal", forKey: DefaultsKey.owner)
+            UserDefaults.standard.set("darthdubu", forKey: DefaultsKey.owner)
         }
         if UserDefaults.standard.object(forKey: DefaultsKey.repository) == nil {
             UserDefaults.standard.set("opal", forKey: DefaultsKey.repository)

@@ -28,6 +28,7 @@
 - 2026-02-24T04:16Z [ASSUMPTION] Prioritize `opal-vte` control-sequence semantics and Swift `TerminalView` cursor rendering path, since both affect prompt placement.
 
 ## [DECISIONS]
+- 2026-03-03T06:12Z [CODE] Updated Sunshine default update source to GitHub `darthdubu/opal` so new installs check the correct release feed without manual owner/repo edits.
 - 2026-03-03T05:52Z [CODE] Added `.github/workflows/release.yml` to build Opal on tag `v*`, sign release zip with `EDDSA_PRIVATE_KEY_BASE64`, generate Sunshine `update-manifest.json`, and publish artifacts to GitHub Releases.
 - 2026-03-03T05:52Z [CODE] Workflow checks out `opal-terminal/sunshine` and symlinks it to `../sunshine` so existing local path dependency in `Package.swift` resolves in CI.
 - 2026-03-03T05:32Z [CODE] Added local SwiftPM dependency on `../sunshine` (`AutoUpdate` product) and created `SunshineUpdateStore` as the Opal-facing bridge for update checks/download/install.
@@ -81,6 +82,8 @@
 - 2026-02-24T04:16Z [CODE] Switched Swift cursor rendering to inline text attributes + range scrolling in `TerminalView.swift` to avoid overlay drift.
 
 ## [PROGRESS]
+- 2026-03-03T06:12Z [TOOL] Created GitHub repo `https://github.com/darthdubu/opal`, set `origin`, and pushed `main` including Sunshine release workflow commit `aadc199`.
+- 2026-03-03T06:12Z [TOOL] `swift build -c release` and `cargo test -p opal-core` passed after default updater target and version bump to `1.3.2`.
 - 2026-03-03T05:52Z [TOOL] Added release automation docs in `.github/SUNSHINE_UPDATES.md` and bumped version surfaces to `1.3.1` (`Cargo.toml`, `Sources/OpalNext/BuildInfo.swift`, `Opal/Sources/Opal/SettingsView.swift`).
 - 2026-03-03T05:32Z [TOOL] `cargo test -p opal-core` passed (33 tests) after Sunshine integration version bump.
 - 2026-03-03T05:32Z [TOOL] `swift build -c release` passed with local `../sunshine` package integrated and new Settings > Updates UI compiled successfully.
@@ -188,6 +191,7 @@
 - 2026-02-24T04:16Z [CODE] `Grid::clear_from_cursor` and `clear_to_cursor` used internal grid cursor fields that were not synced with terminal cursor state.
 
 ## [OUTCOMES]
+- 2026-03-03T06:12Z [CODE] Opal updater defaults now target `darthdubu/opal` and version surfaces are bumped to `1.3.2`.
 - 2026-03-03T05:52Z [CODE] Added GitHub release automation for Sunshine update delivery and documented required secret + tag workflow; release assets are now standardized as `Opal.zip`, `Opal.sig`, and `update-manifest.json`.
 - 2026-03-03T05:52Z [CODE] Version surfaces bumped to `1.3.1` for GitHub Actions Sunshine integration.
 - 2026-03-03T05:32Z [CODE] Version surfaces bumped to `1.3.0` (`Cargo.toml`, `Sources/OpalNext/BuildInfo.swift`, `Opal/Sources/Opal/SettingsView.swift`, `opal-core/src/pty.rs`) for Sunshine updates feature release.
