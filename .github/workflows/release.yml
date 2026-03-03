@@ -58,6 +58,10 @@ jobs:
       - name: Build Rust FFI
         run: cargo build -p opal-ffi --lib --release
 
+      - name: Link target path for Swift linker flags
+        run: |
+          ln -sfn "$GITHUB_WORKSPACE/target" "$GITHUB_WORKSPACE/../target"
+
       - name: Build Swift app
         run: swift build -c release
 
