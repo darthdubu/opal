@@ -442,7 +442,7 @@ private struct AboutSettingsPanel: View {
                 HStack {
                     Text("Opal")
                     Spacer()
-                    Text("1.3.3")
+                    Text("1.3.4")
                         .foregroundStyle(.secondary)
                 }
 

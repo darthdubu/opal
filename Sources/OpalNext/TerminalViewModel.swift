@@ -22,6 +22,7 @@ final class TerminalViewModel: ObservableObject {
 
     private static let sessionSnapshotKey = "opal.session.snapshot.v1"
     static let sessionAutoRestoreKey = "opal.session.autorestore"
+    static let defaultShellPreferenceKey = "opal.shell.default"
 
     private struct SessionSnapshot: Codable {
         let currentDirectory: String
@@ -77,7 +78,7 @@ final class TerminalViewModel: ObservableObject {
             }
         }
 
-        let pty = PtySessionLite(cols: 80, rows: 24, preferredShell: "sea")
+        let pty = PtySessionLite(cols: 80, rows: 24, preferredShell: Self.preferredShellValue())
         ptySession = pty
         terminalHandle = pty.terminal()
 
@@ -321,6 +322,12 @@ final class TerminalViewModel: ObservableObject {
             return true
         }
         return defaults.bool(forKey: sessionAutoRestoreKey)
+    }
+
+    private static func preferredShellValue() -> String {
+        let defaults = UserDefaults.standard
+        let configured = defaults.string(forKey: defaultShellPreferenceKey) ?? "sea"
+        return configured == "zsh" ? "zsh" : "sea"
     }
 
     private static func shellQuote(_ value: String) -> String {

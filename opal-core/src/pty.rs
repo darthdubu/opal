@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 use std::sync::mpsc::{channel, Receiver};
 use std::sync::{Arc, Mutex};
 
-const OPAL_VERSION: &str = "1.3.3";
+const OPAL_VERSION: &str = "1.3.4";
 
 #[derive(Clone, Debug, Default)]
 pub struct ShellRuntimeStatus {

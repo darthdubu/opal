@@ -28,6 +28,7 @@
 - 2026-02-24T04:16Z [ASSUMPTION] Prioritize `opal-vte` control-sequence semantics and Swift `TerminalView` cursor rendering path, since both affect prompt placement.
 
 ## [DECISIONS]
+- 2026-03-03T06:28Z [CODE] Committed `TerminalViewModel` default-shell preference key + shell selection wiring that Settings depended on; missing this in tagged code caused Release CI `swift build` failure.
 - 2026-03-03T06:24Z [CODE] Updated release workflow Sunshine checkout target from `opal-terminal/sunshine` to `darthdubu/sunshine` after first tagged release run failed with repository-not-found.
 - 2026-03-03T06:24Z [CODE] Prefilled Sunshine public verification key default in `SunshineUpdateStore` so signature verification is enabled by default for new installs.
 - 2026-03-03T06:12Z [CODE] Updated Sunshine default update source to GitHub `darthdubu/opal` so new installs check the correct release feed without manual owner/repo edits.
@@ -84,6 +85,8 @@
 - 2026-02-24T04:16Z [CODE] Switched Swift cursor rendering to inline text attributes + range scrolling in `TerminalView.swift` to avoid overlay drift.
 
 ## [PROGRESS]
+- 2026-03-03T06:28Z [TOOL] Release run `22610822136` for tag `v1.3.3` failed at `Build Swift app` due missing committed `TerminalViewModel.defaultShellPreferenceKey`.
+- 2026-03-03T06:28Z [TOOL] Local verification after fix and version bump to `1.3.4`: `swift build -c release`, `cargo test -p opal-core`, and `cargo clippy -p opal-core --all-targets` passed (existing `opal-vte` warnings remain).
 - 2026-03-03T06:24Z [TOOL] Generated new Ed25519 keypair for Sunshine, set GitHub repo secret `EDDSA_PRIVATE_KEY_BASE64` on `darthdubu/opal`, and saved public key for app defaults.
 - 2026-03-03T06:24Z [TOOL] Created `https://github.com/darthdubu/sunshine` from local `../sunshine` and pushed `main` so Opal CI can fetch Sunshine dependency.
 - 2026-03-03T06:24Z [TOOL] Pushed tag `v1.3.2`; Release workflow triggered and failed at Sunshine checkout, then fixes were prepared in `v1.3.3` follow-up.
@@ -164,6 +167,7 @@
 - 2026-02-24T04:16Z [TOOL] Implemented and verified targeted regression tests in `opal-vte` for wrap/linefeed scrolling/CHA/DECSTBM defaults.
 
 ## [DISCOVERIES]
+- 2026-03-03T06:28Z [TOOL] GitHub Actions builds from committed repo state only; uncommitted local `TerminalViewModel` changes masked missing symbol errors during local runs.
 - 2026-03-03T06:24Z [TOOL] First `Release` run for tag `v1.3.2` failed at `Checkout Sunshine` because `opal-terminal/sunshine` was not resolvable in GitHub Actions context.
 - 2026-03-03T05:52Z [TOOL] Because Opal currently references Sunshine via local path (`../sunshine`), CI must fetch Sunshine separately and provide that sibling path before `swift build` can succeed.
 - 2026-03-03T05:32Z [TOOL] SwiftPM manifest argument order matters for this toolchain (`products` must appear before `dependencies` in `Package(...)`); initial build failed until reordered.
@@ -198,6 +202,7 @@
 - 2026-02-24T04:16Z [CODE] `Grid::clear_from_cursor` and `clear_to_cursor` used internal grid cursor fields that were not synced with terminal cursor state.
 
 ## [OUTCOMES]
+- 2026-03-03T06:28Z [CODE] Prepared `1.3.4` release candidate with workflow/dependency/key defaults fixed and Swift compile parity restored for CI release builds.
 - 2026-03-03T06:24Z [CODE] Release pipeline credentials are now configured (`EDDSA_PRIVATE_KEY_BASE64` secret set) and app defaults include Sunshine public key; follow-up release target version set to `1.3.3`.
 - 2026-03-03T06:12Z [CODE] Opal updater defaults now target `darthdubu/opal` and version surfaces are bumped to `1.3.2`.
 - 2026-03-03T05:52Z [CODE] Added GitHub release automation for Sunshine update delivery and documented required secret + tag workflow; release assets are now standardized as `Opal.zip`, `Opal.sig`, and `update-manifest.json`.
